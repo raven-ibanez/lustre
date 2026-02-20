@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ProductCard } from '@/components/ProductCard';
-import { products } from '@/data/products';
+import { useSupabase } from '@/hooks/useSupabase';
+import type { Product, Category } from '@/types';
 
-const categories = ['All', 'Rings', 'Necklaces', 'Earrings', 'Bracelets'];
 const sortOptions = [
   { value: 'featured', label: 'Featured' },
   { value: 'price-low', label: 'Price: Low to High' },
@@ -10,29 +10,58 @@ const sortOptions = [
   { value: 'newest', label: 'Newest First' },
 ];
 
-export function Shop() {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+interface ShopProps {
+  initialCategory?: string | null;
+}
+
+export function Shop({ initialCategory }: ShopProps) {
+  const { getProducts, getCategories, loading } = useSupabase();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory || 'All');
   const [sortBy, setSortBy] = useState('featured');
 
-  const filteredProducts = selectedCategory === 'All' 
-    ? products 
-    : products.filter(p => p.category.toLowerCase() === selectedCategory.toLowerCase());
+  useEffect(() => {
+    if (initialCategory) {
+      setSelectedCategory(initialCategory);
+    }
+  }, [initialCategory]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const [productsData, categoriesData] = await Promise.all([
+        getProducts(),
+        getCategories()
+      ]);
+      setProducts(productsData);
+      setCategories(categoriesData);
+    };
+    loadData();
+  }, []);
+
+  const filteredProducts = selectedCategory === 'All'
+    ? products
+    : products.filter(p => p.category === selectedCategory);
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
+    const getPrice = (p: Product) => p.discount_active && p.discount_price ? p.discount_price : p.base_price;
+    const priceA = getPrice(a);
+    const priceB = getPrice(b);
+
     switch (sortBy) {
       case 'price-low':
-        return a.price - b.price;
+        return priceA - priceB;
       case 'price-high':
-        return b.price - a.price;
+        return priceB - priceA;
       case 'newest':
-        return b.id.localeCompare(a.id);
+        return new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime();
       default:
         return 0;
     }
   });
 
   return (
-    <div id="all-products" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div id="all-products" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto">
         <h1 className="section-title mb-4">Shop All</h1>
         <p className="text-center text-muted-foreground mb-8">
@@ -43,17 +72,25 @@ export function Shop() {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
           {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-2">
+            <button
+              onClick={() => setSelectedCategory('All')}
+              className={`px-4 py-2 text-sm transition-colors ${selectedCategory === 'All'
+                  ? 'bg-gold text-primary-dark font-medium'
+                  : 'border border-white/20 text-muted-foreground hover:border-gold hover:text-white'
+                }`}
+            >
+              All
+            </button>
             {categories.map((category) => (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 text-sm transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-forest text-white'
-                    : 'border border-gray-300 hover:border-forest'
-                }`}
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`px-4 py-2 text-sm transition-colors ${selectedCategory === category.id
+                    ? 'bg-gold text-primary-dark font-medium'
+                    : 'border border-white/20 text-muted-foreground hover:border-gold hover:text-white'
+                  }`}
               >
-                {category}
+                {category.name}
               </button>
             ))}
           </div>
@@ -62,10 +99,10 @@ export function Shop() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+            className="px-4 py-2 bg-white/5 border border-white/20 text-white text-sm focus:border-gold focus:outline-none"
           >
             {sortOptions.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} value={option.value} className="bg-primary-dark text-white">
                 {option.label}
               </option>
             ))}
@@ -74,7 +111,7 @@ export function Shop() {
 
         {/* Results Count */}
         <p className="text-sm text-muted-foreground mb-6">
-          Showing {sortedProducts.length} products
+          {loading ? 'Loading products...' : `Showing ${sortedProducts.length} products`}
         </p>
 
         {/* Products Grid */}
@@ -90,7 +127,7 @@ export function Shop() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : !loading && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No products found in this category.</p>
           </div>

@@ -1,8 +1,18 @@
-import { ringSizeGuide } from '@/data/categories';
+const ringSizeGuide = [
+  { size: 4, diameter: 14.9, circumference: 46.8 },
+  { size: 5, diameter: 15.7, circumference: 49.3 },
+  { size: 6, diameter: 16.5, circumference: 51.8 },
+  { size: 7, diameter: 17.3, circumference: 54.4 },
+  { size: 8, diameter: 18.1, circumference: 56.9 },
+  { size: 9, diameter: 18.9, circumference: 59.4 },
+  { size: 10, diameter: 19.7, circumference: 61.9 },
+  { size: 11, diameter: 20.5, circumference: 64.4 },
+  { size: 12, diameter: 21.3, circumference: 66.9 },
+];
 
 export function RingSizeGuide() {
   return (
-    <div id="ring-size-guide" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div id="ring-size-guide" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen">
       <div className="max-w-4xl mx-auto">
         <h1 className="section-title mb-4">Ring Size Guide</h1>
         <p className="text-center text-muted-foreground mb-12">
@@ -23,7 +33,7 @@ export function RingSizeGuide() {
               </thead>
               <tbody>
                 {ringSizeGuide.map((size) => (
-                  <tr key={size.size} className="border-b border-gray-100 hover:bg-cream">
+                  <tr key={size.size} className="border-b border-gray-100 hover:bg-white/5">
                     <td className="py-3 px-4">{size.size}</td>
                     <td className="py-3 px-4">{size.diameter}</td>
                     <td className="py-3 px-4">{size.circumference}</td>
@@ -82,14 +92,14 @@ export function RingSizeGuide() {
         </div>
 
         {/* Tips */}
-        <div className="bg-forest text-white p-8 mt-8">
-          <h2 className="font-serif text-xl mb-4">Helpful Tips</h2>
+        <div className="bg-primary-dark/50 border border-gold/20 p-8 mt-8">
+          <h2 className="font-serif text-xl mb-4 text-gold">Helpful Tips</h2>
           <ul className="space-y-2 text-sm text-white/80">
-            <li>&#10022; Measure your finger at the end of the day when it's at its largest</li>
-            <li>&#10022; Avoid measuring when your hands are cold, as fingers shrink</li>
-            <li>&#10022; If you're between sizes, we recommend sizing up</li>
-            <li>&#10022; Wide bands fit more snugly, consider sizing up by half a size</li>
-            <li>&#10022; Contact us for a complimentary ring sizer sent to your address</li>
+            <li><span className="text-gold">&#10022;</span> Measure your finger at the end of the day when it's at its largest</li>
+            <li><span className="text-gold">&#10022;</span> Avoid measuring when your hands are cold, as fingers shrink</li>
+            <li><span className="text-gold">&#10022;</span> If you're between sizes, we recommend sizing up</li>
+            <li><span className="text-gold">&#10022;</span> Wide bands fit more snugly, consider sizing up by half a size</li>
+            <li><span className="text-gold">&#10022;</span> Contact us for a complimentary ring sizer sent to your address</li>
           </ul>
         </div>
       </div>

@@ -1,14 +1,14 @@
 export function PristineCare() {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-cream">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="animate-slide-right">
             <h2 className="section-title text-left mb-6">Our Promise</h2>
             <p className="text-sm leading-relaxed text-foreground mb-6">
-              At Lustre Lab, we believe that beautiful jewelry shouldn't come at the cost of 
-              our planet. That's why we're committed to ethical sourcing, sustainable practices, 
+              At Lustre Lab, we believe that beautiful jewelry shouldn't come at the cost of
+              our planet. That's why we're committed to ethical sourcing, sustainable practices,
               and creating pieces that last a lifetime.
             </p>
             <ul className="space-y-3 mb-6">

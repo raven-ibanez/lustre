@@ -48,7 +48,7 @@ export function FAQs() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div id="faqs" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div id="faqs" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen">
       <div className="max-w-3xl mx-auto">
         <h1 className="section-title mb-4">Frequently Asked Questions</h1>
         <p className="text-center text-muted-foreground mb-12">
@@ -57,13 +57,13 @@ export function FAQs() {
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="bg-white overflow-hidden"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-cream transition-colors"
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors"
               >
                 <span className="font-medium pr-4">{faq.question}</span>
                 {openIndex === index ? (

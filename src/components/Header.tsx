@@ -1,46 +1,57 @@
-import { useState, useRef, useEffect } from 'react';
-import { Search, ShoppingBag, Menu, X, ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { ShoppingBag, Menu, X, ChevronDown } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useSupabase } from '@/hooks/useSupabase';
+import type { Category } from '@/types';
 
-const navItems = [
-  { name: 'Home', href: '#home' },
-  {
-    name: 'Shop',
-    href: '#shop',
-    dropdown: [
-      { name: 'All Products', href: '#shop' },
-      { name: 'New Arrivals', href: '#shop' },
-      { name: 'Best Sellers', href: '#shop' },
-      { name: 'Sale Items', href: '#shop' },
-    ]
-  },
-  {
-    name: 'Rings',
-    href: '#rings',
-    dropdown: [
-      { name: 'Promise Rings', href: '#rings' },
-      { name: 'Eternity Rings', href: '#rings' },
-      { name: 'Engagement Rings', href: '#rings' },
-      { name: 'Wedding Bands', href: '#rings' },
-    ]
-  },
-  { name: 'Bracelets', href: '#bracelets' },
-  { name: 'Necklaces', href: '#necklaces' },
-  { name: 'Earrings', href: '#earrings' },
-  {
-    name: 'Guide',
-    href: '#guide',
-    dropdown: [
-      { name: 'Ring Size Guide', href: '#ring-size-guide' },
-      { name: 'Jewelry Care', href: '#jewelry-care' },
-      { name: 'About Us', href: '#about' },
-      { name: 'Contact', href: '#contact' },
-    ]
-  },
-];
+interface HeaderProps {
+  isTransparent?: boolean;
+}
 
-export function Header() {
+export function Header({ isTransparent = false }: HeaderProps) {
   const { totalItems, setIsCartOpen } = useCart();
+  const { getCategories } = useSupabase();
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    getCategories().then(setCategories);
+  }, []);
+
+  const navItems = useMemo(() => {
+    const items = [
+      { name: 'Home', href: '#home' },
+      {
+        name: 'Shop',
+        href: '#shop',
+        dropdown: [
+          { name: 'All Products', href: '#shop' },
+        ]
+      },
+    ];
+
+    // Add dynamic categories
+    categories.forEach(cat => {
+      items.push({
+        name: cat.name,
+        href: `#shop/${cat.id}`,
+        // @ts-ignore - keeping it simple for now as per user request to have categories as top level
+      });
+    });
+
+    items.push({
+      name: 'Guide',
+      href: '#guide',
+      dropdown: [
+        { name: 'Ring Size Guide', href: '#ring-size-guide' },
+        { name: 'Jewelry Care', href: '#jewelry-care' },
+        { name: 'About Us', href: '#about' },
+        { name: 'Contact', href: '#contact' },
+        { name: 'Admin Dashboard', href: '#admin' },
+      ]
+    });
+
+    return items;
+  }, [categories]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -114,22 +125,24 @@ export function Header() {
 
   return (
     <>
-      {/* Full header wrapper - transparent by default, bg on hover */}
+      {/* Full header wrapper */}
       <div
         className="header-wrapper"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-          position: 'relative',
+          position: isTransparent ? 'absolute' : 'relative',
+          top: 0,
+          left: 0,
+          right: 0,
           zIndex: 50,
-          marginBottom: 'calc(-1 * var(--header-height, 180px))',
         }}
       >
-        {/* Logo Section - scrolls with the page */}
+        {/* Logo Section */}
         <div
           className="transition-colors duration-300"
           style={{
-            backgroundColor: isHovered ? 'hsl(165, 38%, 17%)' : 'transparent',
+            backgroundColor: isHovered || !isTransparent ? '#050b18' : 'transparent',
           }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -153,16 +166,13 @@ export function Header() {
 
               {/* Right Icons */}
               <div className="absolute right-0 flex items-center space-x-4">
-                <button className="text-white hover:text-white/80 transition-colors">
-                  <Search className="w-5 h-5" />
-                </button>
                 <button
                   onClick={() => setIsCartOpen(true)}
                   className="relative text-white hover:text-white/80 transition-colors"
                 >
                   <ShoppingBag className="w-5 h-5" />
                   {totalItems > 0 && (
-                    <span className="absolute -top-2 -right-2 w-5 h-5 bg-gold text-forest text-xs font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-2 -right-2 w-5 h-5 bg-gold text-primary-dark text-xs font-bold rounded-full flex items-center justify-center">
                       {totalItems}
                     </span>
                   )}
@@ -180,8 +190,8 @@ export function Header() {
             position: 'sticky',
             top: 0,
             zIndex: 50,
-            backgroundColor: isHovered || navIsStuck ? 'hsl(165, 38%, 17%)' : 'transparent',
-            borderTop: isHovered || navIsStuck ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
+            backgroundColor: isHovered || navIsStuck || !isTransparent ? '#050b18' : 'transparent',
+            borderTop: isHovered || navIsStuck || !isTransparent ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
             boxShadow: navIsStuck ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
           }}
         >
@@ -205,7 +215,7 @@ export function Header() {
                   {/* Dropdown */}
                   {item.dropdown && activeDropdown === item.name && (
                     <div
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-56 bg-forest shadow-xl py-2 animate-fade-in"
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-56 bg-background shadow-xl py-2 animate-fade-in"
                       onMouseEnter={handleDropdownMouseEnter}
                       onMouseLeave={handleDropdownMouseLeave}
                     >
@@ -223,17 +233,13 @@ export function Header() {
                 </div>
               ))}
             </div>
-
-            {/* Mobile: minimal nav label */}
-            <div className="lg:hidden flex items-center justify-center py-2">
-            </div>
           </div>
         </nav>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-forest pt-32 animate-slide-up">
+        <div className="fixed inset-0 z-40 bg-background pt-32 animate-slide-up">
           <nav className="flex flex-col items-center space-y-6 py-8">
             {navItems.map((item) => (
               <div key={item.name} className="text-center">

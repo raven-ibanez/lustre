@@ -10,7 +10,7 @@ export function Newsletter() {
   };
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-forest">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-2xl mx-auto text-center">
         <div className="animate-fade-in">
           <h2 className="font-serif text-2xl text-white mb-2">Join the Lustre Lab Family</h2>
@@ -29,7 +29,7 @@ export function Newsletter() {
             />
             <button
               type="submit"
-              className="px-8 py-3 text-white text-xs uppercase tracking-[2px] font-semibold border border-white hover:bg-white hover:text-forest transition-colors"
+              className="px-8 py-3 text-white text-xs uppercase tracking-[2px] font-semibold border border-white hover:bg-white hover:text-primary-dark transition-colors"
             >
               Subscribe
             </button>

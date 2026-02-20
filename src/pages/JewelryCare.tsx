@@ -2,7 +2,7 @@ import { jewelryCareTips } from '@/data/articles';
 
 export function JewelryCare() {
   return (
-    <div id="jewelry-care" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div id="jewelry-care" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen">
       <div className="max-w-4xl mx-auto">
         <h1 className="section-title mb-4">Jewelry Care Guide</h1>
         <p className="text-center text-muted-foreground mb-12">
@@ -54,18 +54,18 @@ export function JewelryCare() {
         </div>
 
         {/* What to Avoid */}
-        <div className="bg-forest text-white p-8">
-          <h2 className="font-serif text-xl mb-4">What to Avoid</h2>
+        <div className="bg-primary-dark/50 border border-gold/20 p-8">
+          <h2 className="font-serif text-xl mb-4 text-gold">What to Avoid</h2>
           <div className="grid md:grid-cols-2 gap-4 text-sm text-white/80">
             <ul className="space-y-2">
-              <li>&#10022; Harsh chemicals (bleach, chlorine, ammonia)</li>
-              <li>&#10022; Abrasive materials or rough cloths</li>
-              <li>&#10022; Ultrasonic cleaners for soft gemstones</li>
+              <li><span className="text-gold">&#10022;</span> Harsh chemicals (bleach, chlorine, ammonia)</li>
+              <li><span className="text-gold">&#10022;</span> Abrasive materials or rough cloths</li>
+              <li><span className="text-gold">&#10022;</span> Ultrasonic cleaners for soft gemstones</li>
             </ul>
             <ul className="space-y-2">
-              <li>&#10022; Wearing jewelry during strenuous activities</li>
-              <li>&#10022; Exposing to extreme temperatures</li>
-              <li>&#10022; Storing multiple pieces together</li>
+              <li><span className="text-gold">&#10022;</span> Wearing jewelry during strenuous activities</li>
+              <li><span className="text-gold">&#10022;</span> Exposing to extreme temperatures</li>
+              <li><span className="text-gold">&#10022;</span> Storing multiple pieces together</li>
             </ul>
           </div>
         </div>
@@ -73,7 +73,7 @@ export function JewelryCare() {
         {/* Professional Service */}
         <div className="text-center mt-12">
           <p className="text-muted-foreground mb-4">
-            Need professional cleaning or repair? We offer complimentary cleaning services 
+            Need professional cleaning or repair? We offer complimentary cleaning services
             for all Lustre Lab pieces.
           </p>
           <a href="#contact" className="btn-secondary">

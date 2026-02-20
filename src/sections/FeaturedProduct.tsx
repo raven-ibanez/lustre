@@ -1,6 +1,6 @@
 export function FeaturedProduct() {
   return (
-    <section className="bg-cream">
+    <section className="bg-background border-y border-white/5">
       <div className="grid md:grid-cols-2">
         {/* Image */}
         <div className="relative h-[500px] md:h-auto animate-slide-right">
@@ -20,9 +20,9 @@ export function FeaturedProduct() {
             Where elegance meets the stars
           </p>
           <p className="text-sm leading-relaxed text-foreground mb-8">
-            Discover our newest collection inspired by the beauty of the night sky. Each piece 
-            features carefully selected gemstones that capture the brilliance of celestial bodies. 
-            From delicate pendants to statement rings, the Celestial Collection offers something 
+            Discover our newest collection inspired by the beauty of the night sky. Each piece
+            features carefully selected gemstones that capture the brilliance of celestial bodies.
+            From delicate pendants to statement rings, the Celestial Collection offers something
             extraordinary for every jewelry lover.
           </p>
           <div>

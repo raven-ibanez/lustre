@@ -1,6 +1,6 @@
 export function Shipping() {
   return (
-    <div id="shipping" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div id="shipping" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen">
       <div className="max-w-4xl mx-auto">
         <h1 className="section-title mb-4">Shipping & Returns</h1>
         <p className="text-center text-muted-foreground mb-12">
@@ -10,12 +10,12 @@ export function Shipping() {
         {/* Shipping Info */}
         <div className="bg-white p-8 mb-8">
           <h2 className="font-serif text-xl mb-6">Shipping Information</h2>
-          
+
           <div className="space-y-6">
             <div>
               <h3 className="font-medium mb-2">Free Shipping</h3>
               <p className="text-sm text-muted-foreground">
-                We offer free nationwide shipping for all orders over ₱5,000. 
+                We offer free nationwide shipping for all orders over ₱5,000.
                 For orders below this amount, a flat shipping fee of ₱150 applies.
               </p>
             </div>
@@ -32,7 +32,7 @@ export function Shipping() {
             <div>
               <h3 className="font-medium mb-2">Order Processing</h3>
               <p className="text-sm text-muted-foreground">
-                All orders are processed within 1-2 business days. You will receive 
+                All orders are processed within 1-2 business days. You will receive
                 a tracking number via email once your order has been shipped.
               </p>
             </div>
@@ -40,7 +40,7 @@ export function Shipping() {
             <div>
               <h3 className="font-medium mb-2">International Shipping</h3>
               <p className="text-sm text-muted-foreground">
-                We currently ship to select international destinations. Please contact 
+                We currently ship to select international destinations. Please contact
                 us at hello@lustrelab.com for international shipping rates and delivery times.
               </p>
             </div>
@@ -50,12 +50,12 @@ export function Shipping() {
         {/* Returns Info */}
         <div className="bg-white p-8 mb-8">
           <h2 className="font-serif text-xl mb-6">Returns & Exchanges</h2>
-          
+
           <div className="space-y-6">
             <div>
               <h3 className="font-medium mb-2">Return Policy</h3>
               <p className="text-sm text-muted-foreground">
-                We accept returns within 14 days of delivery. Items must be unused, 
+                We accept returns within 14 days of delivery. Items must be unused,
                 in their original packaging, and in the same condition as received.
               </p>
             </div>
@@ -73,8 +73,8 @@ export function Shipping() {
             <div>
               <h3 className="font-medium mb-2">Refunds</h3>
               <p className="text-sm text-muted-foreground">
-                Refunds will be processed within 5-7 business days after we receive 
-                and inspect the returned item. The refund will be issued to the original 
+                Refunds will be processed within 5-7 business days after we receive
+                and inspect the returned item. The refund will be issued to the original
                 payment method.
               </p>
             </div>
@@ -92,12 +92,12 @@ export function Shipping() {
         </div>
 
         {/* Contact */}
-        <div className="bg-forest text-white p-8 text-center">
+        <div className="bg-background border border-white/5 text-white p-8 text-center">
           <h2 className="font-serif text-xl mb-4">Need Help?</h2>
           <p className="text-sm text-white/80 mb-4">
             If you have any questions about shipping or returns, please don't hesitate to contact us.
           </p>
-          <a href="#contact" className="inline-block border border-white text-white px-6 py-2 text-xs uppercase tracking-wider hover:bg-white hover:text-forest transition-colors">
+          <a href="#contact" className="inline-block border border-white text-white px-6 py-2 text-xs uppercase tracking-wider hover:bg-white hover:text-primary-dark transition-colors">
             Contact Us
           </a>
         </div>

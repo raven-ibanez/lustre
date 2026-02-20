@@ -20,48 +20,48 @@ export function CustomOrder() {
   };
 
   return (
-    <div id="custom" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div id="custom" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen">
       <div className="max-w-6xl mx-auto">
         <h1 className="section-title mb-4">Bespoke Creations</h1>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Let us bring your dream jewelry to life. Our master craftsmen will work with you 
+          Let us bring your dream jewelry to life. Our master craftsmen will work with you
           to create a one-of-a-kind piece that tells your unique story.
         </p>
 
         {/* Process */}
         <div className="grid md:grid-cols-4 gap-6 mb-16">
-          <div className="bg-white p-6 text-center">
-            <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center mx-auto mb-4">
-              <MessageSquare className="w-5 h-5 text-white" />
+          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+            <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageSquare className="w-5 h-5 text-primary-dark" />
             </div>
-            <h3 className="font-serif text-lg mb-2">1. Consultation</h3>
+            <h3 className="font-serif text-lg mb-2 text-gold italic">1. Consultation</h3>
             <p className="text-sm text-muted-foreground">
               Share your vision with us through a detailed consultation
             </p>
           </div>
-          <div className="bg-white p-6 text-center">
-            <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center mx-auto mb-4">
-              <Palette className="w-5 h-5 text-white" />
+          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+            <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center mx-auto mb-4">
+              <Palette className="w-5 h-5 text-primary-dark" />
             </div>
-            <h3 className="font-serif text-lg mb-2">2. Design</h3>
+            <h3 className="font-serif text-lg mb-2 text-gold italic">2. Design</h3>
             <p className="text-sm text-muted-foreground">
               Our designers create sketches and 3D renderings for your approval
             </p>
           </div>
-          <div className="bg-white p-6 text-center">
-            <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center mx-auto mb-4">
-              <Sparkles className="w-5 h-5 text-white" />
+          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+            <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="w-5 h-5 text-primary-dark" />
             </div>
-            <h3 className="font-serif text-lg mb-2">3. Crafting</h3>
+            <h3 className="font-serif text-lg mb-2 text-gold italic">3. Crafting</h3>
             <p className="text-sm text-muted-foreground">
               Master artisans handcraft your piece with meticulous attention
             </p>
           </div>
-          <div className="bg-white p-6 text-center">
-            <div className="w-12 h-12 bg-forest rounded-full flex items-center justify-center mx-auto mb-4">
-              <Package className="w-5 h-5 text-white" />
+          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+            <div className="w-12 h-12 bg-gold/10 border border-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Package className="w-5 h-5 text-gold" />
             </div>
-            <h3 className="font-serif text-lg mb-2">4. Delivery</h3>
+            <h3 className="font-serif text-lg mb-2 text-gold italic">4. Delivery</h3>
             <p className="text-sm text-muted-foreground">
               Your finished piece is carefully packaged and delivered to you
             </p>
@@ -70,15 +70,15 @@ export function CustomOrder() {
 
         {/* Form */}
         <div className="grid md:grid-cols-2 gap-12">
-          <div className="bg-white p-8">
-            <h2 className="font-serif text-xl mb-6">Start Your Custom Order</h2>
+          <div className="bg-card p-8 border border-white/5 shadow-2xl">
+            <h2 className="font-serif text-xl mb-6 text-gold italic">Start Your Custom Order</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               />
               <input
@@ -86,7 +86,7 @@ export function CustomOrder() {
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               />
               <input
@@ -94,14 +94,14 @@ export function CustomOrder() {
                 placeholder="Phone Number"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               />
-              
+
               <select
                 value={formData.jewelryType}
                 onChange={(e) => setFormData({ ...formData, jewelryType: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               >
                 <option value="">Select Jewelry Type</option>
@@ -115,7 +115,7 @@ export function CustomOrder() {
               <select
                 value={formData.budget}
                 onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               >
                 <option value="">Select Budget Range</option>
@@ -129,7 +129,7 @@ export function CustomOrder() {
               <select
                 value={formData.timeline}
                 onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               >
                 <option value="">Select Timeline</option>
@@ -143,7 +143,7 @@ export function CustomOrder() {
                 placeholder="Describe your dream piece..."
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none resize-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none resize-none"
                 rows={4}
                 required
               />
@@ -152,7 +152,7 @@ export function CustomOrder() {
                 placeholder="Share any inspiration (links, images, ideas)..."
                 value={formData.inspiration}
                 onChange={(e) => setFormData({ ...formData, inspiration: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none resize-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none resize-none"
                 rows={3}
               />
 
@@ -164,7 +164,7 @@ export function CustomOrder() {
 
           {/* Info */}
           <div className="space-y-6">
-            <div className="bg-forest text-white p-8">
+            <div className="bg-background text-white p-8 border border-white/5">
               <h2 className="font-serif text-xl mb-4">Why Choose Custom?</h2>
               <ul className="space-y-3 text-sm text-white/80">
                 <li className="flex items-start gap-2">
@@ -190,13 +190,13 @@ export function CustomOrder() {
               </ul>
             </div>
 
-            <div className="bg-white p-8">
-              <h2 className="font-serif text-xl mb-4">Questions?</h2>
+            <div className="bg-card p-8 border border-white/5 shadow-2xl">
+              <h2 className="font-serif text-xl mb-4 text-gold italic">Questions?</h2>
               <p className="text-sm text-muted-foreground mb-4">
-                Not sure where to start? Our team is here to guide you through 
+                Not sure where to start? Our team is here to guide you through
                 the custom design process.
               </p>
-              <a href="#contact" className="btn-secondary inline-block">
+              <a href="#contact" className="btn-secondary px-8">
                 Schedule a Consultation
               </a>
             </div>

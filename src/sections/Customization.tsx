@@ -17,12 +17,12 @@ export function Customization() {
               bespoke creations
             </h2>
             <p className="text-white/90 text-sm leading-relaxed mb-8">
-              Bring your dream jewelry to life with our custom design service. Our master 
-              craftsmen work with you to create one-of-a-kind pieces that tell your unique story. 
+              Bring your dream jewelry to life with our custom design service. Our master
+              craftsmen work with you to create one-of-a-kind pieces that tell your unique story.
               From engagement rings to anniversary gifts, we transform your vision into reality.
             </p>
-            <a href="#contact" className="btn-ghost">
-              Start Your Design
+            <a href="#quotation" className="btn-ghost">
+              Get a Custom Quote
             </a>
           </div>
         </div>

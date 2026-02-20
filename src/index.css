@@ -6,34 +6,34 @@
 
 @layer base {
   :root {
-    --background: 60 14% 95%;
-    --foreground: 0 0% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
-    --primary: 165 38% 17%;
+    --background: 221 64% 6%;
+    --foreground: 0 0% 100%;
+    --card: 221 64% 10%;
+    --card-foreground: 0 0% 100%;
+    --popover: 221 64% 6%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 221 64% 10%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 50 14% 89%;
-    --secondary-foreground: 0 0% 10%;
-    --muted: 50 14% 89%;
-    --muted-foreground: 0 0% 40%;
+    --secondary: 217 40% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217 40% 20%;
+    --muted-foreground: 217 15% 70%;
     --accent: 43 52% 59%;
-    --accent-foreground: 0 0% 10%;
+    --accent-foreground: 217 65% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 165 38% 17%;
+    --border: 217 40% 20%;
+    --input: 217 40% 20%;
+    --ring: 43 52% 59%;
     --radius: 0rem;
-    --sidebar-background: 165 38% 17%;
+    --sidebar-background: 217 65% 11%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 165 38% 17%;
-    --sidebar-accent: 165 30% 25%;
+    --sidebar-primary-foreground: 217 65% 11%;
+    --sidebar-accent: 217 40% 20%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 165 30% 25%;
-    --sidebar-ring: 165 38% 17%;
+    --sidebar-border: 217 40% 20%;
+    --sidebar-ring: 217 65% 11%;
   }
 }
 
@@ -41,79 +41,87 @@
   * {
     @apply border-border;
   }
+
   html {
     scroll-behavior: smooth;
   }
+
   body {
-    @apply bg-cream text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif text-white;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-forest text-white px-8 py-3 text-xs font-semibold uppercase tracking-[2px] transition-all duration-200 hover:bg-primary-dark;
+    @apply bg-gold text-primary-dark px-8 py-3 text-xs font-semibold uppercase tracking-[2px] transition-all duration-200 hover:bg-gold/90;
   }
-  
+
   .btn-secondary {
-    @apply border border-forest text-forest px-8 py-3 text-xs font-semibold uppercase tracking-[2px] transition-all duration-200 hover:bg-forest hover:text-white;
+    @apply border border-gold text-gold px-8 py-3 text-xs font-semibold uppercase tracking-[2px] transition-all duration-200 hover:bg-gold hover:text-primary-dark;
   }
-  
+
   .btn-ghost {
-    @apply border border-white text-white px-8 py-3 text-xs font-semibold uppercase tracking-[2px] transition-all duration-200 hover:bg-white hover:text-forest;
+    @apply border border-white text-white px-8 py-3 text-xs font-semibold uppercase tracking-[2px] transition-all duration-200 hover:bg-white hover:text-primary-dark;
   }
-  
+
   .section-title {
     @apply font-serif text-2xl md:text-3xl uppercase tracking-[2px] text-center;
   }
-  
+
   .section-subtitle {
     @apply text-xs uppercase tracking-[3px] text-muted-foreground text-center mt-2;
   }
-  
+
   .nav-link {
     @apply relative text-xs uppercase tracking-[2px] font-medium transition-colors duration-200;
   }
-  
+
   .nav-link::after {
     content: '';
     @apply absolute bottom-0 left-0 w-0 h-[1px] bg-current transition-all duration-300;
   }
-  
+
   .nav-link:hover::after {
     @apply w-full;
   }
-  
+
   .product-card {
     position: relative;
   }
-  
+
   .product-card-image {
     @apply overflow-hidden aspect-square;
   }
-  
+
   .product-card-image img {
     @apply w-full h-full object-cover transition-transform duration-500;
   }
-  
+
   .product-card:hover .product-card-image img {
     @apply scale-105;
   }
-  
+
   .badge-vermeil {
-    @apply absolute top-3 left-3 bg-forest text-white text-[10px] uppercase tracking-wider px-2 py-1;
+    @apply absolute top-3 left-3 bg-gold text-primary-dark text-[10px] uppercase tracking-wider px-2 py-1;
   }
-  
+
   .badge-sale {
-    @apply absolute top-3 left-3 bg-gold text-forest text-[10px] uppercase tracking-wider px-2 py-1;
+    @apply absolute top-3 left-3 bg-gold text-primary-dark text-[10px] uppercase tracking-wider px-2 py-1;
   }
-  
+
   .badge-sold-out {
     @apply absolute top-3 left-3 bg-gray-500 text-white text-[10px] uppercase tracking-wider px-2 py-1;
   }
-  
+
   .badge-new {
     @apply absolute top-3 left-3 bg-blue-600 text-white text-[10px] uppercase tracking-wider px-2 py-1;
   }
@@ -123,23 +131,23 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out forwards;
   }
-  
+
   .animate-slide-up {
     animation: slideUp 0.5s ease-out forwards;
   }
-  
+
   .animate-slide-left {
     animation: slideLeft 0.6s ease-out forwards;
   }
-  
+
   .animate-slide-right {
     animation: slideRight 0.6s ease-out forwards;
   }
-  
+
   .animate-scale-in {
     animation: scaleIn 0.3s ease-out forwards;
   }
@@ -149,6 +157,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -159,6 +168,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -170,6 +180,7 @@
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -181,6 +192,7 @@
     opacity: 0;
     transform: translateX(-50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -192,6 +204,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

@@ -1,5 +1,31 @@
 import { useState, useEffect, useCallback } from 'react';
-import { heroSlides } from '@/data/products';
+
+const heroSlides = [
+  {
+    id: '1',
+    image: '/images/hero-ring.jpg',
+    title: 'discover timeless elegance',
+    subtitle: 'fine jewelry crafted with passion',
+    cta: 'SHOP COLLECTION',
+    href: '#shop',
+  },
+  {
+    id: '2',
+    image: '/images/hero-necklace.jpg',
+    title: 'new arrivals',
+    subtitle: 'exquisite pieces for every moment',
+    cta: 'Explore Now',
+    href: '#shop',
+  },
+  {
+    id: '3',
+    image: '/images/hero-ring.jpg',
+    title: 'custom creations',
+    subtitle: 'design your dream jewelry with us',
+    cta: 'GET A QUOTE',
+    href: '#quotation',
+  },
+];
 
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -49,9 +75,8 @@ export function Hero() {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-white w-6' : 'bg-white/50'
-            }`}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white w-6' : 'bg-white/50'
+              }`}
           />
         ))}
       </div>

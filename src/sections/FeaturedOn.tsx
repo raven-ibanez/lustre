@@ -3,7 +3,7 @@ import { articles } from '@/data/articles';
 
 export function FeaturedOn() {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-cream">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
         <SectionTitle title="From the Journal" subtitle="TIPS, GUIDES & INSPIRATION" />
 
@@ -26,7 +26,7 @@ export function FeaturedOn() {
                   <p className="text-xs text-muted-foreground">
                     {article.date} <span className="mx-2">•</span> {article.source}
                   </p>
-                  <h3 className="font-serif text-lg leading-tight group-hover:text-forest transition-colors">
+                  <h3 className="font-serif text-lg leading-tight group-hover:text-gold transition-colors">
                     {article.title}
                   </h3>
                   <p className="text-sm text-muted-foreground line-clamp-3">

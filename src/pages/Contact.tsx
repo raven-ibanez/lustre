@@ -17,7 +17,7 @@ export function Contact() {
   };
 
   return (
-    <div id="contact" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div id="contact" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen">
       <div className="max-w-6xl mx-auto">
         <h1 className="section-title mb-4">Get in Touch</h1>
         <p className="text-center text-muted-foreground mb-12">
@@ -34,7 +34,7 @@ export function Contact() {
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               />
               <input
@@ -42,7 +42,7 @@ export function Contact() {
                 placeholder="Your Email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               />
               <input
@@ -50,14 +50,14 @@ export function Contact() {
                 placeholder="Subject"
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none"
                 required
               />
               <textarea
                 placeholder="Your Message"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-forest focus:outline-none resize-none"
+                className="w-full px-4 py-3 border border-gray-300 text-sm focus:border-gold focus:outline-none resize-none"
                 rows={5}
                 required
               />
@@ -73,25 +73,25 @@ export function Contact() {
               <h2 className="font-serif text-xl mb-6">Contact Information</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
-                  <Mail className="w-5 h-5 text-forest mt-0.5" />
+                  <Mail className="w-5 h-5 text-gold mt-0.5" />
                   <div>
                     <p className="font-medium text-sm">Email</p>
-                    <a href="mailto:hello@lustrelab.com" className="text-muted-foreground hover:text-forest">
+                    <a href="mailto:hello@lustrelab.com" className="text-muted-foreground hover:text-gold">
                       hello@lustrelab.com
                     </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <Phone className="w-5 h-5 text-forest mt-0.5" />
+                  <Phone className="w-5 h-5 text-gold mt-0.5" />
                   <div>
                     <p className="font-medium text-sm">Phone</p>
-                    <a href="tel:+639123456789" className="text-muted-foreground hover:text-forest">
+                    <a href="tel:+639123456789" className="text-muted-foreground hover:text-gold">
                       +63 912 345 6789
                     </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <MapPin className="w-5 h-5 text-forest mt-0.5" />
+                  <MapPin className="w-5 h-5 text-gold mt-0.5" />
                   <div>
                     <p className="font-medium text-sm">Address</p>
                     <p className="text-muted-foreground">
@@ -101,7 +101,7 @@ export function Contact() {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <Clock className="w-5 h-5 text-forest mt-0.5" />
+                  <Clock className="w-5 h-5 text-gold mt-0.5" />
                   <div>
                     <p className="font-medium text-sm">Business Hours</p>
                     <p className="text-muted-foreground">
@@ -115,13 +115,13 @@ export function Contact() {
             </div>
 
             {/* Custom Orders */}
-            <div className="bg-forest text-white p-8">
+            <div className="bg-primary-dark/50 border border-gold/20 p-8">
               <h2 className="font-serif text-xl mb-4">Custom Orders</h2>
               <p className="text-sm text-white/80 mb-4">
-                Looking for something unique? We specialize in custom jewelry design. 
+                Looking for something unique? We specialize in custom jewelry design.
                 Share your vision with us and we'll bring it to life.
               </p>
-              <a href="#custom" className="inline-block border border-white text-white px-6 py-2 text-xs uppercase tracking-wider hover:bg-white hover:text-forest transition-colors">
+              <a href="#custom" className="inline-block border border-white text-white px-6 py-2 text-xs uppercase tracking-wider hover:bg-white hover:text-primary-dark transition-colors">
                 Start a Custom Order
               </a>
             </div>

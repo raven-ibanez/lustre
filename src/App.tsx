@@ -3,13 +3,12 @@ import { CartProvider } from '@/context/CartContext';
 import { AnnouncementBar } from '@/components/AnnouncementBar';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { EmailPopup } from '@/components/EmailPopup';
+
 import { CartDrawer } from '@/components/CartDrawer';
 import { Hero } from '@/sections/Hero';
 import { ProductNotice } from '@/sections/ProductNotice';
 import { FeaturedProduct } from '@/sections/FeaturedProduct';
 import { ValentinesPicks } from '@/sections/ValentinesPicks';
-import { GiftVoucher } from '@/sections/GiftVoucher';
 import { Customization } from '@/sections/Customization';
 import { FeaturedCollection } from '@/sections/FeaturedCollection';
 import { ShopByCategory } from '@/sections/ShopByCategory';
@@ -28,8 +27,10 @@ import { Shipping } from '@/pages/Shipping';
 import { Terms } from '@/pages/Terms';
 import { FAQs } from '@/pages/FAQs';
 import { CustomOrder } from '@/pages/CustomOrder';
+import { CustomRingQuotation } from '@/pages/CustomRingQuotation';
+import { Admin } from '@/pages/Admin';
 
-type Page = 'home' | 'shop' | 'ring-size-guide' | 'jewelry-care' | 'about' | 'contact' | 'shipping' | 'terms' | 'faqs' | 'custom';
+type Page = 'home' | 'shop' | 'ring-size-guide' | 'jewelry-care' | 'about' | 'contact' | 'shipping' | 'terms' | 'faqs' | 'custom' | 'quotation' | 'admin';
 
 function HomePage() {
   return (
@@ -38,7 +39,6 @@ function HomePage() {
       <ProductNotice />
       <FeaturedProduct />
       <ValentinesPicks />
-      <GiftVoucher />
       <Customization />
       <FeaturedCollection />
       <ShopByCategory />
@@ -54,11 +54,14 @@ function HomePage() {
 
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
 
   // Handle hash-based navigation
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
+      const [baseHash, subHash] = hash.split('/');
+
       const pageMap: Record<string, Page> = {
         'home': 'home',
         'shop': 'shop',
@@ -71,8 +74,18 @@ function App() {
         'terms': 'terms',
         'faqs': 'faqs',
         'custom': 'custom',
+        'quotation': 'quotation',
+        'admin': 'admin',
       };
-      setCurrentPage(pageMap[hash] || 'home');
+
+      const targetPage = pageMap[baseHash] || 'home';
+      setCurrentPage(targetPage);
+
+      if (baseHash === 'shop' && subHash) {
+        setCategoryFilter(subHash);
+      } else {
+        setCategoryFilter(null);
+      }
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -84,7 +97,7 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'shop':
-        return <Shop />;
+        return <Shop initialCategory={categoryFilter} />;
       case 'ring-size-guide':
         return <RingSizeGuide />;
       case 'jewelry-care':
@@ -101,6 +114,10 @@ function App() {
         return <FAQs />;
       case 'custom':
         return <CustomOrder />;
+      case 'quotation':
+        return <CustomRingQuotation />;
+      case 'admin':
+        return <Admin />;
       default:
         return <HomePage />;
     }
@@ -108,14 +125,14 @@ function App() {
 
   return (
     <CartProvider>
-      <div className="min-h-screen bg-cream">
+      <div className="min-h-screen bg-background">
         <AnnouncementBar />
-        <Header />
+        <Header isTransparent={currentPage === 'home'} />
         <main>
           {renderPage()}
         </main>
         <Footer />
-        <EmailPopup />
+
         <CartDrawer />
       </div>
     </CartProvider>

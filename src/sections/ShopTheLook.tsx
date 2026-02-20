@@ -1,17 +1,20 @@
-import { useState } from 'react';
 import { SectionTitle } from '@/components/SectionTitle';
-import { products } from '@/data/products';
+
+const lookProduct = {
+  id: '9',
+  name: 'Royal Eternity Band',
+  base_price: 6200,
+  available: false,
+};
 
 export function ShopTheLook() {
-  const [currentLook, setCurrentLook] = useState(0);
-  const lookProduct = products[8];
 
   const formatPrice = (price: number) => {
     return price.toLocaleString('en-PH');
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-forest">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
         <SectionTitle title="Styled by You" />
 
@@ -26,16 +29,16 @@ export function ShopTheLook() {
             <div className="absolute inset-0 bg-black/20" />
 
             {/* Product Overlay */}
-            <div className="absolute bottom-8 left-8 bg-white p-4 max-w-xs">
-              {lookProduct.isSoldOut && (
+            <div className="absolute bottom-8 left-8 bg-primary-dark p-4 max-w-xs border border-gold/20">
+              {!lookProduct.available && (
                 <span className="badge-sold-out static mb-2">Sold out</span>
               )}
               <h3 className="text-sm font-medium mt-2">{lookProduct.name}</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                {lookProduct.currency}{formatPrice(lookProduct.price)}
+                ₱{formatPrice(lookProduct.base_price)}
               </p>
               <a
-                href={`#product-${lookProduct.id}`}
+                href={`#shop`}
                 className="text-xs uppercase tracking-wider underline mt-3 inline-block hover:no-underline"
               >
                 Shop this look
@@ -43,18 +46,6 @@ export function ShopTheLook() {
             </div>
           </div>
 
-          {/* Navigation Dots */}
-          <div className="flex justify-center mt-6 space-x-2">
-            {[0, 1, 2, 3].map((index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentLook(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentLook ? 'bg-white w-6' : 'bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
         </div>
       </div>
     </section>

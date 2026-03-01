@@ -66,7 +66,7 @@ export function GiftVoucher() {
             {/* Denominations */}
             <div className="mb-6">
               <p className="text-xs uppercase tracking-wider mb-3">Select Amount:</p>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 {denominations.map((denom) => (
                   <button
                     key={denom.value}

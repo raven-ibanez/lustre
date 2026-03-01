@@ -40,7 +40,7 @@ export function Hero() {
   }, [nextSlide]);
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: '65vh', minHeight: '500px' }}>
+    <section className="relative w-full overflow-hidden" style={{ height: '65vh', minHeight: '380px' }}>
       <div
         className="absolute inset-0 transition-opacity duration-800"
         key={currentSlide}

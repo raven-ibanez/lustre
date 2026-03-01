@@ -26,7 +26,7 @@ export function Contact() {
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-white p-8">
+          <div className="bg-white p-5 sm:p-8">
             <h2 className="font-serif text-xl mb-6">Send us a Message</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -69,7 +69,7 @@ export function Contact() {
 
           {/* Contact Info */}
           <div className="space-y-8">
-            <div className="bg-white p-8">
+            <div className="bg-white p-5 sm:p-8">
               <h2 className="font-serif text-xl mb-6">Contact Information</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
@@ -115,7 +115,7 @@ export function Contact() {
             </div>
 
             {/* Custom Orders */}
-            <div className="bg-primary-dark/50 border border-gold/20 p-8">
+            <div className="bg-primary-dark/50 border border-gold/20 p-5 sm:p-8">
               <h2 className="font-serif text-xl mb-4">Custom Orders</h2>
               <p className="text-sm text-white/80 mb-4">
                 Looking for something unique? We specialize in custom jewelry design.

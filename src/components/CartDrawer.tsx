@@ -207,7 +207,7 @@ export function CartDrawer() {
               <form onSubmit={handleCheckout} className="space-y-6">
                 <h3 className="font-serif text-xl text-white">Checkout Details</h3>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">First Name</label>
                     <input
@@ -268,7 +268,7 @@ export function CartDrawer() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">City</label>
                     <input

@@ -29,7 +29,7 @@ export function ShopTheLook() {
             <div className="absolute inset-0 bg-black/20" />
 
             {/* Product Overlay */}
-            <div className="absolute bottom-8 left-8 bg-primary-dark p-4 max-w-xs border border-gold/20">
+            <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:bottom-8 sm:left-8 bg-primary-dark p-4 max-w-xs border border-gold/20">
               {!lookProduct.available && (
                 <span className="badge-sold-out static mb-2">Sold out</span>
               )}

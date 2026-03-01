@@ -6,34 +6,49 @@
 
 @layer base {
   :root {
-    --background: 221 64% 6%;
-    --foreground: 0 0% 100%;
-    --card: 221 64% 10%;
-    --card-foreground: 0 0% 100%;
-    --popover: 221 64% 6%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 221 64% 10%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217 40% 20%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 217 40% 20%;
-    --muted-foreground: 217 15% 70%;
+    /* Sapphire:    #13204A  — deep navy primary background */
+    /* Royal Blue:  #1C2F6E  — card / secondary surfaces */
+    /* Swan Wing:   #EDE7DC  — warm cream muted foreground */
+    /* Shellstone:  #D6D0C5  — borders and dividers */
+    --background: 228 57% 18%;
+    /* Sapphire */
+    --foreground: 36 29% 93%;
+    /* Swan Wing */
+    --card: 228 59% 27%;
+    /* Royal Blue */
+    --card-foreground: 36 29% 93%;
+    /* Swan Wing */
+    --popover: 228 57% 18%;
+    /* Sapphire */
+    --popover-foreground: 36 29% 93%;
+    --primary: 228 59% 27%;
+    /* Royal Blue */
+    --primary-foreground: 36 29% 93%;
+    --secondary: 228 52% 33%;
+    /* Royal Blue lighter */
+    --secondary-foreground: 36 29% 93%;
+    --muted: 228 52% 33%;
+    --muted-foreground: 35 17% 67%;
+    /* Shellstone-ish */
     --accent: 43 52% 59%;
-    --accent-foreground: 217 65% 10%;
+    /* gold (unchanged) */
+    --accent-foreground: 228 57% 18%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 217 40% 20%;
-    --input: 217 40% 20%;
+    --border: 35 17% 58%;
+    /* Shellstone */
+    --input: 228 52% 33%;
     --ring: 43 52% 59%;
+    /* gold */
     --radius: 0rem;
-    --sidebar-background: 217 65% 11%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 217 65% 11%;
-    --sidebar-accent: 217 40% 20%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 217 40% 20%;
-    --sidebar-ring: 217 65% 11%;
+    --sidebar-background: 228 57% 18%;
+    --sidebar-foreground: 36 29% 93%;
+    --sidebar-primary: 36 29% 93%;
+    --sidebar-primary-foreground: 228 57% 18%;
+    --sidebar-accent: 228 52% 33%;
+    --sidebar-accent-foreground: 36 29% 93%;
+    --sidebar-border: 35 17% 58%;
+    --sidebar-ring: 228 57% 18%;
   }
 }
 
@@ -44,10 +59,12 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: hidden;
   }
 
   h1,
@@ -178,7 +195,7 @@
 @keyframes slideLeft {
   from {
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(40px);
   }
 
   to {

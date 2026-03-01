@@ -35,16 +35,16 @@ export function PristineCare() {
           </div>
 
           {/* Image */}
-          <div className="grid grid-cols-2 gap-4 animate-slide-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-slide-left">
             <img
               src="/images/packaging.jpg"
               alt="Lustre Lab Packaging"
-              className="w-full h-64 object-cover"
+              className="w-full h-48 sm:h-64 object-cover"
             />
             <img
               src="/images/gift-voucher.jpg"
               alt="Lustre Lab Gift Box"
-              className="w-full h-64 object-cover"
+              className="w-full h-48 sm:h-64 object-cover"
             />
           </div>
         </div>

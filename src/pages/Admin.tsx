@@ -382,12 +382,12 @@ export function Admin() {
     return (
         <div className="admin-dark" style={{ minHeight: '100vh' }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
                     <div>
                         <h1 className="font-serif text-3xl" style={{ color: 'white' }}>Admin Dashboard</h1>
-                        <p style={{ color: 'rgba(255,255,255,0.6)' }}>Manage your shop content and logic</p>
+                        <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm">Manage your shop content and logic</p>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap gap-4">
                         {activeTab === 'products' ? (
                             <button
                                 onClick={() => {
@@ -447,59 +447,61 @@ export function Admin() {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-white/10 mb-8">
-                    <button
-                        onClick={() => setActiveTab('products')}
-                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'products' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                    >
-                        Products ({products.length})
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('categories')}
-                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'categories' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                    >
-                        Categories ({categories.length})
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('orders')}
-                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'orders' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                    >
-                        Orders ({orders.length})
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('analytics')}
-                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'analytics' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                    >
-                        Analytics
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('payments')}
-                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'payments' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                    >
-                        Payments
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('quotation_settings')}
-                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_settings' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                    >
-                        <Settings className="w-4 h-4 inline-block mr-2" />
-                        Quote Settings
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('quotation_records')}
-                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_records' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                    >
-                        <ListChecks className="w-4 h-4 inline-block mr-2" />
-                        Quote Records ({quotationRecords.length})
-                    </button>
+                <div className="flex border-b border-white/10 mb-8 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+                    <div className="flex min-w-max">
+                        <button
+                            onClick={() => setActiveTab('products')}
+                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'products' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                        >
+                            Products ({products.length})
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('categories')}
+                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'categories' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                        >
+                            Categories ({categories.length})
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('orders')}
+                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'orders' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                        >
+                            Orders ({orders.length})
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('analytics')}
+                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'analytics' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                        >
+                            Analytics
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('payments')}
+                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'payments' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                        >
+                            Payments
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('quotation_settings')}
+                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_settings' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                        >
+                            <Settings className="w-4 h-4 inline-block mr-2" />
+                            Quote Settings
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('quotation_records')}
+                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_records' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                        >
+                            <ListChecks className="w-4 h-4 inline-block mr-2" />
+                            Quote Records ({quotationRecords.length})
+                        </button>
+                    </div>
                 </div>
 
                 {loading ? (
                     <div className="text-center py-20 italic">Loading dashboard...</div>
                 ) : error ? (
-                    <div className="bg-red-50 text-red-600 p-4 rounded-md mb-8">Error: {error}</div>
+                    <div className="bg-red-50 text-red-600 p-4 rounded-md mb-8 text-sm">Error: {error}</div>
                 ) : activeTab === 'products' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
                         <table className="min-w-full divide-y divide-white/10">
                             <thead className="bg-white/5">
                                 <tr>
@@ -562,7 +564,7 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'categories' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
                         <table className="min-w-full divide-y divide-white/10">
                             <thead className="bg-white/5">
                                 <tr>
@@ -613,7 +615,7 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'orders' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
                         <table className="min-w-full divide-y divide-white/10">
                             <thead className="bg-white/5">
                                 <tr>
@@ -675,7 +677,7 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'payments' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
                         <table className="min-w-full divide-y divide-white/10">
                             <thead className="bg-white/5">
                                 <tr>
@@ -734,7 +736,7 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'quotation_settings' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
                         <table className="min-w-full divide-y divide-white/10">
                             <thead className="bg-white/5">
                                 <tr>
@@ -775,7 +777,7 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'quotation_records' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
                         <table className="min-w-full divide-y divide-white/10">
                             <thead className="bg-white/5">
                                 <tr>
@@ -938,13 +940,13 @@ export function Admin() {
 
                 {/* Product Edit Modal */}
                 {isEditing && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-2xl max-h-[90vh] overflow-auto border border-white/10 shadow-2xl">
-                            <div className="p-6">
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
+                        <div className="bg-[#1C2F6E] w-full max-w-2xl max-h-[95vh] overflow-y-auto border border-white/10 shadow-2xl">
+                            <div className="p-4 sm:p-8">
                                 <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <h3 className="font-serif text-2xl" style={{ color: 'white' }}>{currentProduct?.id ? 'Edit Product' : 'Add New Product'}</h3>
-                                    <button onClick={() => setIsEditing(false)} className="text-white/60 hover:text-white transition-colors">
-                                        <X className="w-6 h-6" />
+                                    <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'white' }}>{currentProduct?.id ? 'Edit Product' : 'Add New Product'}</h3>
+                                    <button onClick={() => setIsEditing(false)} className="text-white/60 hover:text-white transition-colors p-2">
+                                        <X className="w-5 h-5 sm:w-6 sm:h-6" />
                                     </button>
                                 </div>
 
@@ -1105,17 +1107,17 @@ export function Admin() {
                                         </div>
                                     )}
 
-                                    <div className="flex justify-end gap-3 pt-4">
+                                    <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
                                         <button
                                             type="button"
                                             onClick={() => setIsEditing(false)}
-                                            className="px-6 py-2 border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors uppercase tracking-widest text-[10px] font-bold"
+                                            className="w-full sm:w-auto px-6 py-3 sm:py-2 border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors uppercase tracking-widest text-[10px] font-bold"
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type="submit"
-                                            className="px-8 py-2 bg-gold text-primary-dark hover:bg-gold/90 transition-colors font-bold uppercase tracking-widest text-xs"
+                                            className="w-full sm:w-auto px-8 py-3 sm:py-2 bg-gold text-primary-dark hover:bg-gold/90 transition-colors font-bold uppercase tracking-widest text-xs"
                                         >
                                             Save Product
                                         </button>
@@ -1128,13 +1130,13 @@ export function Admin() {
 
                 {/* Category Edit Modal */}
                 {isEditingCategory && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-md overflow-auto border border-white/10 shadow-2xl">
-                            <div className="p-6">
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
+                        <div className="bg-[#1C2F6E] w-full max-w-md max-h-[95vh] overflow-y-auto border border-white/10 shadow-2xl">
+                            <div className="p-4 sm:p-8">
                                 <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <h3 className="font-serif text-2xl" style={{ color: 'white' }}>{currentCategory?.id ? 'Edit Category' : 'Add New Category'}</h3>
-                                    <button onClick={() => setIsEditingCategory(false)} className="text-white/60 hover:text-white transition-colors">
-                                        <X className="w-6 h-6" />
+                                    <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'white' }}>{currentCategory?.id ? 'Edit Category' : 'Add New Category'}</h3>
+                                    <button onClick={() => setIsEditingCategory(false)} className="text-white/60 hover:text-white transition-colors p-2">
+                                        <X className="w-5 h-5 sm:w-6 sm:h-6" />
                                     </button>
                                 </div>
 
@@ -1349,7 +1351,7 @@ export function Admin() {
                                     </button>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
                                     <div className="space-y-6">
                                         <div>
                                             <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Customer Info</h4>
@@ -1409,9 +1411,9 @@ export function Admin() {
                                     </div>
                                 )}
 
-                                <div className="mb-8">
+                                <div className="mb-0 sm:mb-8">
                                     <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Order Items</h4>
-                                    <div className="border border-white/10 overflow-hidden">
+                                    <div className="border border-white/10 overflow-x-auto">
                                         <table className="min-w-full divide-y divide-white/10">
                                             <thead className="bg-white/5">
                                                 <tr>
@@ -1547,9 +1549,9 @@ export function Admin() {
 
                 {/* Quotation Detail Modal */}
                 {viewingQuotation && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-2xl max-h-[90vh] overflow-auto border border-white/10 shadow-2xl">
-                            <div className="p-6">
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
+                        <div className="bg-[#1C2F6E] w-full max-w-4xl max-h-[95vh] overflow-y-auto border border-white/10 shadow-2xl">
+                            <div className="p-4 sm:p-8">
                                 <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
                                     <h3 className="font-serif text-2xl text-white">Quotation Details</h3>
                                     <button onClick={() => setViewingQuotation(null)} className="text-white/60 hover:text-white transition-colors">
@@ -1557,7 +1559,7 @@ export function Admin() {
                                     </button>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
                                     <div className="space-y-6">
                                         <div>
                                             <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Customer Contact</h4>
@@ -1616,7 +1618,7 @@ export function Admin() {
 
                                 <div>
                                     <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Form Submissions</h4>
-                                    <div className="bg-white/5 p-4 border border-white/5 grid grid-cols-2 gap-x-8 gap-y-4">
+                                    <div className="bg-white/5 p-4 border border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                                         {Object.entries(viewingQuotation.form_data || {}).map(([key, value]: [string, any]) => (
                                             key !== 'inspirationFiles' && (
                                                 <div key={key} className="flex flex-col pb-2 border-b border-white/5">

@@ -92,12 +92,12 @@ export function Shipping() {
         </div>
 
         {/* Contact */}
-        <div className="bg-background border border-white/5 text-white p-8 text-center">
+        <div className="p-8 text-center" style={{ backgroundColor: '#13204A', color: '#EDE7DC' }}>
           <h2 className="font-serif text-xl mb-4">Need Help?</h2>
-          <p className="text-sm text-white/80 mb-4">
+          <p className="text-sm mb-4" style={{ color: 'rgba(237,231,220,0.8)' }}>
             If you have any questions about shipping or returns, please don't hesitate to contact us.
           </p>
-          <a href="#contact" className="inline-block border border-white text-white px-6 py-2 text-xs uppercase tracking-wider hover:bg-white hover:text-primary-dark transition-colors">
+          <a href="#contact" className="inline-block px-6 py-2 text-xs uppercase tracking-wider transition-colors" style={{ border: '1px solid #EDE7DC', color: '#EDE7DC' }}>
             Contact Us
           </a>
         </div>

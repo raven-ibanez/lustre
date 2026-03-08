@@ -10,45 +10,46 @@
     /* Royal Blue:  #1C2F6E  — card / secondary surfaces */
     /* Swan Wing:   #EDE7DC  — warm cream muted foreground */
     /* Shellstone:  #D6D0C5  — borders and dividers */
-    --background: 228 57% 18%;
+    --background: 36 29% 93%;
+    /* Swan Wing — warm cream */
+    --foreground: 228 57% 18%;
+    /* Sapphire — dark text */
+    --card: 0 0% 100%;
+    /* White card surfaces */
+    --card-foreground: 228 57% 18%;
     /* Sapphire */
-    --foreground: 36 29% 93%;
-    /* Swan Wing */
-    --card: 228 59% 27%;
-    /* Royal Blue */
-    --card-foreground: 36 29% 93%;
-    /* Swan Wing */
-    --popover: 228 57% 18%;
-    /* Sapphire */
-    --popover-foreground: 36 29% 93%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 228 57% 18%;
     --primary: 228 59% 27%;
     /* Royal Blue */
     --primary-foreground: 36 29% 93%;
-    --secondary: 228 52% 33%;
-    /* Royal Blue lighter */
-    --secondary-foreground: 36 29% 93%;
-    --muted: 228 52% 33%;
-    --muted-foreground: 35 17% 67%;
-    /* Shellstone-ish */
+    /* Swan Wing */
+    --secondary: 35 20% 85%;
+    /* Shellstone-ish light */
+    --secondary-foreground: 228 57% 18%;
+    --muted: 35 20% 88%;
+    /* Soft cream muted surface */
+    --muted-foreground: 228 30% 40%;
+    /* Readable mid-dark */
     --accent: 43 52% 59%;
     /* gold (unchanged) */
     --accent-foreground: 228 57% 18%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 35 17% 58%;
-    /* Shellstone */
-    --input: 228 52% 33%;
+    --border: 35 17% 75%;
+    /* Shellstone lighter */
+    --input: 35 20% 88%;
     --ring: 43 52% 59%;
     /* gold */
     --radius: 0rem;
-    --sidebar-background: 228 57% 18%;
-    --sidebar-foreground: 36 29% 93%;
-    --sidebar-primary: 36 29% 93%;
-    --sidebar-primary-foreground: 228 57% 18%;
-    --sidebar-accent: 228 52% 33%;
-    --sidebar-accent-foreground: 36 29% 93%;
-    --sidebar-border: 35 17% 58%;
-    --sidebar-ring: 228 57% 18%;
+    --sidebar-background: 36 29% 93%;
+    --sidebar-foreground: 228 57% 18%;
+    --sidebar-primary: 228 57% 18%;
+    --sidebar-primary-foreground: 36 29% 93%;
+    --sidebar-accent: 35 20% 85%;
+    --sidebar-accent-foreground: 228 57% 18%;
+    --sidebar-border: 35 17% 75%;
+    --sidebar-ring: 43 52% 59%;
   }
 }
 
@@ -73,7 +74,7 @@
   h4,
   h5,
   h6 {
-    @apply font-serif text-white;
+    @apply font-serif text-foreground;
   }
 }
 

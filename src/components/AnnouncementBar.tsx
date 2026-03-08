@@ -10,10 +10,10 @@ export function AnnouncementBar({
   linkHref = "#shop"
 }: AnnouncementBarProps) {
   return (
-    <div className="bg-background text-white py-2 px-4 text-center relative z-50">
-      <p className="text-[11px] uppercase tracking-wider">
+    <div className="py-2 px-4 text-center relative z-50" style={{ backgroundColor: '#13204A', color: '#EDE7DC' }}>
+      <p className="text-[11px] uppercase tracking-wide whitespace-nowrap overflow-hidden text-ellipsis">
         {message}{' '}
-        <a href={linkHref} className="underline hover:no-underline">
+        <a href={linkHref} className="underline hover:no-underline whitespace-nowrap">
           {linkText}
         </a>
       </p>

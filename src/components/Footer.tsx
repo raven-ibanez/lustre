@@ -16,7 +16,7 @@ const companyLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-background text-white">
+    <footer style={{ backgroundColor: '#13204A', color: '#EDE7DC' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -26,7 +26,7 @@ export function Footer() {
               alt="Lustre Lab"
               className="h-16 w-auto mb-6"
             />
-            <p className="text-sm text-white/70 mb-4">
+            <p className="text-sm mb-4" style={{ color: 'rgba(237,231,220,0.7)' }}>
               Fine jewelry crafted with passion. Each piece tells a story of elegance and timeless beauty.
             </p>
             <div className="flex space-x-4">
@@ -34,7 +34,10 @@ export function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/70 hover:text-white transition-colors"
+                className="transition-colors"
+                style={{ color: 'rgba(237,231,220,0.7)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#EDE7DC')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(237,231,220,0.7)')}
               >
                 <Facebook className="w-5 h-5" />
               </a>
@@ -42,7 +45,10 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/70 hover:text-white transition-colors"
+                className="transition-colors"
+                style={{ color: 'rgba(237,231,220,0.7)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#EDE7DC')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(237,231,220,0.7)')}
               >
                 <Instagram className="w-5 h-5" />
               </a>
@@ -57,7 +63,10 @@ export function Footer() {
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-sm transition-colors"
+                    style={{ color: 'rgba(237,231,220,0.7)' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#EDE7DC')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(237,231,220,0.7)')}
                   >
                     {link.name}
                   </a>
@@ -74,7 +83,10 @@ export function Footer() {
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-sm transition-colors"
+                    style={{ color: 'rgba(237,231,220,0.7)' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = '#EDE7DC')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(237,231,220,0.7)')}
                   >
                     {link.name}
                   </a>
@@ -87,19 +99,29 @@ export function Footer() {
           <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
             <h3 className="text-xs uppercase tracking-[2px] mb-6">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-sm text-white/70">
+              <li className="flex items-center gap-2 text-sm" style={{ color: 'rgba(237,231,220,0.7)' }}>
                 <Mail className="w-4 h-4" />
-                <a href="mailto:hello@lustrelab.com" className="hover:text-white transition-colors">
+                <a
+                  href="mailto:hello@lustrelab.com"
+                  className="transition-colors"
+                  onMouseEnter={e => (e.currentTarget.style.color = '#EDE7DC')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(237,231,220,0.7)')}
+                >
                   hello@lustrelab.com
                 </a>
               </li>
-              <li className="flex items-center gap-2 text-sm text-white/70">
+              <li className="flex items-center gap-2 text-sm" style={{ color: 'rgba(237,231,220,0.7)' }}>
                 <Phone className="w-4 h-4" />
-                <a href="tel:+639123456789" className="hover:text-white transition-colors">
+                <a
+                  href="tel:+639123456789"
+                  className="transition-colors"
+                  onMouseEnter={e => (e.currentTarget.style.color = '#EDE7DC')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(237,231,220,0.7)')}
+                >
                   +63 912 345 6789
                 </a>
               </li>
-              <li className="flex items-start gap-2 text-sm text-white/70">
+              <li className="flex items-start gap-2 text-sm" style={{ color: 'rgba(237,231,220,0.7)' }}>
                 <MapPin className="w-4 h-4 mt-0.5" />
                 <span>Makati City, Philippines</span>
               </li>
@@ -108,8 +130,8 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-16 pt-8 border-t border-white/10 text-center">
-          <p className="text-xs text-white/50">
+        <div className="mt-16 pt-8 border-t text-center" style={{ borderColor: 'rgba(237,231,220,0.15)' }}>
+          <p className="text-xs" style={{ color: 'rgba(237,231,220,0.5)' }}>
             &copy; {new Date().getFullYear()} Lustre Lab. All rights reserved.
           </p>
         </div>

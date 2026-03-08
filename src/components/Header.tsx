@@ -149,7 +149,7 @@ export function Header({ isTransparent = false }: HeaderProps) {
             <div className="relative flex items-center justify-center py-5">
               {/* Mobile hamburger - left */}
               <button
-                className="lg:hidden absolute left-0 text-white"
+                className="lg:hidden absolute left-0 text-foreground"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -215,7 +215,8 @@ export function Header({ isTransparent = false }: HeaderProps) {
                   {/* Dropdown */}
                   {item.dropdown && activeDropdown === item.name && (
                     <div
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-56 bg-background shadow-xl py-2 animate-fade-in"
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-56 shadow-xl py-2 animate-fade-in"
+                      style={{ backgroundColor: '#13204A' }}
                       onMouseEnter={handleDropdownMouseEnter}
                       onMouseLeave={handleDropdownMouseLeave}
                     >
@@ -223,7 +224,10 @@ export function Header({ isTransparent = false }: HeaderProps) {
                         <a
                           key={subItem.name}
                           href={subItem.href}
-                          className="block px-4 py-3 text-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+                          className="block px-4 py-3 text-sm transition-colors"
+                          style={{ color: 'rgba(237,231,220,0.8)' }}
+                          onMouseEnter={e => (e.currentTarget.style.color = '#EDE7DC')}
+                          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(237,231,220,0.8)')}
                         >
                           {subItem.name}
                         </a>
@@ -239,13 +243,14 @@ export function Header({ isTransparent = false }: HeaderProps) {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-background pt-32 animate-slide-up">
+        <div className="fixed inset-0 z-40 pt-32 animate-slide-up" style={{ backgroundColor: '#13204A' }}>
           <nav className="flex flex-col items-center space-y-6 py-8">
             {navItems.map((item) => (
               <div key={item.name} className="text-center">
                 <a
                   href={item.href}
-                  className="text-white text-lg uppercase tracking-wider block mb-2"
+                  className="text-lg uppercase tracking-wider block mb-2"
+                  style={{ color: '#EDE7DC' }}
                   onClick={() => !item.dropdown && setMobileMenuOpen(false)}
                 >
                   {item.name}
@@ -256,7 +261,8 @@ export function Header({ isTransparent = false }: HeaderProps) {
                       <a
                         key={subItem.name}
                         href={subItem.href}
-                        className="block text-white/70 text-sm"
+                        className="block text-sm"
+                        style={{ color: 'rgba(237,231,220,0.65)' }}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {subItem.name}

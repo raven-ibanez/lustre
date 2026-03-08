@@ -106,7 +106,7 @@ export function CustomRingQuotation() {
                         Your personalized quotation will be sent to your email. We're excited to help bring your vision to life.
                     </p>
                     <div className="space-y-4">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">For urgent requests, contact us via:</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/40">For urgent requests, contact us via:</p>
                         <a
                             href="https://instagram.com/lustrelab"
                             target="_blank"
@@ -231,7 +231,7 @@ export function CustomRingQuotation() {
                                         <input
                                             type="text"
                                             placeholder="Specify gemstone..."
-                                            className="mt-3 w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm"
+                                            className="mt-3 w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm text-foreground bg-transparent placeholder:text-foreground/40"
                                             value={formData.otherStone}
                                             onChange={(e) => setFormData({ ...formData, otherStone: e.target.value })}
                                         />
@@ -242,7 +242,7 @@ export function CustomRingQuotation() {
                                     <div>
                                         <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Preferred shape</label>
                                         <select
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm bg-transparent"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm bg-transparent text-foreground"
                                             value={formData.shape}
                                             onChange={(e) => setFormData({ ...formData, shape: e.target.value })}
                                         >
@@ -256,7 +256,7 @@ export function CustomRingQuotation() {
                                     <div>
                                         <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Desired carat weight</label>
                                         <select
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm bg-transparent"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm bg-transparent text-foreground"
                                             value={formData.caratWeight}
                                             onChange={(e) => setFormData({ ...formData, caratWeight: e.target.value })}
                                         >
@@ -269,7 +269,7 @@ export function CustomRingQuotation() {
                                             <input
                                                 type="text"
                                                 placeholder="Specify carat weight..."
-                                                className="mt-2 w-full border-b border-white/20 py-1 focus:border-gold outline-none text-sm"
+                                                className="mt-2 w-full border-b border-foreground/20 py-1 focus:border-gold outline-none text-sm text-foreground bg-transparent placeholder:text-foreground/40"
                                                 value={formData.otherCarat}
                                                 onChange={(e) => setFormData({ ...formData, otherCarat: e.target.value })}
                                             />
@@ -282,7 +282,7 @@ export function CustomRingQuotation() {
                                         <div>
                                             <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Color preference</label>
                                             <select
-                                                className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm bg-transparent"
+                                                className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm bg-transparent text-foreground"
                                                 value={formData.colorPreference}
                                                 onChange={(e) => setFormData({ ...formData, colorPreference: e.target.value })}
                                             >
@@ -295,7 +295,7 @@ export function CustomRingQuotation() {
                                         <div>
                                             <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Clarity preference</label>
                                             <select
-                                                className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm bg-transparent"
+                                                className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm bg-transparent text-foreground"
                                                 value={formData.clarityPreference}
                                                 onChange={(e) => setFormData({ ...formData, clarityPreference: e.target.value })}
                                             >
@@ -372,7 +372,7 @@ export function CustomRingQuotation() {
                                     <div>
                                         <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Setting style</label>
                                         <select
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm bg-transparent"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm bg-transparent text-foreground"
                                             value={formData.settingStyle}
                                             onChange={(e) => setFormData({ ...formData, settingStyle: e.target.value })}
                                         >
@@ -386,7 +386,7 @@ export function CustomRingQuotation() {
                                     <div>
                                         <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Preferred metal</label>
                                         <select
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm bg-transparent"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm bg-transparent text-foreground"
                                             value={formData.metal}
                                             onChange={(e) => setFormData({ ...formData, metal: e.target.value })}
                                         >
@@ -426,7 +426,7 @@ export function CustomRingQuotation() {
                                         <input
                                             type="text"
                                             placeholder="e.g. 6.5 US"
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm text-foreground bg-transparent placeholder:text-foreground/40"
                                             value={formData.ringSize}
                                             onChange={(e) => setFormData({ ...formData, ringSize: e.target.value })}
                                         />
@@ -553,7 +553,7 @@ export function CustomRingQuotation() {
                                     <input
                                         type="text"
                                         placeholder="Enter text here..."
-                                        className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm"
+                                        className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm text-foreground bg-transparent placeholder:text-foreground/40"
                                         value={formData.engraving}
                                         onChange={(e) => setFormData({ ...formData, engraving: e.target.value })}
                                     />
@@ -565,7 +565,7 @@ export function CustomRingQuotation() {
                                         <input
                                             type="text"
                                             required
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm text-foreground bg-transparent"
                                             value={formData.fullName}
                                             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                                         />
@@ -575,7 +575,7 @@ export function CustomRingQuotation() {
                                         <input
                                             type="tel"
                                             required
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm text-foreground bg-transparent"
                                             value={formData.phoneNumber}
                                             onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                                         />
@@ -588,7 +588,7 @@ export function CustomRingQuotation() {
                                         <input
                                             type="email"
                                             required
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm text-foreground bg-transparent"
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         />
@@ -596,7 +596,7 @@ export function CustomRingQuotation() {
                                     <div>
                                         <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Preferred communication</label>
                                         <select
-                                            className="w-full border-b border-white/20 py-2 focus:border-gold outline-none text-sm bg-transparent"
+                                            className="w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm bg-transparent text-foreground"
                                             value={formData.preferredComm}
                                             onChange={(e) => setFormData({ ...formData, preferredComm: e.target.value })}
                                         >
@@ -612,7 +612,7 @@ export function CustomRingQuotation() {
                     )}
 
                     {/* Navigation Buttons */}
-                    <div className="flex justify-between pt-8 border-t border-gray-100">
+                    <div className="flex justify-between pt-8 border-t border-foreground/10">
                         {step > 1 ? (
                             <button
                                 type="button"

@@ -30,7 +30,7 @@ export function CustomOrder() {
 
         {/* Process */}
         <div className="grid md:grid-cols-4 gap-6 mb-16">
-          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+          <div className="bg-card p-6 text-center border border-foreground/10 shadow-2xl">
             <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center mx-auto mb-4">
               <MessageSquare className="w-5 h-5 text-primary-dark" />
             </div>
@@ -39,7 +39,7 @@ export function CustomOrder() {
               Share your vision with us through a detailed consultation
             </p>
           </div>
-          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+          <div className="bg-card p-6 text-center border border-foreground/10 shadow-2xl">
             <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center mx-auto mb-4">
               <Palette className="w-5 h-5 text-primary-dark" />
             </div>
@@ -48,7 +48,7 @@ export function CustomOrder() {
               Our designers create sketches and 3D renderings for your approval
             </p>
           </div>
-          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+          <div className="bg-card p-6 text-center border border-foreground/10 shadow-2xl">
             <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="w-5 h-5 text-primary-dark" />
             </div>
@@ -57,7 +57,7 @@ export function CustomOrder() {
               Master artisans handcraft your piece with meticulous attention
             </p>
           </div>
-          <div className="bg-card p-6 text-center border border-white/5 shadow-2xl">
+          <div className="bg-card p-6 text-center border border-foreground/10 shadow-2xl">
             <div className="w-12 h-12 bg-gold/10 border border-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <Package className="w-5 h-5 text-gold" />
             </div>
@@ -70,7 +70,7 @@ export function CustomOrder() {
 
         {/* Form */}
         <div className="grid md:grid-cols-2 gap-12">
-          <div className="bg-card p-8 border border-white/5 shadow-2xl">
+          <div className="bg-card p-8 border border-foreground/10 shadow-2xl">
             <h2 className="font-serif text-xl mb-6 text-gold italic">Start Your Custom Order</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -164,9 +164,9 @@ export function CustomOrder() {
 
           {/* Info */}
           <div className="space-y-6">
-            <div className="bg-background text-white p-8 border border-white/5">
+            <div className="p-8 border border-foreground/10" style={{ backgroundColor: '#13204A', color: '#EDE7DC' }}>
               <h2 className="font-serif text-xl mb-4">Why Choose Custom?</h2>
-              <ul className="space-y-3 text-sm text-white/80">
+              <ul className="space-y-3 text-sm" style={{ color: 'rgba(237,231,220,0.8)' }}>
                 <li className="flex items-start gap-2">
                   <span>&#10022;</span>
                   <span>Create a truly one-of-a-kind piece</span>
@@ -190,7 +190,7 @@ export function CustomOrder() {
               </ul>
             </div>
 
-            <div className="bg-card p-8 border border-white/5 shadow-2xl">
+            <div className="bg-card p-8 border border-foreground/10 shadow-2xl">
               <h2 className="font-serif text-xl mb-4 text-gold italic">Questions?</h2>
               <p className="text-sm text-muted-foreground mb-4">
                 Not sure where to start? Our team is here to guide you through

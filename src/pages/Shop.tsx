@@ -75,8 +75,8 @@ export function Shop({ initialCategory }: ShopProps) {
             <button
               onClick={() => setSelectedCategory('All')}
               className={`px-4 py-2 text-sm transition-colors ${selectedCategory === 'All'
-                  ? 'bg-gold text-primary-dark font-medium'
-                  : 'border border-white/20 text-muted-foreground hover:border-gold hover:text-white'
+                ? 'bg-gold text-primary-dark font-medium'
+                : 'border border-foreground/20 text-muted-foreground hover:border-gold hover:text-foreground'
                 }`}
             >
               All
@@ -86,8 +86,8 @@ export function Shop({ initialCategory }: ShopProps) {
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`px-4 py-2 text-sm transition-colors ${selectedCategory === category.id
-                    ? 'bg-gold text-primary-dark font-medium'
-                    : 'border border-white/20 text-muted-foreground hover:border-gold hover:text-white'
+                  ? 'bg-gold text-primary-dark font-medium'
+                  : 'border border-foreground/20 text-muted-foreground hover:border-gold hover:text-foreground'
                   }`}
               >
                 {category.name}
@@ -99,10 +99,10 @@ export function Shop({ initialCategory }: ShopProps) {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 bg-white/5 border border-white/20 text-white text-sm focus:border-gold focus:outline-none"
+            className="px-4 py-2 bg-transparent border border-foreground/20 text-foreground text-sm focus:border-gold focus:outline-none"
           >
             {sortOptions.map((option) => (
-              <option key={option.value} value={option.value} className="bg-primary-dark text-white">
+              <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}

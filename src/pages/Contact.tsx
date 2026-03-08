@@ -115,13 +115,15 @@ export function Contact() {
             </div>
 
             {/* Custom Orders */}
-            <div className="bg-primary-dark/50 border border-gold/20 p-5 sm:p-8">
-              <h2 className="font-serif text-xl mb-4">Custom Orders</h2>
-              <p className="text-sm text-white/80 mb-4">
+            <div className="border border-gold/20 p-5 sm:p-8" style={{ backgroundColor: '#13204A' }}>
+              <h2 className="font-serif text-xl mb-4" style={{ color: '#EDE7DC' }}>Custom Orders</h2>
+              <p className="text-sm mb-4" style={{ color: 'rgba(237,231,220,0.8)' }}>
                 Looking for something unique? We specialize in custom jewelry design.
                 Share your vision with us and we'll bring it to life.
               </p>
-              <a href="#custom" className="inline-block border border-white text-white px-6 py-2 text-xs uppercase tracking-wider hover:bg-white hover:text-primary-dark transition-colors">
+              <a href="#custom" className="inline-block px-6 py-2 text-xs uppercase tracking-wider transition-colors" style={{ border: '1px solid #EDE7DC', color: '#EDE7DC' }}
+                onMouseEnter={undefined}
+              >
                 Start a Custom Order
               </a>
             </div>

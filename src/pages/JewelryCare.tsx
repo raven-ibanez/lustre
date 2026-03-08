@@ -54,9 +54,9 @@ export function JewelryCare() {
         </div>
 
         {/* What to Avoid */}
-        <div className="bg-primary-dark/50 border border-gold/20 p-8">
+        <div className="border border-gold/20 p-8" style={{ backgroundColor: '#13204A' }}>
           <h2 className="font-serif text-xl mb-4 text-gold">What to Avoid</h2>
-          <div className="grid md:grid-cols-2 gap-4 text-sm text-white/80">
+          <div className="grid md:grid-cols-2 gap-4 text-sm" style={{ color: 'rgba(237,231,220,0.8)' }}>
             <ul className="space-y-2">
               <li><span className="text-gold">&#10022;</span> Harsh chemicals (bleach, chlorine, ammonia)</li>
               <li><span className="text-gold">&#10022;</span> Abrasive materials or rough cloths</li>

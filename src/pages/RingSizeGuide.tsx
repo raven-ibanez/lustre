@@ -92,9 +92,9 @@ export function RingSizeGuide() {
         </div>
 
         {/* Tips */}
-        <div className="bg-primary-dark/50 border border-gold/20 p-8 mt-8">
+        <div className="border border-gold/20 p-8 mt-8" style={{ backgroundColor: '#13204A' }}>
           <h2 className="font-serif text-xl mb-4 text-gold">Helpful Tips</h2>
-          <ul className="space-y-2 text-sm text-white/80">
+          <ul className="space-y-2 text-sm" style={{ color: 'rgba(237,231,220,0.8)' }}>
             <li><span className="text-gold">&#10022;</span> Measure your finger at the end of the day when it's at its largest</li>
             <li><span className="text-gold">&#10022;</span> Avoid measuring when your hands are cold, as fingers shrink</li>
             <li><span className="text-gold">&#10022;</span> If you're between sizes, we recommend sizing up</li>

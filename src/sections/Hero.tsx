@@ -2,6 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 
 const heroSlides = [
   {
+    id: '3',
+    image: '/images/hero-ring.jpg',
+    title: 'custom creations',
+    subtitle: 'design your dream jewelry with us',
+    cta: 'GET YOUR RING QUOTATION NOW',
+    href: '#quotation',
+  },
+  {
     id: '1',
     image: '/images/hero-ring.jpg',
     title: 'discover timeless elegance',
@@ -16,14 +24,6 @@ const heroSlides = [
     subtitle: 'exquisite pieces for every moment',
     cta: 'Explore Now',
     href: '#shop',
-  },
-  {
-    id: '3',
-    image: '/images/hero-ring.jpg',
-    title: 'custom creations',
-    subtitle: 'design your dream jewelry with us',
-    cta: 'GET A QUOTE',
-    href: '#quotation',
   },
 ];
 

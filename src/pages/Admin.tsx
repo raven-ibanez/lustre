@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { Product, Category, Order, PaymentMethod } from '@/types';
-import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks } from 'lucide-react';
 
 export function Admin() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -17,7 +17,14 @@ export function Admin() {
     const [loginError, setLoginError] = useState(false);
 
     // Tabs State
-    const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'orders' | 'analytics' | 'payments'>('products');
+    const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'orders' | 'analytics' | 'payments' | 'quotation_settings' | 'quotation_records'>('products');
+
+    // Quotation State
+    const [quotationSettings, setQuotationSettings] = useState<any[]>([]);
+    const [quotationRecords, setQuotationRecords] = useState<any[]>([]);
+    const [isEditingQuotationSetting, setIsEditingQuotationSetting] = useState(false);
+    const [currentQuotationSetting, setCurrentQuotationSetting] = useState<any>(null);
+    const [viewingQuotation, setViewingQuotation] = useState<any>(null);
 
     // Form State
     const [isEditing, setIsEditing] = useState(false);
@@ -70,19 +77,86 @@ export function Admin() {
                 .select('*')
                 .order('sort_order', { ascending: true });
 
+            const { data: quoteSettingsData, error: quoteSettingsErr } = await supabase
+                .from('quotation_settings')
+                .select('*')
+                .order('category', { ascending: true });
+
+            const { data: quoteRecordsData, error: quoteRecordsErr } = await supabase
+                .from('quotation_results')
+                .select('*')
+                .order('created_at', { ascending: false });
+
             if (productsError) throw productsError;
             if (categoriesError) throw categoriesError;
             if (ordersError) throw ordersError;
             if (paymentsError) throw paymentsError;
+            if (quoteSettingsErr) throw quoteSettingsErr;
+            if (quoteRecordsErr) throw quoteRecordsErr;
 
             setProducts(productsData || []);
             setCategories(categoriesData || []);
             setOrders(ordersData || []);
             setPaymentMethods(paymentsData || []);
+            setQuotationSettings(quoteSettingsData || []);
+            setQuotationRecords(quoteRecordsData || []);
+
+            // If quotation settings are empty, initialize them
+            if (!quoteSettingsData || quoteSettingsData.length === 0) {
+                await initializeQuotationSettings();
+            }
         } catch (err: any) {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const initializeQuotationSettings = async () => {
+        const initialSettings = [
+            { key: 'gold_price_10k', value: 5000, label: '10k Gold Price per Gram', category: 'Metal' },
+            { key: 'gold_price_14k', value: 6500, label: '14k Gold Price per Gram', category: 'Metal' },
+            { key: 'gold_price_18k', value: 8500, label: '18k Gold Price per Gram', category: 'Metal' },
+            { key: 'silver_price', value: 280, label: 'Silver Price per Gram', category: 'Metal' },
+            { key: 'base_craftsmanship', value: 2500, label: 'Base Craftsmanship Fee', category: 'Labor' },
+            { key: 'margin', value: 165, label: 'Margin Percentage (e.g. 165 for 1.65)', category: 'Business' },
+            { key: 'stone_lab_diamond', value: 9000, label: 'Lab Diamond Base (per ct)', category: 'Stone' },
+            { key: 'stone_moissanite', value: 1000, label: 'Moissanite Base (per ct)', category: 'Stone' },
+            { key: 'stone_sapphire', value: 1500, label: 'Lab Sapphire Base (per ct)', category: 'Stone' },
+            { key: 'stone_emerald', value: 1800, label: 'Lab Emerald Base (per ct)', category: 'Stone' },
+        ];
+
+        try {
+            const { error } = await supabase
+                .from('quotation_settings')
+                .upsert(initialSettings);
+
+            if (!error) {
+                const { data } = await supabase.from('quotation_settings').select('*');
+                setQuotationSettings(data || []);
+            }
+        } catch (err) {
+            console.error('Initialization error:', err);
+        }
+    };
+
+    const handleSaveQuotationSetting = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!currentQuotationSetting) return;
+
+        try {
+            const { error } = await supabase
+                .from('quotation_settings')
+                .update({ value: currentQuotationSetting.value })
+                .eq('id', currentQuotationSetting.id);
+
+            if (error) throw error;
+
+            setIsEditingQuotationSetting(false);
+            setCurrentQuotationSetting(null);
+            fetchData();
+        } catch (err: any) {
+            alert(err.message);
         }
     };
 
@@ -404,6 +478,20 @@ export function Admin() {
                     >
                         Payments
                     </button>
+                    <button
+                        onClick={() => setActiveTab('quotation_settings')}
+                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_settings' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                    >
+                        <Settings className="w-4 h-4 inline-block mr-2" />
+                        Quote Settings
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('quotation_records')}
+                        className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_records' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
+                    >
+                        <ListChecks className="w-4 h-4 inline-block mr-2" />
+                        Quote Records ({quotationRecords.length})
+                    </button>
                 </div>
 
                 {loading ? (
@@ -642,6 +730,103 @@ export function Admin() {
                                         </td>
                                     </tr>
                                 ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : activeTab === 'quotation_settings' ? (
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                        <table className="min-w-full divide-y divide-white/10">
+                            <thead className="bg-white/5">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Category</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Setting Name</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Value</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                                {quotationSettings.map((setting) => (
+                                    <tr key={setting.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className="px-2 py-1 text-[10px] bg-gold/10 text-gold rounded uppercase font-bold tracking-tighter">
+                                                {setting.category}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap font-medium text-white">
+                                            {setting.label}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-white font-mono">
+                                            {typeof setting.value === 'number' ? `₱${setting.value.toLocaleString()}` : JSON.stringify(setting.value)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
+                                            <button
+                                                onClick={() => {
+                                                    setCurrentQuotationSetting(setting);
+                                                    setIsEditingQuotationSetting(true);
+                                                }}
+                                                className="text-gold hover:text-gold/80"
+                                            >
+                                                <Edit className="w-4 h-4" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : activeTab === 'quotation_records' ? (
+                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-hidden">
+                        <table className="min-w-full divide-y divide-white/10">
+                            <thead className="bg-white/5">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Customer</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Contact Preference</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Path</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Quotation Range</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Date</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                                {quotationRecords.map((record) => (
+                                    <tr key={record.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-white font-medium">{record.customer_name}</div>
+                                            <div className="text-white/60 text-[10px]">{record.customer_email}</div>
+                                            <div className="text-white/40 text-[10px]">{record.customer_phone}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-white font-medium">
+                                            <span className="px-2 py-1 text-[10px] bg-gold text-primary-dark rounded uppercase font-bold">
+                                                {record.form_data?.preferredComm || 'Email'}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className="text-xs text-white/60 bg-white/5 px-2 py-1 rounded">
+                                                {record.path.replace('_', ' ').toUpperCase()}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-gold font-bold">₱{record.final_price_low.toLocaleString()} - ₱{record.final_price_high.toLocaleString()}</div>
+                                            <div className="text-[10px] text-white/60">{record.tier}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-white/60">
+                                            {new Date(record.created_at).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
+                                            <button
+                                                onClick={() => setViewingQuotation(record)}
+                                                className="text-gold hover:text-gold/80"
+                                            >
+                                                View Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {quotationRecords.length === 0 && (
+                                    <tr>
+                                        <td colSpan={4} className="px-6 py-10 text-center text-white/40 italic">No quotation records found.</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -1286,6 +1471,170 @@ export function Admin() {
                                             <option value="cancelled" className="bg-[#0f1d3a]">Cancelled</option>
                                         </select>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Quotation Setting Edit Modal */}
+                {isEditingQuotationSetting && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                        <div className="bg-[#1C2F6E] w-full max-w-md border border-white/10 shadow-2xl">
+                            <div className="p-6">
+                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
+                                    <h3 className="font-serif text-2xl text-white">Edit Setting</h3>
+                                    <button onClick={() => setIsEditingQuotationSetting(false)} className="text-white/60 hover:text-white transition-colors">
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleSaveQuotationSetting} className="space-y-6">
+                                    <div className="space-y-4">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] text-white/40 uppercase font-bold mb-1">Setting</span>
+                                            <span className="text-white font-medium">{currentQuotationSetting?.label}</span>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-widest text-white/60">Value</label>
+                                            {typeof currentQuotationSetting?.value === 'number' ? (
+                                                <input
+                                                    type="number"
+                                                    value={currentQuotationSetting.value}
+                                                    onChange={(e) => setCurrentQuotationSetting({ ...currentQuotationSetting, value: parseFloat(e.target.value) })}
+                                                    className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
+                                                    required
+                                                />
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    value={typeof currentQuotationSetting?.value === 'string' ? currentQuotationSetting.value : JSON.stringify(currentQuotationSetting?.value)}
+                                                    onChange={(e) => {
+                                                        let val: any = e.target.value;
+                                                        try {
+                                                            val = JSON.parse(e.target.value);
+                                                        } catch (e) { }
+                                                        setCurrentQuotationSetting({ ...currentQuotationSetting, value: val });
+                                                    }}
+                                                    className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
+                                                    required
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-4">
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsEditingQuotationSetting(false)}
+                                            className="px-6 py-2 border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors uppercase tracking-widest text-[10px] font-bold"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="px-8 py-2 bg-gold text-primary-dark hover:bg-gold/90 transition-colors font-bold uppercase tracking-widest text-xs"
+                                        >
+                                            Save Setting
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Quotation Detail Modal */}
+                {viewingQuotation && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                        <div className="bg-[#1C2F6E] w-full max-w-2xl max-h-[90vh] overflow-auto border border-white/10 shadow-2xl">
+                            <div className="p-6">
+                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
+                                    <h3 className="font-serif text-2xl text-white">Quotation Details</h3>
+                                    <button onClick={() => setViewingQuotation(null)} className="text-white/60 hover:text-white transition-colors">
+                                        <X className="w-6 h-6" />
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                    <div className="space-y-6">
+                                        <div>
+                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Customer Contact</h4>
+                                            <div className="bg-white/5 p-4 space-y-3 border border-white/5">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Preferred Method</span>
+                                                    <span className="text-sm font-bold text-gold uppercase">{viewingQuotation.form_data?.preferredComm || 'Email'}</span>
+                                                </div>
+                                                {viewingQuotation.form_data?.socialHandle && (
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-white/60 uppercase font-bold">
+                                                            {viewingQuotation.form_data?.preferredComm} Handle/Name
+                                                        </span>
+                                                        <span className="text-sm font-bold text-white">
+                                                            {viewingQuotation.form_data?.preferredComm === 'Instagram' ? '@' : ''}
+                                                            {viewingQuotation.form_data?.socialHandle}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Full Name</span>
+                                                    <span className="text-sm font-medium text-white">{viewingQuotation.customer_name}</span>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Email Address</span>
+                                                    <a href={`mailto:${viewingQuotation.customer_email}`} className="text-sm font-medium text-gold hover:underline">{viewingQuotation.customer_email}</a>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Phone Number</span>
+                                                    <a href={`tel:${viewingQuotation.customer_phone}`} className="text-sm font-medium text-white hover:text-gold transition-colors">{viewingQuotation.customer_phone}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <div>
+                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Quotation Summary</h4>
+                                            <div className="bg-white/5 p-4 space-y-3 border border-white/5">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Path</span>
+                                                    <span className="text-sm font-medium text-white capitalize">{viewingQuotation.path.replace('_', ' ')}</span>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Price Range</span>
+                                                    <span className="text-sm font-bold text-gold">₱{viewingQuotation.final_price_low.toLocaleString()} - ₱{viewingQuotation.final_price_high.toLocaleString()}</span>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Tier</span>
+                                                    <span className="text-sm font-medium text-white">{viewingQuotation.tier}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Form Submissions</h4>
+                                    <div className="bg-white/5 p-4 border border-white/5 grid grid-cols-2 gap-x-8 gap-y-4">
+                                        {Object.entries(viewingQuotation.form_data || {}).map(([key, value]: [string, any]) => (
+                                            key !== 'inspirationFiles' && (
+                                                <div key={key} className="flex flex-col pb-2 border-b border-white/5">
+                                                    <span className="text-[10px] text-white/40 uppercase font-bold">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                                    <span className="text-xs text-white/80">{Array.isArray(value) ? value.join(', ') : String(value)}</span>
+                                                </div>
+                                            )
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-end pt-8">
+                                    <button
+                                        onClick={() => setViewingQuotation(null)}
+                                        className="px-8 py-3 text-[10px] font-bold uppercase tracking-widest border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors"
+                                    >
+                                        Dismiss
+                                    </button>
                                 </div>
                             </div>
                         </div>

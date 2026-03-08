@@ -1,12 +1,31 @@
-import { useState, useRef } from 'react';
-import { Sparkles, Upload, ChevronRight, ChevronLeft, CheckCircle2, Instagram } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Sparkles, Upload, ChevronRight, ChevronLeft, Instagram, ShieldCheck, Gem } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 type Section = 1 | 2 | 3 | 4 | 5;
 
 export function CustomRingQuotation() {
     const [step, setStep] = useState<Section>(1);
     const [submitted, setSubmitted] = useState(false);
+    const [quotationResult, setQuotationResult] = useState<any>(null);
+    const [calculating, setCalculating] = useState(false);
+    const [settings, setSettings] = useState<any>({});
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        fetchSettings();
+    }, []);
+
+    const fetchSettings = async () => {
+        const { data } = await supabase.from('quotation_settings').select('*');
+        if (data) {
+            const settingsObj = data.reduce((acc: any, curr: any) => {
+                acc[curr.key] = curr.value;
+                return acc;
+            }, {});
+            setSettings(settingsObj);
+        }
+    };
 
     const [formData, setFormData] = useState({
         // Section 1: Your Vision
@@ -39,6 +58,7 @@ export function CustomRingQuotation() {
         engraving: '',
         fullName: '',
         phoneNumber: '',
+        socialHandle: '',
         email: '',
         preferredComm: '',
         inspirationFiles: [] as File[],
@@ -68,11 +88,171 @@ export function CustomRingQuotation() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const calculateQuotation = () => {
+        // 1. Determine Path
+        let path = 'center_stone';
+        if (formData.creationType === 'Plain band (no stones)') path = 'plain_band';
+        if (formData.creationType === 'Eternity ring (no center stone)') path = 'eternity';
+
+        let cost = 0;
+        const margin = (settings.margin || 165) / 100 + 1; // e.g. 1.65 + 1 = 2.65
+
+        // Helper: Get Metal Price per Gram
+        const getMetalPrice = () => {
+            if (formData.metal.includes('10k')) return settings.gold_price_10k || 5000;
+            if (formData.metal.includes('14k')) return settings.gold_price_14k || 6500;
+            if (formData.metal.includes('18k')) return settings.gold_price_18k || 8500;
+            if (formData.metal.includes('Silver')) return settings.silver_price || 280;
+            return 6500; // Default 14k
+        };
+
+        // Helper: Gold Weight Logic
+        const getFinalGoldWeight = () => {
+            let baseWeight = 3.5; // Medium
+            if (formData.bandThickness.includes('Thin')) baseWeight = 3;
+            if (formData.bandThickness.includes('Thick')) baseWeight = 4;
+
+            const size = parseFloat(formData.ringSize) || 6;
+            const sizeDiff = size - 6;
+            const adjustment = Math.floor(sizeDiff) * 0.25;
+            return baseWeight + adjustment;
+        };
+
+        if (path === 'center_stone') {
+            // 1. Stone Cost
+            let stoneBaseCarat = settings.stone_moissanite || 1000;
+            if (formData.stoneType.includes('Lab-grown diamond')) stoneBaseCarat = settings.stone_lab_diamond || 9000;
+            if (formData.stoneType.includes('sapphire')) stoneBaseCarat = settings.stone_sapphire || 1500;
+            if (formData.stoneType.includes('emerald')) stoneBaseCarat = settings.stone_emerald || 1800;
+
+            // Carat weight parsing
+            let carat = 1.0;
+            const ctMatch = formData.caratWeight.match(/([\d.]+)\s*–\s*([\d.]+)/);
+            if (ctMatch) {
+                carat = (parseFloat(ctMatch[1]) + parseFloat(ctMatch[2])) / 2;
+            } else if (formData.otherCarat) {
+                carat = parseFloat(formData.otherCarat) || 1.0;
+            }
+
+            cost += (stoneBaseCarat * carat);
+
+            // Adjustments
+            if (formData.shape === 'Marquise') cost += 2000;
+
+            if (formData.stoneType.includes('Lab-grown diamond') || formData.stoneType.includes('Moissanite')) {
+                if (formData.colorPreference.includes('D–F')) cost += 500;
+                if (formData.colorPreference.includes('G–H')) cost += 100;
+                if (formData.colorPreference.includes('Fancy')) cost += 11800;
+
+                if (formData.clarityPreference.includes('VS')) cost -= 150;
+                if (formData.clarityPreference.includes('SI')) cost -= 200;
+            }
+
+            if (formData.stoneType.includes('Lab-grown diamond') && formData.certification === 'No') {
+                cost -= 200;
+            }
+
+            // 2. Setting Cost
+            cost += (settings.base_craftsmanship || 2500);
+
+            const styleAddons: any = {
+                'Hidden halo': 4500,
+                'Halo': 4500,
+                'Three-stone': 5000,
+                'Bezel': 5000,
+                'Cathedral': 4500,
+                'Petal': 4500,
+                'Basket': 5500
+            };
+            Object.keys(styleAddons).forEach(key => {
+                if (formData.settingStyle.includes(key)) cost += styleAddons[key];
+            });
+
+            // Side stones
+            if (formData.sideStones.includes('accent')) cost += 3000;
+            if (formData.sideStones.includes('Halo')) cost += 3000;
+            if (formData.sideStones.includes('baguettes')) cost += 7000;
+            if (formData.sideStones.includes('Three-stone')) cost += 15000;
+
+            // 3. Metal Cost
+            cost += (getFinalGoldWeight() * getMetalPrice());
+
+        } else if (path === 'plain_band') {
+            cost += (getFinalGoldWeight() * getMetalPrice());
+            cost += (settings.base_craftsmanship || 2500);
+
+        } else if (path === 'eternity') {
+            // Path C: Eternity
+            let stonePricePerCt = settings.stone_moissanite || 1000;
+            if (formData.stoneType.includes('Lab-grown diamond')) stonePricePerCt = settings.stone_lab_diamond || 9000;
+            if (formData.stoneType.includes('sapphire')) stonePricePerCt = settings.stone_sapphire || 1500;
+
+            // Base stone count (Size 6)
+            let baseCount = 32; // Default 1.5mm
+            let stoneCt = 0.02; // Default 1.5mm
+            if (formData.bandThickness.includes('1.0mm')) { baseCount = 48; stoneCt = 0.01; }
+            if (formData.bandThickness.includes('1.3mm')) { baseCount = 38; stoneCt = 0.015; }
+            if (formData.bandThickness.includes('2.0mm')) { baseCount = 24; stoneCt = 0.03; }
+            if (formData.bandThickness.includes('2.5mm')) { baseCount = 18; stoneCt = 0.05; }
+
+            const size = parseFloat(formData.ringSize) || 6;
+            const sizeDiff = size - 6;
+            const countAdjustment = Math.floor(sizeDiff) * 2;
+            const finalCount = baseCount + countAdjustment;
+
+            const totalCarat = stoneCt * finalCount;
+            cost += (totalCarat * stonePricePerCt);
+
+            // Metal Cost
+            cost += (getFinalGoldWeight() * getMetalPrice());
+
+            // Labor
+            cost += 2500;
+        }
+
+        const finalTotal = cost * margin;
+        const low = Math.round(finalTotal * 0.98 / 100) * 100;
+        const high = Math.round(finalTotal * 1.10 / 100) * 100;
+
+        let tier = 'Refined Minimal';
+        if (finalTotal >= 250000) tier = 'Heirloom Tier';
+        else if (finalTotal >= 150000) tier = 'Statement Collection';
+        else if (finalTotal >= 80000) tier = 'Signature Luxe';
+
+        return { low, high, tier, path };
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form Data Submitted:', formData);
-        setSubmitted(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setCalculating(true);
+
+        try {
+            const result = calculateQuotation();
+            setQuotationResult(result);
+
+            // Save to Supabase
+            const { error } = await supabase.from('quotation_results').insert([
+                {
+                    customer_name: formData.fullName,
+                    customer_email: formData.email,
+                    customer_phone: formData.phoneNumber,
+                    path: result.path,
+                    form_data: formData,
+                    final_price_low: result.low,
+                    final_price_high: result.high,
+                    tier: result.tier
+                }
+            ]);
+
+            if (error) console.error('Error saving quotation:', error);
+
+            setSubmitted(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (err) {
+            console.error('Calculation error:', err);
+        } finally {
+            setCalculating(false);
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,33 +276,71 @@ export function CustomRingQuotation() {
         );
     };
 
-    if (submitted) {
+    if (submitted && quotationResult) {
         return (
-            <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen flex items-center justify-center text-center">
-                <div className="max-w-md bg-card p-12 shadow-2xl border border-white/5 animate-fade-in">
-                    <CheckCircle2 className="w-16 h-16 text-gold mx-auto mb-6" />
-                    <h2 className="font-serif text-3xl mb-4 text-gold italic">Thank You for Designing with Lustre Lab!</h2>
-                    <p className="text-muted-foreground mb-8">
-                        Your personalized quotation will be sent to your email. We're excited to help bring your vision to life.
-                    </p>
-                    <div className="space-y-4">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/40">For urgent requests, contact us via:</p>
-                        <a
-                            href="https://instagram.com/lustrelab"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors"
-                        >
-                            <Instagram className="w-5 h-5" />
-                            <span className="text-sm font-medium tracking-widest">@lustrelab</span>
-                        </a>
+            <div className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-background min-h-screen flex items-center justify-center">
+                <div className="max-w-2xl w-full bg-card p-8 sm:p-12 shadow-2xl border border-primary-dark/10 animate-fade-in relative overflow-hidden">
+                    {/* Decorative Elements */}
+                    <div className="absolute top-0 right-0 p-8 opacity-10">
+                        <Gem className="w-32 h-32 text-gold" />
                     </div>
-                    <button
-                        onClick={() => window.location.hash = 'home'}
-                        className="mt-12 btn-primary w-full"
-                    >
-                        Return Home
-                    </button>
+
+                    <div className="text-center relative z-10">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold/10 mb-6">
+                            <ShieldCheck className="w-8 h-8 text-gold" />
+                        </div>
+
+                        <h2 className="font-serif text-3xl mb-2 text-primary-dark italic">Your Custom Design Proposal</h2>
+                        <p className="text-gold uppercase tracking-[0.3em] text-[10px] font-bold mb-8">Generated Exclusively for {formData.fullName}</p>
+
+                        <div className="bg-primary-dark/5 border border-primary-dark/10 p-8 mb-8 backdrop-blur-sm">
+                            <span className="text-[10px] uppercase tracking-widest text-primary-dark/40 mb-2 block font-bold">Estimated Investment</span>
+                            <div className="font-serif text-4xl sm:text-5xl text-gold mb-2">
+                                ₱{quotationResult.low.toLocaleString()} – ₱{quotationResult.high.toLocaleString()}
+                            </div>
+                            <div className="inline-block px-4 py-1 bg-gold text-primary-dark text-[10px] font-bold uppercase tracking-widest rounded-full">
+                                {quotationResult.tier}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 text-left">
+                            <div className="p-4 border border-primary-dark/5 bg-primary-dark/[0.02]">
+                                <h4 className="text-[10px] uppercase font-bold text-primary-dark/40 mb-2 tracking-widest">Specifications</h4>
+                                <ul className="text-xs space-y-2 text-primary-dark/80">
+                                    <li className="flex justify-between"><span>Type:</span> <span className="text-primary-dark font-medium">{formData.creationType}</span></li>
+                                    <li className="flex justify-between"><span>Metal:</span> <span className="text-primary-dark font-medium">{formData.metal}</span></li>
+                                    {formData.stoneType && <li className="flex justify-between"><span>Stone:</span> <span className="text-primary-dark font-medium">{formData.stoneType}</span></li>}
+                                </ul>
+                            </div>
+                            <div className="p-4 border border-primary-dark/5 bg-primary-dark/[0.02]">
+                                <h4 className="text-[10px] uppercase font-bold text-primary-dark/40 mb-2 tracking-widest">Next Steps</h4>
+                                <p className="text-[11px] text-primary-dark/60 leading-relaxed font-medium">
+                                    Our master craftsmen have received your vision. A concierge will reach out via <span className="text-gold font-bold">{formData.preferredComm}</span> to finalize your design.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <button
+                                onClick={() => window.location.hash = 'home'}
+                                className="btn-primary w-full py-4 text-xs tracking-[0.2em]"
+                            >
+                                CLOSE & RETURN HOME
+                            </button>
+
+                            <div className="flex items-center justify-center gap-6 pt-4 border-t border-primary-dark/5">
+                                <a
+                                    href="https://instagram.com/lustrelab"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 text-primary-dark/40 hover:text-gold transition-colors"
+                                >
+                                    <Instagram className="w-4 h-4" />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest">Follow @lustrelab</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -607,6 +825,30 @@ export function CustomRingQuotation() {
                                         </select>
                                     </div>
                                 </div>
+
+                                {(formData.preferredComm === 'Instagram' || formData.preferredComm === 'Facebook') && (
+                                    <div className="animate-fade-in space-y-4">
+                                        <div className="bg-gold/5 border border-gold/10 p-4">
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-gold mb-2">
+                                                {formData.preferredComm} {formData.preferredComm === 'Instagram' ? 'Handle' : 'Account Name'}
+                                            </label>
+                                            <div className="relative">
+                                                {formData.preferredComm === 'Instagram' && (
+                                                    <span className="absolute left-0 top-1/2 -translate-y-1/2 text-foreground/40 text-sm">@</span>
+                                                )}
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    placeholder={formData.preferredComm === 'Instagram' ? 'username' : 'Full Name on Facebook'}
+                                                    className={`w-full border-b border-foreground/20 py-2 focus:border-gold outline-none text-sm text-foreground bg-transparent placeholder:text-foreground/40 ${formData.preferredComm === 'Instagram' ? 'pl-4' : ''}`}
+                                                    value={formData.socialHandle}
+                                                    onChange={(e) => setFormData({ ...formData, socialHandle: e.target.value })}
+                                                />
+                                            </div>
+                                            <p className="text-[10px] text-muted-foreground mt-2 italic">So we can find you and send your design proposal!</p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -636,9 +878,14 @@ export function CustomRingQuotation() {
                         ) : (
                             <button
                                 type="submit"
-                                className="btn-primary px-12"
+                                disabled={calculating}
+                                className="btn-primary px-12 relative flex items-center justify-center min-w-[160px]"
                             >
-                                Request Quote
+                                {calculating ? (
+                                    <div className="w-5 h-5 border-2 border-primary-dark/30 border-t-primary-dark rounded-full animate-spin" />
+                                ) : (
+                                    'Request Quote'
+                                )}
                             </button>
                         )}
                     </div>

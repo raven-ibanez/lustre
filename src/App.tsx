@@ -37,9 +37,9 @@ function HomePage() {
     <>
       <Hero />
       <ProductNotice />
+      <Customization />
       <FeaturedProduct />
       <ValentinesPicks />
-      <Customization />
       <FeaturedCollection />
       <ShopByCategory />
       <BestSellers />

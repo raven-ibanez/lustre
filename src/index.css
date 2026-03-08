@@ -228,3 +228,32 @@
     transform: scale(1);
   }
 }
+
+/* Admin Dashboard Dark Theme Override */
+.admin-dark,
+.admin-dark *,
+.admin-dark h1,
+.admin-dark h2,
+.admin-dark h3,
+.admin-dark h4,
+.admin-dark h5,
+.admin-dark h6 {
+  color: inherit;
+}
+
+.admin-dark {
+  color: white;
+  background-color: #13204A;
+}
+
+.admin-dark input,
+.admin-dark textarea,
+.admin-dark select {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.admin-dark input::placeholder,
+.admin-dark textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}

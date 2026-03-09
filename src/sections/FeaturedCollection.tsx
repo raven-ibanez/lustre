@@ -18,7 +18,7 @@ export function FeaturedCollection() {
     loadProducts();
   }, []);
 
-  const displayProducts = products.filter(p => p.popular).slice(0, 4);
+  const displayProducts = products.filter(p => p.is_new_arrival).slice(0, 4);
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">

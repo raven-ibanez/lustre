@@ -37,6 +37,22 @@ export function Admin() {
     const [categoryImageFile, setCategoryImageFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
+    // Analytics Filters
+    const [dateFilter, setDateFilter] = useState('');
+    const [monthFilter, setMonthFilter] = useState('');
+
+    const filteredOrders = products.length > 0 ? orders.filter(order => {
+        const orderDate = new Date(order.created_at!);
+        const matchDate = !dateFilter || orderDate.toISOString().split('T')[0] === dateFilter;
+        const matchMonth = !monthFilter || (orderDate.getMonth() + 1).toString().padStart(2, '0') === monthFilter;
+        return matchDate && matchMonth;
+    }) : [];
+
+    const resetFilters = () => {
+        setDateFilter('');
+        setMonthFilter('');
+    };
+
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
@@ -397,6 +413,7 @@ export function Admin() {
                                         base_price: 0,
                                         category: categories[0]?.id || '',
                                         popular: false,
+                                        is_new_arrival: false,
                                         available: true,
                                         discount_active: false,
                                         raw_price: 0,
@@ -572,6 +589,7 @@ export function Admin() {
                                             base_price: 0,
                                             category: categories[0]?.id || '',
                                             popular: false,
+                                            is_new_arrival: false,
                                             available: true,
                                             discount_active: false,
                                             raw_price: 0,
@@ -686,7 +704,10 @@ export function Admin() {
                                                 )}
                                                 <div>
                                                     <div className="font-semibold text-slate-900">{product.name}</div>
-                                                    {product.popular && <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded font-bold uppercase">Popular</span>}
+                                                    <div className="flex gap-1">
+                                                        {product.popular && <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded font-bold uppercase">Favorite</span>}
+                                                        {product.is_new_arrival && <span className="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-bold uppercase">New</span>}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
@@ -991,8 +1012,47 @@ export function Admin() {
                             </tbody>
                         </table>
                     </div>
-                ) : (
+                ) : activeTab === 'analytics' ? (
                     <div className="space-y-8 animate-in fade-in duration-500">
+                        {/* Filters */}
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap items-center gap-4">
+                            <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-slate-400" />
+                                <span className="text-sm font-semibold text-slate-600">Filter by:</span>
+                            </div>
+                            <input
+                                type="date"
+                                value={dateFilter}
+                                onChange={(e) => setDateFilter(e.target.value)}
+                                className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-sm outline-none focus:border-primary transition-all"
+                            />
+                            <select
+                                value={monthFilter}
+                                onChange={(e) => setMonthFilter(e.target.value)}
+                                className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-sm outline-none focus:border-primary transition-all"
+                            >
+                                <option value="">Select Month</option>
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                            <button
+                                onClick={resetFilters}
+                                className="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-200 transition-all uppercase tracking-wider"
+                            >
+                                Reset
+                            </button>
+                        </div>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
                                 <div className="p-2 bg-emerald-50 w-fit rounded-lg">
@@ -1001,7 +1061,7 @@ export function Admin() {
                                 <div>
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Gross Sales</p>
                                     <p className="text-3xl font-bold text-slate-900">
-                                        ₱{orders
+                                        ₱{filteredOrders
                                             .filter(o => o.status === 'completed')
                                             .reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0), 0)
                                             .toLocaleString()}
@@ -1016,7 +1076,7 @@ export function Admin() {
                                 <div>
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Profit</p>
                                     <p className="text-3xl font-bold text-slate-900">
-                                        ₱{orders
+                                        ₱{filteredOrders
                                             .filter(o => o.status === 'completed')
                                             .reduce((sum, o) => {
                                                 const gross = o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0;
@@ -1033,9 +1093,9 @@ export function Admin() {
                                     <ShoppingCart className="w-5 h-5 text-blue-500" />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Orders</p>
-                                    <p className="text-3xl font-bold text-slate-900">{orders.length}</p>
-                                    <p className="text-[10px] text-slate-400 mt-1 italic">Across all statuses</p>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Filtered Orders</p>
+                                    <p className="text-3xl font-bold text-slate-900">{filteredOrders.length}</p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">Based on current filters</p>
                                 </div>
                             </div>
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
@@ -1045,18 +1105,18 @@ export function Admin() {
                                 <div>
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Items Sold</p>
                                     <p className="text-3xl font-bold text-slate-900">
-                                        {orders.reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + i.quantity, 0) || 0), 0)}
+                                        {filteredOrders.reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + i.quantity, 0) || 0), 0)}
                                     </p>
-                                    <p className="text-[10px] text-slate-400 mt-1 italic">Total units distributed</p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">In filtered period</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                                <h3 className="font-bold text-xl mb-6 text-slate-900">Recent Order Activity</h3>
+                                <h3 className="font-bold text-xl mb-6 text-slate-900">Filtered Order Activity</h3>
                                 <div className="space-y-4">
-                                    {orders.slice(0, 5).map(order => (
+                                    {filteredOrders.slice(0, 5).map(order => (
                                         <div key={order.id} className="flex items-center justify-between py-4 px-4 hover:bg-slate-50 transition-all rounded-2xl group border border-transparent hover:border-slate-100">
                                             <div className="flex items-center gap-4">
                                                 <div className="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center text-primary font-bold text-sm group-hover:bg-primary/10 transition-colors">
@@ -1076,6 +1136,9 @@ export function Admin() {
                                             </div>
                                         </div>
                                     ))}
+                                    {filteredOrders.length === 0 && (
+                                        <p className="text-center py-10 text-slate-400 italic">No orders found for this selection.</p>
+                                    )}
                                 </div>
                             </div>
 
@@ -1084,8 +1147,8 @@ export function Admin() {
                                     <BarChart3 className="w-5 h-5 text-primary" /> Sales Performance
                                 </h3>
                                 <div className="h-64 flex items-end gap-3 px-6 pb-6 bg-slate-50/50 rounded-3xl">
-                                    {orders.slice(0, 7).reverse().map((order, i) => {
-                                        const maxAmount = Math.max(...orders.map(o => o.total_amount)) || 1;
+                                    {(filteredOrders.length > 0 ? filteredOrders : []).slice(0, 7).reverse().map((order, i) => {
+                                        const maxAmount = Math.max(...filteredOrders.map(o => o.total_amount)) || 1;
                                         const height = (order.total_amount / maxAmount) * 100;
                                         return (
                                             <div key={i} className="flex-1 flex flex-col items-center gap-3 group relative h-full justify-end">
@@ -1102,9 +1165,17 @@ export function Admin() {
                                             </div>
                                         );
                                     })}
-                                </div>
-                            </div>
-                        </div>
+                                     {filteredOrders.length === 0 && (
+                                         <div className="w-full h-full flex items-center justify-center text-slate-400 italic">No data</div>
+                                     )}
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 ) : (
+                    <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
+                        <LayoutDashboard className="w-12 h-12 opacity-20" />
+                        <p className="italic font-medium text-sm uppercase tracking-widest">Select a management tab to begin</p>
                     </div>
                 )}
 
@@ -1243,7 +1314,16 @@ export function Admin() {
                                                     onChange={(e) => setCurrentProduct({ ...currentProduct, popular: e.target.checked })}
                                                     className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
                                                 />
-                                                <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">Featured Product</span>
+                                                <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">Customers' Favorite</span>
+                                            </label>
+                                            <label className="relative flex items-center gap-3 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={currentProduct?.is_new_arrival || false}
+                                                    onChange={(e) => setCurrentProduct({ ...currentProduct, is_new_arrival: e.target.checked })}
+                                                    className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
+                                                />
+                                                <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">New Arrival</span>
                                             </label>
                                             <label className="relative flex items-center gap-3 cursor-pointer group">
                                                 <input

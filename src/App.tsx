@@ -3,6 +3,7 @@ import { CartProvider } from '@/context/CartContext';
 import { AnnouncementBar } from '@/components/AnnouncementBar';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { NotificationPopup } from '@/components/NotificationPopup';
 
 import { CartDrawer } from '@/components/CartDrawer';
 import { Hero } from '@/sections/Hero';
@@ -132,7 +133,7 @@ function App() {
           {renderPage()}
         </main>
         <Footer />
-
+        <NotificationPopup />
         <CartDrawer />
       </div>
     </CartProvider>

@@ -5,6 +5,7 @@ export interface Product {
   base_price: number;
   category: string;
   popular: boolean;
+  is_new_arrival: boolean;
   image_url: string | null;
   available: boolean;
   discount_price?: number | null;

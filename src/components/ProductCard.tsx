@@ -48,7 +48,7 @@ export function ProductCard({ product, showQuickView = true }: ProductCardProps)
             <button
               onClick={handleAddToCart}
               disabled={!product.available}
-              className="w-8 h-8 bg-card border border-white/20 text-white flex items-center justify-center hover:bg-gold hover:text-primary-dark hover:border-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-8 h-8 bg-primary text-primary-foreground border border-primary/10 flex items-center justify-center hover:bg-gold hover:text-primary-dark hover:border-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4" />
             </button>

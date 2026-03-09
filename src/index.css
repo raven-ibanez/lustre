@@ -257,3 +257,15 @@
 .admin-dark textarea::placeholder {
   color: rgba(255, 255, 255, 0.35);
 }
+
+/* Global Scrollbar Hide Utilities - Force outside layers for max specificity */
+.scrollbar-hide::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.scrollbar-hide,
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}

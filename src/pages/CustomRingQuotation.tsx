@@ -398,7 +398,7 @@ export function CustomRingQuotation() {
                                         {['Minimal & timeless', 'Soft & romantic', 'Bold statement', 'Vintage luxury', 'Modern elegance'].map((option) => (
                                             <label key={option} className={`
                         cursor-pointer border p-4 text-sm transition-all flex items-center gap-3
-                        ${formData.aestheticPreference === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                        ${formData.aestheticPreference === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                       `}>
                                                 <input
                                                     type="radio"
@@ -408,7 +408,7 @@ export function CustomRingQuotation() {
                                                     checked={formData.aestheticPreference === option}
                                                     onChange={(e) => setFormData({ ...formData, aestheticPreference: e.target.value })}
                                                 />
-                                                <div className={`w-3 h-3 rounded-full border ${formData.aestheticPreference === option ? 'bg-gold border-gold' : 'border-white/20'}`} />
+                                                <div className={`w-3 h-3 rounded-full border ${formData.aestheticPreference === option ? 'bg-gold border-gold' : 'border-foreground/20'}`} />
                                                 {option}
                                             </label>
                                         ))}
@@ -430,7 +430,7 @@ export function CustomRingQuotation() {
                                         {['Lab-grown diamond', 'Moissanite', 'Lab-grown sapphire', 'Lab-grown emerald', 'Other gemstone (please specify)'].map((option) => (
                                             <label key={option} className={`
                         cursor-pointer border p-4 text-sm transition-all flex items-center gap-3
-                        ${formData.stoneType === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                        ${formData.stoneType === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                       `}>
                                                 <input
                                                     type="radio"
@@ -440,7 +440,7 @@ export function CustomRingQuotation() {
                                                     checked={formData.stoneType === option}
                                                     onChange={(e) => setFormData({ ...formData, stoneType: e.target.value })}
                                                 />
-                                                <div className={`w-3 h-3 rounded-full border ${formData.stoneType === option ? 'bg-gold border-gold' : 'border-white/20'}`} />
+                                                <div className={`w-3 h-3 rounded-full border ${formData.stoneType === option ? 'bg-gold border-gold' : 'border-foreground/20'}`} />
                                                 {option}
                                             </label>
                                         ))}
@@ -532,7 +532,7 @@ export function CustomRingQuotation() {
                                         {['No', 'Small accent diamonds', 'Halo', 'Side baguettes', 'Three-stone design'].map((option) => (
                                             <label key={option} className={`
                         cursor-pointer border p-3 text-sm transition-all text-center
-                        ${formData.sideStones === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                        ${formData.sideStones === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                       `}>
                                                 <input
                                                     type="radio"
@@ -559,7 +559,7 @@ export function CustomRingQuotation() {
                                             ].map((opt) => (
                                                 <label key={opt.value} className={`
                           cursor-pointer border p-4 text-sm transition-all flex items-center gap-3
-                          ${formData.certification === opt.value ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                          ${formData.certification === opt.value ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                         `}>
                                                     <input
                                                         type="radio"
@@ -569,7 +569,7 @@ export function CustomRingQuotation() {
                                                         checked={formData.certification === opt.value}
                                                         onChange={(e) => setFormData({ ...formData, certification: e.target.value })}
                                                     />
-                                                    <div className={`w-3 h-3 rounded-full border ${formData.certification === opt.value ? 'bg-gold border-gold' : 'border-white/20'}`} />
+                                                    <div className={`w-3 h-3 rounded-full border ${formData.certification === opt.value ? 'bg-gold border-gold' : 'border-foreground/20'}`} />
                                                     {opt.label}
                                                 </label>
                                             ))}
@@ -623,7 +623,7 @@ export function CustomRingQuotation() {
                                             {['Thin (1.5–1.8mm)', 'Medium (2.0–2.3mm)', 'Thick (2.5mm+)'].map(option => (
                                                 <label key={option} className={`
                           cursor-pointer border p-2 text-[10px] text-center transition-all leading-tight flex items-center justify-center
-                          ${formData.bandThickness === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                          ${formData.bandThickness === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                         `}>
                                                     <input
                                                         type="radio"
@@ -659,7 +659,7 @@ export function CustomRingQuotation() {
                                             return (
                                                 <label key={option} className={`
                           relative cursor-pointer border p-4 text-sm transition-all text-center
-                          ${formData.bandStyle === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                          ${formData.bandStyle === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                           ${isRecommended ? 'border-gold/30 bg-gold/5' : ''}
                         `}>
                                                     <input
@@ -695,7 +695,7 @@ export function CustomRingQuotation() {
                                         {['Under ₱50,000', '₱50,000 – ₱100,000', '₱100,000 – ₱200,000', '₱200,000+'].map((option) => (
                                             <label key={option} className={`
                         cursor-pointer border p-4 text-sm transition-all flex items-center gap-3
-                        ${formData.budgetRange === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                        ${formData.budgetRange === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                       `}>
                                                 <input
                                                     type="radio"
@@ -705,7 +705,7 @@ export function CustomRingQuotation() {
                                                     checked={formData.budgetRange === option}
                                                     onChange={(e) => setFormData({ ...formData, budgetRange: e.target.value })}
                                                 />
-                                                <div className={`w-3 h-3 rounded-full border ${formData.budgetRange === option ? 'bg-gold border-gold' : 'border-white/20'}`} />
+                                                <div className={`w-3 h-3 rounded-full border ${formData.budgetRange === option ? 'bg-gold border-gold' : 'border-foreground/20'}`} />
                                                 {option}
                                             </label>
                                         ))}
@@ -718,7 +718,7 @@ export function CustomRingQuotation() {
                                         {['Within 2 weeks', '1 month', '2–3 months', 'Just exploring'].map((option) => (
                                             <label key={option} className={`
                         cursor-pointer border p-4 text-xs text-center transition-all flex items-center justify-center
-                        ${formData.timeline === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-white/10 hover:border-gold/50'}
+                        ${formData.timeline === option ? 'border-gold bg-gold/5 ring-1 ring-gold' : 'border-foreground/10 hover:border-gold/50'}
                       `}>
                                                 <input
                                                     type="radio"
@@ -747,7 +747,7 @@ export function CustomRingQuotation() {
                                     <label className="block text-sm font-medium mb-4 uppercase tracking-wider">Do you have inspiration photos?</label>
                                     <div
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="border-2 border-dashed border-white/10 p-8 text-center cursor-pointer hover:border-gold transition-colors"
+                                        className="border-2 border-dashed border-foreground/10 p-8 text-center cursor-pointer hover:border-gold transition-colors"
                                     >
                                         <Upload className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                                         <p className="text-sm text-muted-foreground">Click to upload or drag and drop</p>

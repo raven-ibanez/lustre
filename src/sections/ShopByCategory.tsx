@@ -18,7 +18,7 @@ export function ShopByCategory() {
   }, []);
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background border-t border-white/5">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background border-t border-foreground/5">
       <div className="max-w-7xl mx-auto">
         <SectionTitle title="Shop by Category" />
 
@@ -32,7 +32,7 @@ export function ShopByCategory() {
                 className="animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <a href={`#shop?category=${category.id}`} className="group block relative overflow-hidden">
+                <a href={`#shop/${category.id}`} className="group block relative overflow-hidden">
                   <div className="aspect-square overflow-hidden bg-gray-100 flex items-center justify-center relative">
                     {(category.image_url || category.icon) ? (
                       <img

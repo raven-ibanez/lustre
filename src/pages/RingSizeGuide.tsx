@@ -33,7 +33,7 @@ export function RingSizeGuide() {
               </thead>
               <tbody>
                 {ringSizeGuide.map((size) => (
-                  <tr key={size.size} className="border-b border-gray-100 hover:bg-white/5">
+                  <tr key={size.size} className="border-b border-gray-100 hover:bg-foreground/5 transition-colors">
                     <td className="py-3 px-4">{size.size}</td>
                     <td className="py-3 px-4">{size.diameter}</td>
                     <td className="py-3 px-4">{size.circumference}</td>

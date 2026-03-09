@@ -16,7 +16,7 @@ const companyLinks = [
 
 export function Footer() {
   return (
-    <footer style={{ backgroundColor: '#13204A', color: '#EDE7DC' }}>
+    <footer style={{ backgroundColor: '#13204A', color: '#EDE7DC', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}

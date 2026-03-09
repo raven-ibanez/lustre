@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { Product, Category, Order, PaymentMethod } from '@/types';
-import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks, Calendar, LayoutDashboard, Sparkles, Users, ArrowRight } from 'lucide-react';
 
 export function Admin() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -17,7 +17,7 @@ export function Admin() {
     const [loginError, setLoginError] = useState(false);
 
     // Tabs State
-    const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'orders' | 'analytics' | 'payments' | 'quotation_settings' | 'quotation_records'>('products');
+    const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'orders' | 'analytics' | 'payments' | 'quotation_settings' | 'quotation_records'>('overview');
 
     // Quotation State
     const [quotationSettings, setQuotationSettings] = useState<any[]>([]);
@@ -380,12 +380,12 @@ export function Admin() {
     }
 
     return (
-        <div className="admin-dark" style={{ minHeight: '100vh' }}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-[#f8fafc] min-h-screen text-slate-900 font-sans">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
                     <div>
-                        <h1 className="font-serif text-3xl" style={{ color: 'white' }}>Admin Dashboard</h1>
-                        <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm">Manage your shop content and logic</p>
+                        <h1 className="font-serif text-3xl text-slate-900">Admin Dashboard</h1>
+                        <p className="text-slate-500 text-sm">Manage your shop content and logic</p>
                     </div>
                     <div className="flex flex-wrap gap-4">
                         {activeTab === 'products' ? (
@@ -447,52 +447,60 @@ export function Admin() {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-white/10 mb-8 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-                    <div className="flex min-w-max">
-                        <button
-                            onClick={() => setActiveTab('products')}
-                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'products' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                        >
-                            Products ({products.length})
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('categories')}
-                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'categories' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                        >
-                            Categories ({categories.length})
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('orders')}
-                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'orders' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                        >
-                            Orders ({orders.length})
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('analytics')}
-                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'analytics' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                        >
-                            Analytics
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('payments')}
-                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'payments' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                        >
-                            Payments
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('quotation_settings')}
-                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_settings' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                        >
-                            <Settings className="w-4 h-4 inline-block mr-2" />
-                            Quote Settings
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('quotation_records')}
-                            className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_records' ? 'border-gold text-gold' : 'border-transparent text-white/60 hover:text-white'}`}
-                        >
-                            <ListChecks className="w-4 h-4 inline-block mr-2" />
-                            Quote Records ({quotationRecords.length})
-                        </button>
+                <div className="border-b border-slate-200 mb-8 -mx-4 px-4 sm:mx-0 sm:px-0">
+                    <div className="flex overflow-x-auto scrollbar-hide no-scrollbar">
+                        <div className="flex min-w-max">
+                            <button
+                                onClick={() => setActiveTab('overview')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                Overview
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('products')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'products' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                Products ({products.length})
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('categories')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'categories' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                Categories ({categories.length})
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('orders')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'orders' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                Orders ({orders.length})
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('analytics')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'analytics' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                Analytics
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('payments')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'payments' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                Payments
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('quotation_settings')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_settings' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                <Settings className="w-4 h-4 inline-block mr-2" />
+                                Quote Settings
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('quotation_records')}
+                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_records' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+                            >
+                                <ListChecks className="w-4 h-4 inline-block mr-2" />
+                                Quote Records ({quotationRecords.length})
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -500,44 +508,196 @@ export function Admin() {
                     <div className="text-center py-20 italic">Loading dashboard...</div>
                 ) : error ? (
                     <div className="bg-red-50 text-red-600 p-4 rounded-md mb-8 text-sm">Error: {error}</div>
+                ) : activeTab === 'overview' ? (
+                    <div className="space-y-8 animate-in fade-in duration-500">
+                        {/* Header */}
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                                <Calendar className="w-6 h-6 text-primary" />
+                            </div>
+                            <h2 className="text-2xl font-bold text-slate-900">Inventory Overview</h2>
+                        </div>
+
+                        {/* Stats Grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-slate-50 w-fit rounded-lg">
+                                    <Package className="w-5 h-5 text-slate-400" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Products</p>
+                                    <p className="text-3xl font-bold text-slate-900">{products.length}</p>
+                                </div>
+                            </div>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-emerald-50 w-fit rounded-lg">
+                                    <TrendingUp className="w-5 h-5 text-emerald-500" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Available</p>
+                                    <p className="text-3xl font-bold text-emerald-600">{products.filter(p => p.available).length}</p>
+                                </div>
+                            </div>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-amber-50 w-fit rounded-lg">
+                                    <Sparkles className="w-5 h-5 text-amber-500" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Featured</p>
+                                    <p className="text-3xl font-bold text-amber-600">{products.filter(p => p.popular).length}</p>
+                                </div>
+                            </div>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-blue-50 w-fit rounded-lg">
+                                    <Users className="w-5 h-5 text-blue-500" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Categories</p>
+                                    <p className="text-3xl font-bold text-blue-600">{categories.length}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Quick Actions */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                            <div className="p-6 border-b border-slate-50">
+                                <h3 className="font-bold text-lg text-slate-900">Quick Actions</h3>
+                            </div>
+                            <div className="divide-y divide-slate-50">
+                                <button
+                                    onClick={() => {
+                                        setCurrentProduct({
+                                            name: '',
+                                            description: '',
+                                            base_price: 0,
+                                            category: categories[0]?.id || '',
+                                            popular: false,
+                                            available: true,
+                                            discount_active: false,
+                                            raw_price: 0,
+                                            markup_type: 'jewelry'
+                                        });
+                                        setIsEditing(true);
+                                    }}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-indigo-50 rounded-xl group-hover:bg-indigo-100 transition-colors">
+                                        <Plus className="w-5 h-5 text-indigo-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Add New Product</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('products')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-slate-50 rounded-xl group-hover:bg-slate-100 transition-colors">
+                                        <Package className="w-5 h-5 text-slate-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Manage Products</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('categories')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-sky-50 rounded-xl group-hover:bg-sky-100 transition-colors">
+                                        <LayoutDashboard className="w-5 h-5 text-sky-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Manage Categories</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('payments')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-purple-50 rounded-xl group-hover:bg-purple-100 transition-colors">
+                                        <Wallet className="w-5 h-5 text-purple-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Payment Methods</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('orders')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-blue-50 rounded-xl group-hover:bg-blue-100 transition-colors">
+                                        <ShoppingCart className="w-5 h-5 text-blue-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Orders Management</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('quotation_settings')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-amber-50 rounded-xl group-hover:bg-amber-100 transition-colors">
+                                        <Settings className="w-5 h-5 text-amber-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Quotation Settings</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('quotation_records')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-emerald-50 rounded-xl group-hover:bg-emerald-100 transition-colors">
+                                        <ListChecks className="w-5 h-5 text-emerald-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Quotation Inquiries</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('analytics')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-slate-50 rounded-xl group-hover:bg-slate-100 transition-colors">
+                                        <BarChart3 className="w-5 h-5 text-slate-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Sales Analytics</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 ) : activeTab === 'products' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
-                        <table className="min-w-full divide-y divide-white/10">
-                            <thead className="bg-white/5">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
+                        <table className="min-w-full divide-y divide-slate-100">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Product</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Category</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Price</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Product</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Category</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Price</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Status</th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
                                 {products.map((product) => (
-                                    <tr key={product.id}>
+                                    <tr key={product.id} className="hover:bg-slate-50/50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 {product.image_url ? (
-                                                    <img className="h-10 w-10 object-cover mr-3" src={product.image_url} alt="" />
+                                                    <img className="h-10 w-10 rounded-lg object-cover mr-3 border border-slate-100" src={product.image_url} alt="" />
                                                 ) : (
-                                                    <div className="h-10 w-10 bg-white/5 flex items-center justify-center mr-3">
-                                                        <Package className="w-5 h-5 text-white/60" />
+                                                    <div className="h-10 w-10 bg-slate-100 rounded-lg flex items-center justify-center mr-3">
+                                                        <Package className="w-5 h-5 text-slate-400" />
                                                     </div>
                                                 )}
                                                 <div>
-                                                    <div className="font-medium text-white">{product.name}</div>
-                                                    {product.popular && <span className="text-[10px] bg-gold/10 text-gold px-1.5 py-0.5 rounded uppercase">Popular</span>}
+                                                    <div className="font-semibold text-slate-900">{product.name}</div>
+                                                    {product.popular && <span className="text-[10px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded font-bold uppercase">Popular</span>}
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white/60">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-500">
                                             {categories.find(c => c.id === product.category)?.name || product.category}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white font-medium">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-900 font-bold">
                                             ₱{product.base_price.toLocaleString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.available ? 'bg-gold/10 text-gold' : 'bg-red-100/10 text-red-400'}`}>
+                                            <span className={`px-2 inline-flex text-xs leading-5 font-bold rounded-full ${product.available ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
                                                 {product.available ? 'Available' : 'Out of Stock'}
                                             </span>
                                         </td>
@@ -547,13 +707,13 @@ export function Admin() {
                                                     setCurrentProduct(product);
                                                     setIsEditing(true);
                                                 }}
-                                                className="text-gold hover:text-gold/80 mr-3"
+                                                className="text-primary hover:text-primary/80 mr-3 p-2 hover:bg-primary/5 rounded-lg transition-colors"
                                             >
                                                 <Edit className="w-4 h-4" />
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteProduct(product.id)}
-                                                className="text-red-600 hover:text-red-900"
+                                                className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -564,31 +724,31 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'categories' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
-                        <table className="min-w-full divide-y divide-white/10">
-                            <thead className="bg-white/5">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
+                        <table className="min-w-full divide-y divide-slate-100">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Category Name</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Slug</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Order</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Category Name</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Slug</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Order</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Status</th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
                                 {categories.map((category) => (
-                                    <tr key={category.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap font-medium text-white">
+                                    <tr key={category.id} className="hover:bg-slate-50/50 transition-colors">
+                                        <td className="px-6 py-4 whitespace-nowrap font-semibold text-slate-900">
                                             {category.name}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white/60">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-500">
                                             {category.slug}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-900 font-medium">
                                             {category.sort_order}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${category.active ? 'bg-gold/10 text-gold' : 'bg-gray-100/10 text-gray-400'}`}>
+                                            <span className={`px-2 inline-flex text-xs leading-5 font-bold rounded-full ${category.active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
                                                 {category.active ? 'Active' : 'Inactive'}
                                             </span>
                                         </td>
@@ -598,13 +758,13 @@ export function Admin() {
                                                     setCurrentCategory(category);
                                                     setIsEditingCategory(true);
                                                 }}
-                                                className="text-gold hover:text-gold/80 mr-3"
+                                                className="text-primary hover:text-primary/80 mr-3 p-2 hover:bg-primary/5 rounded-lg transition-colors"
                                             >
                                                 <Edit className="w-4 h-4" />
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteCategory(category.id)}
-                                                className="text-red-600 hover:text-red-900"
+                                                className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -615,58 +775,58 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'orders' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
-                        <table className="min-w-full divide-y divide-white/10">
-                            <thead className="bg-white/5">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
+                        <table className="min-w-full divide-y divide-slate-100">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Order ID</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Customer</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Total</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Date</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Order ID</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Customer</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Total</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Status</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Date</th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
                                 {orders.map((order) => (
-                                    <tr key={order.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap font-mono text-xs text-white/60">
-                                            {order.id.slice(0, 8)}...
+                                    <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
+                                        <td className="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-400">
+                                            #{order.id.slice(0, 8)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-white font-medium">{order.first_name} {order.last_name}</div>
-                                            <div className="text-white/60 text-xs">{order.email}</div>
+                                            <div className="text-slate-900 font-semibold">{order.first_name} {order.last_name}</div>
+                                            <div className="text-slate-400 text-xs">{order.email}</div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white font-medium">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-900 font-bold">
                                             ₱{order.total_amount.toLocaleString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <select
                                                 value={order.status}
                                                 onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value as Order['status'])}
-                                                className={`px-2 py-1 text-xs font-semibold rounded-full bg-white/5 outline-none ${order.status === 'completed' ? 'text-gold' :
-                                                    order.status === 'cancelled' ? 'text-red-400' :
-                                                        'text-blue-400'
+                                                className={`px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-50 border border-slate-100 outline-none transition-all ${order.status === 'completed' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' :
+                                                    order.status === 'cancelled' ? 'text-red-600 bg-red-50 border-red-100' :
+                                                        'text-blue-600 bg-blue-50 border-blue-100'
                                                     }`}
                                             >
-                                                <option value="pending" className="bg-[#0f1d3a]">Pending</option>
-                                                <option value="completed" className="bg-[#0f1d3a]">Completed</option>
-                                                <option value="cancelled" className="bg-[#0f1d3a]">Cancelled</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
                                             </select>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white/60">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-500">
                                             {new Date(order.created_at!).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
                                             <button
                                                 onClick={() => setViewingOrder(order)}
-                                                className="text-gold hover:text-gold/80 mr-3"
+                                                className="text-primary hover:text-primary/80 mr-3 p-2 hover:bg-primary/5 rounded-lg transition-colors font-semibold text-xs"
                                             >
                                                 View
                                             </button>
                                             <button
                                                 onClick={() => handleDeleteOrder(order.id)}
-                                                className="text-red-600 hover:text-red-900"
+                                                className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -677,40 +837,40 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'payments' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
-                        <table className="min-w-full divide-y divide-white/10">
-                            <thead className="bg-white/5">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
+                        <table className="min-w-full divide-y divide-slate-100">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Method Name</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Account Info</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">QR Code</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Method Name</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Account Info</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">QR Code</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Status</th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
                                 {paymentMethods.map((method) => (
-                                    <tr key={method.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap font-medium text-white">
+                                    <tr key={method.id} className="hover:bg-slate-50/50 transition-colors">
+                                        <td className="px-6 py-4 whitespace-nowrap font-semibold text-slate-900">
                                             <div className="flex items-center gap-2">
-                                                <Wallet className="w-4 h-4 text-gold" />
+                                                <Wallet className="w-4 h-4 text-primary" />
                                                 {method.name}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white/60">
-                                            <div className="text-xs">{method.account_name}</div>
-                                            <div className="font-mono text-[10px]">{method.account_number}</div>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-slate-900 font-semibold text-xs">{method.account_name}</div>
+                                            <div className="font-mono text-[10px] text-slate-400">{method.account_number}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {method.qr_code_url ? (
-                                                <img src={method.qr_code_url} alt="QR" className="h-10 w-10 object-contain border border-white/10 rounded bg-white" />
+                                                <img src={method.qr_code_url} alt="QR" className="h-10 w-10 object-contain border border-slate-100 rounded-lg bg-white p-1" />
                                             ) : (
-                                                <span className="text-[10px] text-white/60 italic">No QR</span>
+                                                <span className="text-[10px] text-slate-400 italic">No QR</span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${method.active ? 'bg-gold/10 text-gold' : 'bg-gray-100/10 text-gray-400'}`}>
-                                                {method.active ? 'Active' : 'Hidden'}
+                                            <span className={`px-2 inline-flex text-xs leading-5 font-bold rounded-full ${method.active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                                                {method.active ? 'Active' : 'Inactive'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
@@ -719,13 +879,13 @@ export function Admin() {
                                                     setCurrentPaymentMethod(method);
                                                     setIsEditingPayment(true);
                                                 }}
-                                                className="text-gold hover:text-gold/80 mr-3"
+                                                className="text-primary hover:text-primary/80 mr-3 p-2 hover:bg-primary/5 rounded-lg transition-colors"
                                             >
                                                 <Edit className="w-4 h-4" />
                                             </button>
                                             <button
                                                 onClick={() => handleDeletePaymentMethod(method.id)}
-                                                className="text-red-600 hover:text-red-900"
+                                                className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
@@ -736,28 +896,28 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'quotation_settings' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
-                        <table className="min-w-full divide-y divide-white/10">
-                            <thead className="bg-white/5">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
+                        <table className="min-w-full divide-y divide-slate-100">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Category</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Setting Name</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Value</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Category</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Setting Name</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Value</th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
                                 {quotationSettings.map((setting) => (
-                                    <tr key={setting.id}>
+                                    <tr key={setting.id} className="hover:bg-slate-50/50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="px-2 py-1 text-[10px] bg-gold/10 text-gold rounded uppercase font-bold tracking-tighter">
+                                            <span className="px-2 py-1 text-[10px] bg-primary/10 text-primary rounded uppercase font-bold tracking-tighter">
                                                 {setting.category}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap font-medium text-white">
+                                        <td className="px-6 py-4 whitespace-nowrap font-bold text-slate-900">
                                             {setting.label}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white font-mono">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-900 font-mono">
                                             {typeof setting.value === 'number' ? `₱${setting.value.toLocaleString()}` : JSON.stringify(setting.value)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
@@ -766,7 +926,7 @@ export function Admin() {
                                                     setCurrentQuotationSetting(setting);
                                                     setIsEditingQuotationSetting(true);
                                                 }}
-                                                className="text-gold hover:text-gold/80"
+                                                className="text-primary hover:text-primary/80 p-2 hover:bg-primary/5 rounded-lg transition-colors"
                                             >
                                                 <Edit className="w-4 h-4" />
                                             </button>
@@ -777,47 +937,46 @@ export function Admin() {
                         </table>
                     </div>
                 ) : activeTab === 'quotation_records' ? (
-                    <div className="bg-[#1C2F6E] shadow-sm border border-white/10 overflow-x-auto">
-                        <table className="min-w-full divide-y divide-white/10">
-                            <thead className="bg-white/5">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
+                        <table className="min-w-full divide-y divide-slate-100">
+                            <thead className="bg-slate-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Customer</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Contact Preference</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Path</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Quotation Range</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">Date</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-white/60 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Customer</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Contact Preference</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Path</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Quote Summary</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Date</th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-transparent divide-y divide-white/10 text-sm">
+                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
                                 {quotationRecords.map((record) => (
-                                    <tr key={record.id}>
+                                    <tr key={record.id} className="hover:bg-slate-50/50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-white font-medium">{record.customer_name}</div>
-                                            <div className="text-white/60 text-[10px]">{record.customer_email}</div>
-                                            <div className="text-white/40 text-[10px]">{record.customer_phone}</div>
+                                            <div className="text-slate-900 font-bold">{record.customer_name}</div>
+                                            <div className="text-slate-400 text-xs">{record.customer_email}</div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white font-medium">
-                                            <span className="px-2 py-1 text-[10px] bg-gold text-primary-dark rounded uppercase font-bold">
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span className="px-2 py-1 text-[10px] bg-slate-100 text-slate-600 rounded uppercase font-bold tracking-tighter">
                                                 {record.form_data?.preferredComm || 'Email'}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="text-xs text-white/60 bg-white/5 px-2 py-1 rounded">
+                                            <span className="text-xs text-primary font-bold bg-primary/5 px-2 py-1 rounded">
                                                 {record.path.replace('_', ' ').toUpperCase()}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-gold font-bold">₱{record.final_price_low.toLocaleString()} - ₱{record.final_price_high.toLocaleString()}</div>
-                                            <div className="text-[10px] text-white/60">{record.tier}</div>
+                                            <div className="text-slate-900 font-bold">₱{record.final_price_low.toLocaleString()} - ₱{record.final_price_high.toLocaleString()}</div>
+                                            <div className="text-[10px] text-slate-400 font-medium">{record.tier}</div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-white/60">
+                                        <td className="px-6 py-4 whitespace-nowrap text-slate-500">
                                             {new Date(record.created_at).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
                                             <button
                                                 onClick={() => setViewingQuotation(record)}
-                                                className="text-gold hover:text-gold/80"
+                                                className="text-primary hover:text-primary/80 font-bold text-xs p-2 hover:bg-primary/5 rounded-lg transition-colors"
                                             >
                                                 View Details
                                             </button>
@@ -826,107 +985,118 @@ export function Admin() {
                                 ))}
                                 {quotationRecords.length === 0 && (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-10 text-center text-white/40 italic">No quotation records found.</td>
+                                        <td colSpan={6} className="px-6 py-10 text-center text-slate-400 italic">No quotation records found.</td>
                                     </tr>
                                 )}
                             </tbody>
                         </table>
                     </div>
                 ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-8 animate-in fade-in duration-500">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div className="bg-[#1C2F6E] p-6 shadow-sm border border-white/10">
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="p-2 bg-gold/10 rounded-lg"><DollarSign className="w-5 h-5 text-gold" /></span>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-emerald-50 w-fit rounded-lg">
+                                    <DollarSign className="w-5 h-5 text-emerald-500" />
                                 </div>
-                                <h3 className="text-white/60 text-sm font-medium">Gross Sales</h3>
-                                <p className="text-2xl font-serif mt-1 text-white">
-                                    ₱{orders
-                                        .filter(o => o.status === 'completed')
-                                        .reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0), 0)
-                                        .toLocaleString()}
-                                </p>
-                                <p className="text-[10px] text-white/60 mt-1">Total Selling Price (Completed Orders)</p>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Gross Sales</p>
+                                    <p className="text-3xl font-bold text-slate-900">
+                                        ₱{orders
+                                            .filter(o => o.status === 'completed')
+                                            .reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0), 0)
+                                            .toLocaleString()}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">Total Selling Price (Completed)</p>
+                                </div>
                             </div>
-                            <div className="bg-[#1C2F6E] p-6 shadow-sm border border-white/10">
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="p-2 bg-gold/10 rounded-lg"><TrendingUp className="w-5 h-5 text-gold" /></span>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-primary/10 w-fit rounded-lg">
+                                    <TrendingUp className="w-5 h-5 text-primary" />
                                 </div>
-                                <h3 className="text-white/60 text-sm font-medium">Net Profit</h3>
-                                <p className="text-2xl font-serif mt-1 text-white">
-                                    ₱{orders
-                                        .filter(o => o.status === 'completed')
-                                        .reduce((sum, o) => {
-                                            const gross = o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0;
-                                            const raw = o.order_items?.reduce((s, i) => s + ((i.raw_price || 0) * i.quantity), 0) || 0;
-                                            return sum + (gross - raw);
-                                        }, 0)
-                                        .toLocaleString()}
-                                </p>
-                                <p className="text-[10px] text-white/60 mt-1">Gross Sales - Total Raw Price</p>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Profit</p>
+                                    <p className="text-3xl font-bold text-slate-900">
+                                        ₱{orders
+                                            .filter(o => o.status === 'completed')
+                                            .reduce((sum, o) => {
+                                                const gross = o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0;
+                                                const raw = o.order_items?.reduce((s, i) => s + ((i.raw_price || 0) * i.quantity), 0) || 0;
+                                                return sum + (gross - raw);
+                                            }, 0)
+                                            .toLocaleString()}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">Gross Sales - Total Cost</p>
+                                </div>
                             </div>
-                            <div className="bg-[#1C2F6E] p-6 shadow-sm border border-white/10">
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="p-2 bg-blue-500/10 rounded-lg"><ShoppingCart className="w-5 h-5 text-blue-400" /></span>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-blue-50 w-fit rounded-lg">
+                                    <ShoppingCart className="w-5 h-5 text-blue-500" />
                                 </div>
-                                <h3 className="text-white/60 text-sm font-medium">Total Orders</h3>
-                                <p className="text-2xl font-serif mt-1 text-white">{orders.length}</p>
-                                <p className="text-[10px] text-white/60 mt-1">All orders (Pending, Completed, Cancelled)</p>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Orders</p>
+                                    <p className="text-3xl font-bold text-slate-900">{orders.length}</p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">Across all statuses</p>
+                                </div>
                             </div>
-                            <div className="bg-[#1C2F6E] p-6 shadow-sm border border-white/10">
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="p-2 bg-amber-500/10 rounded-lg"><Package className="w-5 h-5 text-amber-400" /></span>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                                <div className="p-2 bg-amber-50 w-fit rounded-lg">
+                                    <Package className="w-5 h-5 text-amber-500" />
                                 </div>
-                                <h3 className="text-white/60 text-sm font-medium">Items Sold</h3>
-                                <p className="text-2xl font-serif mt-1 text-white">
-                                    {orders.reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + i.quantity, 0) || 0), 0)}
-                                </p>
+                                <div>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Items Sold</p>
+                                    <p className="text-3xl font-bold text-slate-900">
+                                        {orders.reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + i.quantity, 0) || 0), 0)}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">Total units distributed</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div className="bg-[#1C2F6E] p-6 shadow-sm border border-white/10">
-                                <h3 className="font-serif text-xl mb-6 text-white">Recent Order Activity</h3>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                                <h3 className="font-bold text-xl mb-6 text-slate-900">Recent Order Activity</h3>
                                 <div className="space-y-4">
                                     {orders.slice(0, 5).map(order => (
-                                        <div key={order.id} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 bg-gold/5 rounded-full flex items-center justify-center text-gold font-serif">
+                                        <div key={order.id} className="flex items-center justify-between py-4 px-4 hover:bg-slate-50 transition-all rounded-2xl group border border-transparent hover:border-slate-100">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center text-primary font-bold text-sm group-hover:bg-primary/10 transition-colors">
                                                     {order.first_name[0]}{order.last_name[0]}
                                                 </div>
                                                 <div>
-                                                    <div className="text-sm font-medium text-white">{order.first_name} {order.last_name}</div>
-                                                    <div className="text-xs text-white/60">{new Date(order.created_at!).toLocaleDateString()}</div>
+                                                    <div className="text-sm font-bold text-slate-900">{order.first_name} {order.last_name}</div>
+                                                    <div className="text-xs text-slate-400">{new Date(order.created_at!).toLocaleDateString()}</div>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-sm font-medium text-white">₱{order.total_amount.toLocaleString()}</div>
-                                                <div className="text-xs text-gold uppercase tracking-wider font-bold">{order.status}</div>
+                                                <div className="text-sm font-bold text-slate-900">₱{order.total_amount.toLocaleString()}</div>
+                                                <div className={`text-[10px] font-bold uppercase tracking-widest ${order.status === 'completed' ? 'text-emerald-500' :
+                                                    order.status === 'cancelled' ? 'text-red-500' :
+                                                        'text-primary'
+                                                    }`}>{order.status}</div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
 
-                            <div className="bg-[#1C2F6E] p-6 shadow-sm border border-white/10">
-                                <h3 className="font-serif text-xl mb-6 flex items-center gap-2 text-white">
-                                    <BarChart3 className="w-5 h-5 text-gold" /> Sales Performance
+                            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                                <h3 className="font-bold text-xl mb-6 flex items-center gap-2 text-slate-900">
+                                    <BarChart3 className="w-5 h-5 text-primary" /> Sales Performance
                                 </h3>
-                                <div className="h-64 flex items-end gap-2 px-4 pb-4">
-                                    {/* Simple CSS Bar Chart for last 7 orders */}
+                                <div className="h-64 flex items-end gap-3 px-6 pb-6 bg-slate-50/50 rounded-3xl">
                                     {orders.slice(0, 7).reverse().map((order, i) => {
                                         const maxAmount = Math.max(...orders.map(o => o.total_amount)) || 1;
                                         const height = (order.total_amount / maxAmount) * 100;
                                         return (
-                                            <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
-                                                <div className="absolute -top-8 bg-gold text-primary-dark text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                                            <div key={i} className="flex-1 flex flex-col items-center gap-3 group relative h-full justify-end">
+                                                <div className="absolute -top-4 bg-slate-900 text-white text-[10px] px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-xl font-bold -translate-y-2 group-hover:translate-y-0 z-20">
                                                     ₱{order.total_amount.toLocaleString()}
                                                 </div>
                                                 <div
-                                                    className="w-full bg-gold/20 group-hover:bg-gold transition-colors rounded-t"
-                                                    style={{ height: `${height}%` }}
+                                                    className="w-full bg-primary/15 group-hover:bg-primary transition-all rounded-t-xl"
+                                                    style={{ height: `${Math.max(height, 8)}%` }}
                                                 />
-                                                <span className="text-[10px] text-white/60 rotate-45 origin-left">
+                                                <span className="text-[10px] text-slate-400 font-bold rotate-0 whitespace-nowrap">
                                                     {new Date(order.created_at!).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                                 </span>
                                             </div>
@@ -939,711 +1109,750 @@ export function Admin() {
                 )}
 
                 {/* Product Edit Modal */}
-                {isEditing && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-2xl max-h-[95vh] overflow-y-auto border border-white/10 shadow-2xl">
-                            <div className="p-4 sm:p-8">
-                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'white' }}>{currentProduct?.id ? 'Edit Product' : 'Add New Product'}</h3>
-                                    <button onClick={() => setIsEditing(false)} className="text-white/60 hover:text-white transition-colors p-2">
-                                        <X className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    </button>
-                                </div>
+                {
+                    isEditing && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <div className="bg-white w-full max-w-2xl max-h-[95vh] overflow-y-auto rounded-3xl shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                                <div className="p-6 sm:p-10">
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-50 pb-6">
+                                        <div>
+                                            <h3 className="font-bold text-2xl text-slate-900">{currentProduct?.id ? 'Edit Product' : 'Add New Product'}</h3>
+                                            <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Product Information</p>
+                                        </div>
+                                        <button onClick={() => setIsEditing(false)} className="bg-slate-50 hover:bg-slate-100 text-slate-400 p-2.5 rounded-full transition-all">
+                                            <X className="w-5 h-5" />
+                                        </button>
+                                    </div>
 
-                                <form onSubmit={handleSaveProduct} className="space-y-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <form onSubmit={handleSaveProduct} className="space-y-8">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Product Name</label>
+                                                <input
+                                                    type="text"
+                                                    value={currentProduct?.name || ''}
+                                                    onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
+                                                    placeholder="Enter product title"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Category</label>
+                                                <select
+                                                    value={currentProduct?.category || ''}
+                                                    onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                    required
+                                                >
+                                                    <option value="">Select Category</option>
+                                                    {categories.map((cat) => (
+                                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-widest text-white/60">Product Name</label>
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Description</label>
+                                            <textarea
+                                                value={currentProduct?.description || ''}
+                                                onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all resize-none min-h-[120px] placeholder:text-slate-300"
+                                                placeholder="Describe your product..."
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100 space-y-6">
+                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                                                <Sparkles className="w-3.5 h-3.5" /> Pricing Configuration
+                                            </h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Pricing Group</label>
+                                                    <select
+                                                        value={currentProduct?.markup_type || 'jewelry'}
+                                                        onChange={(e) => {
+                                                            const type = e.target.value as 'jewelry' | 'loose_stone';
+                                                            const rawPrice = currentProduct?.raw_price || 0;
+                                                            const markup = type === 'jewelry' ? 2.65 : 2.30;
+                                                            setCurrentProduct({
+                                                                ...currentProduct,
+                                                                markup_type: type,
+                                                                base_price: Math.round(rawPrice * markup)
+                                                            });
+                                                        }}
+                                                        className="w-full px-5 py-3 bg-white border border-slate-100 rounded-xl text-slate-900 focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all"
+                                                        required
+                                                    >
+                                                        <option value="jewelry">Jewelry (+165%)</option>
+                                                        <option value="loose_stone">Loose Stones (+130%)</option>
+                                                    </select>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Raw Cost (₱)</label>
+                                                    <input
+                                                        type="number"
+                                                        value={currentProduct?.raw_price || 0}
+                                                        onChange={(e) => {
+                                                            const rawPrice = parseFloat(e.target.value) || 0;
+                                                            const type = currentProduct?.markup_type || 'jewelry';
+                                                            const markup = type === 'jewelry' ? 2.65 : 2.30;
+                                                            setCurrentProduct({
+                                                                ...currentProduct,
+                                                                raw_price: rawPrice,
+                                                                base_price: Math.round(rawPrice * markup)
+                                                            });
+                                                        }}
+                                                        className="w-full px-5 py-3 bg-white border border-slate-100 rounded-xl text-slate-900 focus:border-primary focus:ring-4 focus:ring-primary/5 outline-none transition-all"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Selling Price (Selling ₱)</label>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="number"
+                                                            value={currentProduct?.base_price || 0}
+                                                            className="w-full px-5 py-3 bg-primary/5 border border-primary/10 rounded-xl text-primary font-bold outline-none cursor-default"
+                                                            readOnly
+                                                        />
+                                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] text-primary/60 font-bold uppercase">Auto</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Feature Image URL</label>
                                             <input
                                                 type="text"
-                                                value={currentProduct?.name || ''}
-                                                onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
+                                                value={currentProduct?.image_url || ''}
+                                                onChange={(e) => setCurrentProduct({ ...currentProduct, image_url: e.target.value })}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
+                                                placeholder="https://example.com/image.jpg"
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-8 pt-2">
+                                            <label className="relative flex items-center gap-3 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={currentProduct?.popular || false}
+                                                    onChange={(e) => setCurrentProduct({ ...currentProduct, popular: e.target.checked })}
+                                                    className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
+                                                />
+                                                <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">Featured Product</span>
+                                            </label>
+                                            <label className="relative flex items-center gap-3 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={currentProduct?.available || false}
+                                                    onChange={(e) => setCurrentProduct({ ...currentProduct, available: e.target.checked })}
+                                                    className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
+                                                />
+                                                <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">In Stock</span>
+                                            </label>
+                                            <label className="relative flex items-center gap-3 cursor-pointer group">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={currentProduct?.discount_active || false}
+                                                    onChange={(e) => setCurrentProduct({ ...currentProduct, discount_active: e.target.checked })}
+                                                    className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
+                                                />
+                                                <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">Special Offer</span>
+                                            </label>
+                                        </div>
+
+                                        {currentProduct?.discount_active && (
+                                            <div className="bg-amber-50/50 p-6 rounded-3xl border border-amber-100 animate-in slide-in-from-top-4 duration-300">
+                                                <div className="space-y-2">
+                                                    <label className="text-[10px] font-bold uppercase tracking-widest text-amber-600 ml-1">Discounted Price (₱)</label>
+                                                    <input
+                                                        type="number"
+                                                        value={currentProduct?.discount_price || 0}
+                                                        onChange={(e) => setCurrentProduct({ ...currentProduct, discount_price: parseFloat(e.target.value) })}
+                                                        className="w-full px-5 py-3 bg-white border border-amber-200 rounded-2xl text-amber-900 focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 outline-none transition-all"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div className="flex flex-col sm:flex-row justify-end gap-4 pt-8 border-t border-slate-50">
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsEditing(false)}
+                                                className="w-full sm:w-auto px-10 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 bg-slate-50 hover:bg-slate-100 hover:text-slate-600 rounded-2xl transition-all"
+                                            >
+                                                Discard
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="w-full sm:w-auto px-12 py-4 bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all rounded-2xl font-bold uppercase tracking-[0.2em] text-xs"
+                                            >
+                                                Publish Product
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+                {/* Category Edit Modal */}
+                {
+                    isEditingCategory && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <div className="bg-white w-full max-w-md max-h-[95vh] overflow-y-auto rounded-3xl shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                                <div className="p-6 sm:p-10">
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-50 pb-6">
+                                        <div>
+                                            <h3 className="font-bold text-2xl text-slate-900">{currentCategory?.id ? 'Edit Category' : 'Add New Category'}</h3>
+                                            <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Category Details</p>
+                                        </div>
+                                        <button onClick={() => setIsEditingCategory(false)} className="bg-slate-50 hover:bg-slate-100 text-slate-400 p-2.5 rounded-full transition-all">
+                                            <X className="w-5 h-5" />
+                                        </button>
+                                    </div>
+
+                                    <form onSubmit={handleSaveCategory} className="space-y-6">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Category Name</label>
+                                            <input
+                                                type="text"
+                                                value={currentCategory?.name || ''}
+                                                onChange={(e) => {
+                                                    const name = e.target.value;
+                                                    const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-t-]/g, '');
+                                                    setCurrentCategory({ ...currentCategory, name, slug });
+                                                }}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
+                                                placeholder="e.g. Rings"
                                                 required
                                             />
                                         </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-widest text-white/60">Category</label>
-                                            <select
-                                                value={currentProduct?.category || ''}
-                                                onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
-                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                                required
-                                            >
-                                                <option value="" className="bg-[#0f1d3a]">Select Category</option>
-                                                {categories.map((cat) => (
-                                                    <option key={cat.id} value={cat.id} className="bg-[#0f1d3a]">{cat.name}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Description</label>
-                                        <textarea
-                                            value={currentProduct?.description || ''}
-                                            onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors resize-none"
-                                            rows={3}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        <div className="space-y-2">
-                                            <div className="flex justify-between items-center">
-                                                <label className="text-xs font-bold uppercase tracking-widest text-white/60">Pricing Category</label>
-                                            </div>
-                                            <select
-                                                value={currentProduct?.markup_type || 'jewelry'}
-                                                onChange={(e) => {
-                                                    const type = e.target.value as 'jewelry' | 'loose_stone';
-                                                    const rawPrice = currentProduct?.raw_price || 0;
-                                                    const markup = type === 'jewelry' ? 2.65 : 2.30;
-
-                                                    setCurrentProduct({
-                                                        ...currentProduct,
-                                                        markup_type: type,
-                                                        base_price: Math.round(rawPrice * markup)
-                                                    });
-                                                }}
-                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                                required
-                                            >
-                                                <option value="jewelry" className="bg-[#0f1d3a]">Jewelry (+165%)</option>
-                                                <option value="loose_stone" className="bg-[#0f1d3a]">Loose Stones (+130%)</option>
-                                            </select>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <div className="flex justify-between items-center">
-                                                <label className="text-xs font-bold uppercase tracking-widest text-white/60">Raw Price (Cost ₱)</label>
-                                                <span className="text-[10px] text-white/60">Internal only</span>
-                                            </div>
+                                        <div className="space-y-2 opacity-60">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Slug (URL)</label>
                                             <input
-                                                type="number"
-                                                value={currentProduct?.raw_price || 0}
-                                                onChange={(e) => {
-                                                    const rawPrice = parseFloat(e.target.value) || 0;
-                                                    const type = currentProduct?.markup_type || 'jewelry';
-                                                    const markup = type === 'jewelry' ? 2.65 : 2.30;
-
-                                                    setCurrentProduct({
-                                                        ...currentProduct,
-                                                        raw_price: rawPrice,
-                                                        base_price: Math.round(rawPrice * markup)
-                                                    });
-                                                }}
-                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <div className="flex justify-between items-center">
-                                                <label className="text-xs font-bold uppercase tracking-widest text-white/60">Selling Price (Base ₱)</label>
-                                                <span className="text-[10px] text-gold font-medium italic">Auto-calculated</span>
-                                            </div>
-                                            <input
-                                                type="number"
-                                                value={currentProduct?.base_price || 0}
-                                                onChange={(e) => setCurrentProduct({ ...currentProduct, base_price: parseFloat(e.target.value) })}
-                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 text-gold font-bold focus:border-gold outline-none"
+                                                type="text"
+                                                value={currentCategory?.slug || ''}
+                                                className="w-full px-5 py-3 bg-slate-100 border border-slate-100 rounded-2xl text-slate-500 outline-none cursor-not-allowed font-mono text-xs"
                                                 readOnly
                                                 required
                                             />
                                         </div>
-                                    </div>
 
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Image URL</label>
-                                        <input
-                                            type="text"
-                                            value={currentProduct?.image_url || ''}
-                                            onChange={(e) => setCurrentProduct({ ...currentProduct, image_url: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                        />
-                                    </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Sort Order</label>
+                                            <input
+                                                type="number"
+                                                value={currentCategory?.sort_order || 0}
+                                                onChange={(e) => setCurrentCategory({ ...currentCategory, sort_order: parseInt(e.target.value) })}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                required
+                                            />
+                                        </div>
 
-                                    <div className="flex flex-wrap gap-6 pt-2">
-                                        <label className="flex items-center gap-2 cursor-pointer group">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Category Image</label>
+                                            <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                                {currentCategory?.image_url && !categoryImageFile && (
+                                                    <img src={currentCategory.image_url} alt="" className="w-16 h-16 object-cover rounded-xl shadow-sm" />
+                                                )}
+                                                {categoryImageFile && (
+                                                    <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-xl">
+                                                        <Upload className="w-6 h-6 text-primary" />
+                                                    </div>
+                                                )}
+                                                <div className="flex-1">
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={(e) => setCategoryImageFile(e.target.files?.[0] || null)}
+                                                        className="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-primary file:text-white hover:file:bg-primary/90 transition-all cursor-pointer"
+                                                    />
+                                                    {categoryImageFile && <p className="text-[10px] text-primary font-bold mt-2 italic">{categoryImageFile.name}</p>}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <label className="relative flex items-center gap-3 cursor-pointer group py-2">
                                             <input
                                                 type="checkbox"
-                                                checked={currentProduct?.popular || false}
-                                                onChange={(e) => setCurrentProduct({ ...currentProduct, popular: e.target.checked })}
-                                                className="w-4 h-4 accent-gold"
+                                                checked={currentCategory?.active !== false}
+                                                onChange={(e) => setCurrentCategory({ ...currentCategory, active: e.target.checked })}
+                                                className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
                                             />
-                                            <span className="text-sm text-white/60 group-hover:text-white transition-colors">Popular Choice</span>
+                                            <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">Visible in Storefront</span>
                                         </label>
-                                        <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                checked={currentProduct?.available || false}
-                                                onChange={(e) => setCurrentProduct({ ...currentProduct, available: e.target.checked })}
-                                                className="w-4 h-4 accent-gold"
-                                            />
-                                            <span className="text-sm text-white/60 group-hover:text-white transition-colors">Available in Stock</span>
-                                        </label>
-                                        <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                checked={currentProduct?.discount_active || false}
-                                                onChange={(e) => setCurrentProduct({ ...currentProduct, discount_active: e.target.checked })}
-                                                className="w-4 h-4 accent-gold"
-                                            />
-                                            <span className="text-sm text-white/60 group-hover:text-white transition-colors">Enable Discount</span>
-                                        </label>
+
+                                        <div className="flex justify-end gap-3 pt-8 border-t border-slate-50">
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsEditingCategory(false)}
+                                                className="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                disabled={isUploading}
+                                                className="px-10 py-3 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all font-bold uppercase tracking-widest text-xs disabled:opacity-50"
+                                            >
+                                                {isUploading ? 'Uploading...' : 'Save Category'}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+                {/* Payment Method Edit Modal */}
+                {
+                    isEditingPayment && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                                <div className="p-8">
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-50 pb-6">
+                                        <div>
+                                            <h3 className="font-bold text-2xl text-slate-900">{currentPaymentMethod?.id ? 'Edit Payment Method' : 'Add New Payment Method'}</h3>
+                                            <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Billing Configuration</p>
+                                        </div>
+                                        <button onClick={() => setIsEditingPayment(false)} className="bg-slate-50 hover:bg-slate-100 text-slate-400 p-2 rounded-full transition-all">
+                                            <X className="w-6 h-6" />
+                                        </button>
                                     </div>
 
-                                    {currentProduct?.discount_active && (
-                                        <div className="bg-white/5 p-4 border border-white/5 space-y-4">
+                                    <form onSubmit={handleSavePaymentMethod} className="space-y-6">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Method Name</label>
+                                            <input
+                                                type="text"
+                                                value={currentPaymentMethod?.name || ''}
+                                                onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, name: e.target.value })}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
+                                                placeholder="e.g. GCash"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Account Name</label>
+                                            <input
+                                                type="text"
+                                                value={currentPaymentMethod?.account_name || ''}
+                                                onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, account_name: e.target.value })}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
+                                                placeholder="Full Name"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Account Number</label>
+                                            <input
+                                                type="text"
+                                                value={currentPaymentMethod?.account_number || ''}
+                                                onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, account_number: e.target.value })}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-mono text-sm placeholder:text-slate-300"
+                                                placeholder="09xx-xxx-xxxx"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">QR Code URL</label>
+                                            <input
+                                                type="text"
+                                                value={currentPaymentMethod?.qr_code_url || ''}
+                                                onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, qr_code_url: e.target.value })}
+                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
+                                                placeholder="https://example.com/qr.jpg"
+                                            />
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-2">
-                                                <label className="text-xs font-bold uppercase tracking-widest text-white/60">Discount Price (₱)</label>
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Sort Order</label>
                                                 <input
                                                     type="number"
-                                                    value={currentProduct?.discount_price || 0}
-                                                    onChange={(e) => setCurrentProduct({ ...currentProduct, discount_price: parseFloat(e.target.value) })}
-                                                    className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
+                                                    value={currentPaymentMethod?.sort_order || 0}
+                                                    onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, sort_order: parseInt(e.target.value) })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                    required
                                                 />
+                                            </div>
+                                            <div className="flex items-end pb-3">
+                                                <label className="relative flex items-center gap-3 cursor-pointer group">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={currentPaymentMethod?.active !== false}
+                                                        onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, active: e.target.checked })}
+                                                        className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
+                                                    />
+                                                    <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">Active</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-end gap-3 pt-8 border-t border-slate-50">
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsEditingPayment(false)}
+                                                className="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-10 py-3 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all font-bold uppercase tracking-widest text-xs"
+                                            >
+                                                Save Method
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+                {/* Order Details Modal */}
+                {
+                    viewingOrder && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <div className="bg-white w-full max-w-2xl max-h-[90vh] overflow-auto rounded-3xl shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                                <div className="p-8 sm:p-10">
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-50 pb-8">
+                                        <div>
+                                            <h3 className="font-bold text-2xl text-slate-900">Order Details</h3>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">ID: {viewingOrder.id}</p>
+                                        </div>
+                                        <button onClick={() => setViewingOrder(null)} className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-400 rounded-full transition-all">
+                                            <X className="w-5 h-5" />
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-10">
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 bg-primary rounded-full"></div> Customer Information
+                                                </h4>
+                                                <div className="bg-slate-50 p-6 rounded-2xl space-y-4 border border-slate-100">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Full Name</span>
+                                                        <span className="text-sm font-bold text-slate-900">{viewingOrder.first_name} {viewingOrder.last_name}</span>
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Email Address</span>
+                                                        <a href={`mailto:${viewingOrder.email}`} className="text-sm font-bold text-primary hover:underline">{viewingOrder.email}</a>
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Phone Number</span>
+                                                        <a href={`tel:${viewingOrder.phone}`} className="text-sm font-bold text-slate-900 hover:text-primary transition-colors">{viewingOrder.phone}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 bg-primary rounded-full"></div> Shipping & Payment
+                                                </h4>
+                                                <div className="bg-slate-50 p-6 rounded-2xl space-y-4 border border-slate-100">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Full Address</span>
+                                                        <span className="text-sm font-bold text-slate-900">{viewingOrder.address}</span>
+                                                        <span className="text-xs text-slate-500">{viewingOrder.city}, {viewingOrder.postal_code}</span>
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Payment Method</span>
+                                                        <span className="text-sm font-bold uppercase text-primary tracking-wide">{viewingOrder.payment_method}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {viewingOrder.payment_proof_url && (
+                                        <div className="mb-10">
+                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                                <div className="w-1.5 h-1.5 bg-primary rounded-full"></div> Proof of Payment
+                                            </h4>
+                                            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                                <a href={viewingOrder.payment_proof_url} target="_blank" rel="noopener noreferrer" className="block relative group overflow-hidden rounded-xl border border-slate-200 hover:border-primary/50 transition-all">
+                                                    <img
+                                                        src={viewingOrder.payment_proof_url}
+                                                        alt="Proof of Payment"
+                                                        className="w-full max-h-80 object-contain bg-white"
+                                                    />
+                                                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                                        <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em] border-2 border-white px-6 py-3 rounded-full hover:bg-white hover:text-slate-900 transition-all">View Full Entry</span>
+                                                    </div>
+                                                </a>
                                             </div>
                                         </div>
                                     )}
 
-                                    <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsEditing(false)}
-                                            className="w-full sm:w-auto px-6 py-3 sm:py-2 border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors uppercase tracking-widest text-[10px] font-bold"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="w-full sm:w-auto px-8 py-3 sm:py-2 bg-gold text-primary-dark hover:bg-gold/90 transition-colors font-bold uppercase tracking-widest text-xs"
-                                        >
-                                            Save Product
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Category Edit Modal */}
-                {isEditingCategory && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-md max-h-[95vh] overflow-y-auto border border-white/10 shadow-2xl">
-                            <div className="p-4 sm:p-8">
-                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <h3 className="font-serif text-xl sm:text-2xl" style={{ color: 'white' }}>{currentCategory?.id ? 'Edit Category' : 'Add New Category'}</h3>
-                                    <button onClick={() => setIsEditingCategory(false)} className="text-white/60 hover:text-white transition-colors p-2">
-                                        <X className="w-5 h-5 sm:w-6 sm:h-6" />
-                                    </button>
-                                </div>
-
-                                <form onSubmit={handleSaveCategory} className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Category Name</label>
-                                        <input
-                                            type="text"
-                                            value={currentCategory?.name || ''}
-                                            onChange={(e) => {
-                                                const name = e.target.value;
-                                                const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-t-]/g, '');
-                                                setCurrentCategory({ ...currentCategory, name, slug });
-                                            }}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                            placeholder="e.g. Rings"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Slug</label>
-                                        <input
-                                            type="text"
-                                            value={currentCategory?.slug || ''}
-                                            onChange={(e) => setCurrentCategory({ ...currentCategory, slug: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white/60 outline-none cursor-not-allowed"
-                                            readOnly
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Sort Order</label>
-                                        <input
-                                            type="number"
-                                            value={currentCategory?.sort_order || 0}
-                                            onChange={(e) => setCurrentCategory({ ...currentCategory, sort_order: parseInt(e.target.value) })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Category Image</label>
-                                        <div className="flex items-center gap-4">
-                                            {currentCategory?.image_url && !categoryImageFile && (
-                                                <img src={currentCategory.image_url} alt="" className="w-16 h-16 object-cover rounded" />
-                                            )}
-                                            {categoryImageFile && (
-                                                <div className="w-16 h-16 bg-gold/10 flex items-center justify-center rounded">
-                                                    <Upload className="w-6 h-6 text-gold" />
-                                                </div>
-                                            )}
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => setCategoryImageFile(e.target.files?.[0] || null)}
-                                                className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-primary-dark hover:file:bg-gold/90 transition-colors"
-                                            />
-                                        </div>
-                                        {categoryImageFile && <p className="text-[10px] text-gold font-medium">{categoryImageFile.name} selected</p>}
-                                    </div>
-
-                                    <label className="flex items-center gap-2 cursor-pointer group">
-                                        <input
-                                            type="checkbox"
-                                            checked={currentCategory?.active !== false}
-                                            onChange={(e) => setCurrentCategory({ ...currentCategory, active: e.target.checked })}
-                                            className="w-4 h-4 accent-gold"
-                                        />
-                                        <span className="text-sm text-white/60 group-hover:text-white transition-colors">Active (Visible in menu)</span>
-                                    </label>
-
-                                    <div className="flex justify-end gap-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsEditingCategory(false)}
-                                            className="px-6 py-2 border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors uppercase tracking-widest text-[10px] font-bold"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            disabled={isUploading}
-                                            className="px-8 py-2 bg-gold text-primary-dark hover:bg-gold/90 transition-colors font-bold uppercase tracking-widest text-xs disabled:opacity-50"
-                                        >
-                                            {isUploading ? 'Uploading...' : 'Save Category'}
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Payment Method Edit Modal */}
-                {isEditingPayment && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-md border border-white/10 shadow-2xl">
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <h3 className="font-serif text-2xl" style={{ color: 'white' }}>{currentPaymentMethod?.id ? 'Edit Payment Method' : 'Add New Payment Method'}</h3>
-                                    <button onClick={() => setIsEditingPayment(false)} className="text-white/60 hover:text-white transition-colors">
-                                        <X className="w-6 h-6" />
-                                    </button>
-                                </div>
-
-                                <form onSubmit={handleSavePaymentMethod} className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Method Name</label>
-                                        <input
-                                            type="text"
-                                            value={currentPaymentMethod?.name || ''}
-                                            onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, name: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                            placeholder="e.g. GCash"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Account Name</label>
-                                        <input
-                                            type="text"
-                                            value={currentPaymentMethod?.account_name || ''}
-                                            onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, account_name: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                            placeholder="Full Name"
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">Account Number</label>
-                                        <input
-                                            type="text"
-                                            value={currentPaymentMethod?.account_number || ''}
-                                            onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, account_number: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors font-mono"
-                                            placeholder="09xx-xxx-xxxx"
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold uppercase tracking-widest text-white/60">QR Code URL</label>
-                                        <input
-                                            type="text"
-                                            value={currentPaymentMethod?.qr_code_url || ''}
-                                            onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, qr_code_url: e.target.value })}
-                                            className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                            placeholder="Image URL"
-                                        />
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-widest text-white/60">Sort Order</label>
-                                            <input
-                                                type="number"
-                                                value={currentPaymentMethod?.sort_order || 0}
-                                                onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, sort_order: parseInt(e.target.value) })}
-                                                className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="flex items-end pb-2">
-                                            <label className="flex items-center gap-2 cursor-pointer group">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={currentPaymentMethod?.active !== false}
-                                                    onChange={(e) => setCurrentPaymentMethod({ ...currentPaymentMethod, active: e.target.checked })}
-                                                    className="w-4 h-4 accent-gold"
-                                                />
-                                                <span className="text-sm text-white/60 group-hover:text-white transition-colors">Active</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex justify-end gap-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsEditingPayment(false)}
-                                            className="px-6 py-2 border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors uppercase tracking-widest text-[10px] font-bold"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-8 py-2 bg-gold text-primary-dark hover:bg-gold/90 transition-colors font-bold uppercase tracking-widest text-xs"
-                                        >
-                                            Save Method
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Order Details Modal */}
-                {viewingOrder && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-2xl max-h-[90vh] overflow-auto border border-white/10 shadow-2xl">
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <div>
-                                        <h3 className="font-serif text-2xl" style={{ color: 'white' }}>Order Details</h3>
-                                        <p className="text-xs text-white/60 font-mono mt-1">ID: {viewingOrder.id}</p>
-                                    </div>
-                                    <button onClick={() => setViewingOrder(null)} className="p-1 text-white/60 hover:text-white transition-colors">
-                                        <X className="w-6 h-6" />
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-                                    <div className="space-y-6">
-                                        <div>
-                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Customer Info</h4>
-                                            <div className="bg-white/5 p-4 space-y-3 border border-white/5">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Full Name</span>
-                                                    <span className="text-sm font-medium text-white">{viewingOrder.first_name} {viewingOrder.last_name}</span>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Email Address</span>
-                                                    <a href={`mailto:${viewingOrder.email}`} className="text-sm font-medium text-gold hover:underline">{viewingOrder.email}</a>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Phone Number</span>
-                                                    <a href={`tel:${viewingOrder.phone}`} className="text-sm font-medium text-white hover:text-gold transition-colors">{viewingOrder.phone}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-6">
-                                        <div>
-                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Delivery Details</h4>
-                                            <div className="bg-white/5 p-4 space-y-3 border border-white/5">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Street Address</span>
-                                                    <span className="text-sm font-medium text-white">{viewingOrder.address}</span>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">City & Postal Code</span>
-                                                    <span className="text-sm font-medium text-white">{viewingOrder.city}, {viewingOrder.postal_code}</span>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Payment Method</span>
-                                                    <span className="text-sm font-medium uppercase text-gold">{viewingOrder.payment_method}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {viewingOrder.payment_proof_url && (
-                                    <div className="mb-8">
-                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Proof of Payment</h4>
-                                        <div className="bg-white/5 p-4 border border-white/5">
-                                            <a href={viewingOrder.payment_proof_url} target="_blank" rel="noopener noreferrer" className="block relative group overflow-hidden border border-white/10 hover:border-gold/50 transition-colors">
-                                                <img
-                                                    src={viewingOrder.payment_proof_url}
-                                                    alt="Proof of Payment"
-                                                    className="w-full max-h-64 object-contain bg-white/5"
-                                                />
-                                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                    <span className="text-gold text-[10px] font-bold uppercase tracking-widest border border-gold px-4 py-2">View Full Size</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div className="mb-0 sm:mb-8">
-                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Order Items</h4>
-                                    <div className="border border-white/10 overflow-x-auto">
-                                        <table className="min-w-full divide-y divide-white/10">
-                                            <thead className="bg-white/5">
-                                                <tr>
-                                                    <th className="px-4 py-3 text-left text-[10px] font-bold text-white/60 uppercase tracking-widest">Product</th>
-                                                    <th className="px-4 py-3 text-center text-[10px] font-bold text-white/60 uppercase tracking-widest">Qty</th>
-                                                    <th className="px-4 py-3 text-right text-[10px] font-bold text-white/60 uppercase tracking-widest">Price</th>
-                                                    <th className="px-4 py-3 text-right text-[10px] font-bold text-white/60 uppercase tracking-widest">Subtotal</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-gray-100 text-sm">
-                                                {viewingOrder.order_items?.map((item) => (
-                                                    <tr key={item.id} className="hover:bg-gray-50/50 transition-colors">
-                                                        <td className="px-4 py-4 font-medium">{item.product_name}</td>
-                                                        <td className="px-4 py-4 text-center text-gray-500">{item.quantity}</td>
-                                                        <td className="px-4 py-4 text-right text-gray-500">₱{item.price.toLocaleString()}</td>
-                                                        <td className="px-4 py-4 text-right font-medium">₱{(item.price * item.quantity).toLocaleString()}</td>
+                                    <div className="mb-10">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div> Itemized Summary
+                                        </h4>
+                                        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                                            <table className="min-w-full divide-y divide-slate-50">
+                                                <thead className="bg-slate-50/50">
+                                                    <tr>
+                                                        <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-widest">Product</th>
+                                                        <th className="px-6 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">Qty</th>
+                                                        <th className="px-6 py-4 text-right text-[10px] font-bold text-slate-400 uppercase tracking-widest">Price</th>
+                                                        <th className="px-6 py-4 text-right text-[10px] font-bold text-slate-400 uppercase tracking-widest">Subtotal</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                            <tfoot className="bg-white/5">
-                                                <tr>
-                                                    <td colSpan={3} className="px-4 py-2 text-right text-[10px] text-white/60 uppercase font-bold tracking-widest">Shipping Fee</td>
-                                                    <td className="px-4 py-2 text-right text-sm text-white">₱{(viewingOrder.shipping_fee || 0).toLocaleString()}</td>
-                                                </tr>
-                                                <tr className="text-gold">
-                                                    <td colSpan={3} className="px-4 py-4 text-right text-[10px] uppercase font-bold tracking-widest">Total Amount Paid</td>
-                                                    <td className="px-4 py-4 text-right text-lg font-serif">₱{viewingOrder.total_amount.toLocaleString()}</td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                                </thead>
+                                                <tbody className="divide-y divide-slate-50">
+                                                    {viewingOrder.order_items?.map((item) => (
+                                                        <tr key={item.id} className="hover:bg-slate-50/30 transition-colors">
+                                                            <td className="px-6 py-5 font-bold text-slate-900">{item.product_name}</td>
+                                                            <td className="px-6 py-5 text-center text-slate-500 font-medium">{item.quantity}</td>
+                                                            <td className="px-6 py-5 text-right text-slate-500 font-medium">₱{item.price.toLocaleString()}</td>
+                                                            <td className="px-6 py-5 text-right font-bold text-slate-900">₱{(item.price * item.quantity).toLocaleString()}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                                <tfoot className="bg-slate-50/50 border-t border-slate-100">
+                                                    <tr>
+                                                        <td colSpan={3} className="px-6 py-3 text-right text-[10px] text-slate-400 uppercase font-bold tracking-widest">Delivery Fee</td>
+                                                        <td className="px-6 py-3 text-right text-sm font-bold text-slate-900">₱{(viewingOrder.shipping_fee || 0).toLocaleString()}</td>
+                                                    </tr>
+                                                    <tr className="bg-primary/5">
+                                                        <td colSpan={3} className="px-6 py-5 text-right text-[10px] uppercase font-bold tracking-[0.2em] text-primary">Total Amount Settled</td>
+                                                        <td className="px-6 py-5 text-right text-xl font-bold text-primary">₱{viewingOrder.total_amount.toLocaleString()}</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="flex flex-col sm:flex-row justify-between items-center pt-8 border-t border-white/5 gap-4">
-                                    <div className="flex gap-4">
+                                    <div className="flex flex-col sm:flex-row justify-between items-center pt-10 border-t border-slate-50 gap-6">
                                         <button
                                             onClick={() => handleDeleteOrder(viewingOrder.id)}
-                                            className="text-[10px] font-bold uppercase tracking-widest text-red-500 hover:text-red-400 transition-colors"
+                                            className="text-[10px] font-bold uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors flex items-center gap-2 group"
                                         >
-                                            Delete Order
+                                            <Trash2 className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" /> Permanently Delete
                                         </button>
-                                    </div>
-                                    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                                        <button
-                                            onClick={() => setViewingOrder(null)}
-                                            className="px-8 py-3 text-[10px] font-bold uppercase tracking-widest border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors"
-                                        >
-                                            Dismiss
-                                        </button>
-                                        <select
-                                            value={viewingOrder.status}
-                                            onChange={(e) => handleUpdateOrderStatus(viewingOrder.id, e.target.value as Order['status'])}
-                                            className="px-8 py-3 text-[10px] font-bold uppercase tracking-widest bg-gold text-primary-dark outline-none cursor-pointer hover:bg-gold/90 transition-colors"
-                                        >
-                                            <option value="pending" className="bg-[#0f1d3a]">Pending</option>
-                                            <option value="completed" className="bg-[#0f1d3a]">Completed</option>
-                                            <option value="cancelled" className="bg-[#0f1d3a]">Cancelled</option>
-                                        </select>
+                                        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                                            <button
+                                                onClick={() => setViewingOrder(null)}
+                                                className="px-10 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-2xl transition-all"
+                                            >
+                                                Dismiss
+                                            </button>
+                                            <div className="relative group">
+                                                <select
+                                                    value={viewingOrder.status}
+                                                    onChange={(e) => handleUpdateOrderStatus(viewingOrder.id, e.target.value as Order['status'])}
+                                                    className="w-full sm:w-auto appearance-none pl-10 pr-12 py-4 text-[10px] font-bold uppercase tracking-[0.2em] bg-primary text-white rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl transition-all outline-none cursor-pointer"
+                                                >
+                                                    <option value="pending">Pending</option>
+                                                    <option value="completed">Completed</option>
+                                                    <option value="cancelled">Cancelled</option>
+                                                </select>
+                                                <ListChecks className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none" />
+                                                <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 pointer-events-none rotate-90" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
 
                 {/* Quotation Setting Edit Modal */}
-                {isEditingQuotationSetting && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-md border border-white/10 shadow-2xl">
-                            <div className="p-6">
-                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <h3 className="font-serif text-2xl text-white">Edit Setting</h3>
-                                    <button onClick={() => setIsEditingQuotationSetting(false)} className="text-white/60 hover:text-white transition-colors">
-                                        <X className="w-6 h-6" />
-                                    </button>
+                {
+                    isEditingQuotationSetting && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                                <div className="p-8">
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-50 pb-6">
+                                        <div>
+                                            <h3 className="font-bold text-2xl text-slate-900">Edit Setting</h3>
+                                            <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Quotation Configuration</p>
+                                        </div>
+                                        <button onClick={() => setIsEditingQuotationSetting(false)} className="bg-slate-50 hover:bg-slate-100 text-slate-400 p-2 rounded-full transition-all">
+                                            <X className="w-6 h-6" />
+                                        </button>
+                                    </div>
+
+                                    <form onSubmit={handleSaveQuotationSetting} className="space-y-6">
+                                        <div className="space-y-6">
+                                            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                                                <span className="text-[10px] text-slate-400 uppercase font-bold tracking-[0.2em] block mb-2">Setting Name</span>
+                                                <span className="text-lg font-bold text-slate-900">{currentQuotationSetting?.label}</span>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Setting Value</label>
+                                                {typeof currentQuotationSetting?.value === 'number' ? (
+                                                    <input
+                                                        type="number"
+                                                        value={currentQuotationSetting.value}
+                                                        onChange={(e) => setCurrentQuotationSetting({ ...currentQuotationSetting, value: parseFloat(e.target.value) })}
+                                                        className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                        required
+                                                    />
+                                                ) : (
+                                                    <input
+                                                        type="text"
+                                                        value={typeof currentQuotationSetting?.value === 'string' ? currentQuotationSetting.value : JSON.stringify(currentQuotationSetting?.value)}
+                                                        onChange={(e) => {
+                                                            let val: any = e.target.value;
+                                                            try {
+                                                                val = JSON.parse(e.target.value);
+                                                            } catch (e) { }
+                                                            setCurrentQuotationSetting({ ...currentQuotationSetting, value: val });
+                                                        }}
+                                                        className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all font-mono text-sm"
+                                                        required
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-end gap-3 pt-8 border-t border-slate-50">
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsEditingQuotationSetting(false)}
+                                                className="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                                            >
+                                                Discard
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-10 py-3 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all font-bold uppercase tracking-widest text-xs"
+                                            >
+                                                Save Updates
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-
-                                <form onSubmit={handleSaveQuotationSetting} className="space-y-6">
-                                    <div className="space-y-4">
-                                        <div className="flex flex-col">
-                                            <span className="text-[10px] text-white/40 uppercase font-bold mb-1">Setting</span>
-                                            <span className="text-white font-medium">{currentQuotationSetting?.label}</span>
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-widest text-white/60">Value</label>
-                                            {typeof currentQuotationSetting?.value === 'number' ? (
-                                                <input
-                                                    type="number"
-                                                    value={currentQuotationSetting.value}
-                                                    onChange={(e) => setCurrentQuotationSetting({ ...currentQuotationSetting, value: parseFloat(e.target.value) })}
-                                                    className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                                    required
-                                                />
-                                            ) : (
-                                                <input
-                                                    type="text"
-                                                    value={typeof currentQuotationSetting?.value === 'string' ? currentQuotationSetting.value : JSON.stringify(currentQuotationSetting?.value)}
-                                                    onChange={(e) => {
-                                                        let val: any = e.target.value;
-                                                        try {
-                                                            val = JSON.parse(e.target.value);
-                                                        } catch (e) { }
-                                                        setCurrentQuotationSetting({ ...currentQuotationSetting, value: val });
-                                                    }}
-                                                    className="w-full px-4 py-2 bg-white/5 border border-white/10 text-white focus:border-gold outline-none transition-colors"
-                                                    required
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex justify-end gap-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsEditingQuotationSetting(false)}
-                                            className="px-6 py-2 border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors uppercase tracking-widest text-[10px] font-bold"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-8 py-2 bg-gold text-primary-dark hover:bg-gold/90 transition-colors font-bold uppercase tracking-widest text-xs"
-                                        >
-                                            Save Setting
-                                        </button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
 
                 {/* Quotation Detail Modal */}
-                {viewingQuotation && (
-                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-[#1C2F6E] w-full max-w-4xl max-h-[95vh] overflow-y-auto border border-white/10 shadow-2xl">
-                            <div className="p-4 sm:p-8">
-                                <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                    <h3 className="font-serif text-2xl text-white">Quotation Details</h3>
-                                    <button onClick={() => setViewingQuotation(null)} className="text-white/60 hover:text-white transition-colors">
-                                        <X className="w-6 h-6" />
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-                                    <div className="space-y-6">
+                {
+                    viewingQuotation && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <div className="bg-white w-full max-w-4xl max-h-[95vh] overflow-y-auto rounded-3xl shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                                <div className="p-6 sm:p-10">
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-50 pb-8">
                                         <div>
-                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Customer Contact</h4>
-                                            <div className="bg-white/5 p-4 space-y-3 border border-white/5">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Preferred Method</span>
-                                                    <span className="text-sm font-bold text-gold uppercase">{viewingQuotation.form_data?.preferredComm || 'Email'}</span>
-                                                </div>
-                                                {viewingQuotation.form_data?.socialHandle && (
+                                            <h3 className="font-bold text-2xl text-slate-900">Quotation Inquiry</h3>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">ID: {viewingQuotation.id}</p>
+                                        </div>
+                                        <button onClick={() => setViewingQuotation(null)} className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-400 rounded-full transition-all">
+                                            <X className="w-6 h-6" />
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-10">
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 bg-primary rounded-full"></div> Contact Information
+                                                </h4>
+                                                <div className="bg-slate-50 p-6 rounded-2xl space-y-4 border border-slate-100">
                                                     <div className="flex flex-col">
-                                                        <span className="text-[10px] text-white/60 uppercase font-bold">
-                                                            {viewingQuotation.form_data?.preferredComm} Handle/Name
-                                                        </span>
-                                                        <span className="text-sm font-bold text-white">
-                                                            {viewingQuotation.form_data?.preferredComm === 'Instagram' ? '@' : ''}
-                                                            {viewingQuotation.form_data?.socialHandle}
-                                                        </span>
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Preferred Method</span>
+                                                        <span className="text-sm font-bold text-primary uppercase tracking-wide">{viewingQuotation.form_data?.preferredComm || 'Email'}</span>
                                                     </div>
-                                                )}
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Full Name</span>
-                                                    <span className="text-sm font-medium text-white">{viewingQuotation.customer_name}</span>
+                                                    {viewingQuotation.form_data?.socialHandle && (
+                                                        <div className="flex flex-col">
+                                                            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                                                                {viewingQuotation.form_data?.preferredComm} Handle
+                                                            </span>
+                                                            <span className="text-sm font-bold text-slate-900">
+                                                                {viewingQuotation.form_data?.preferredComm === 'Instagram' ? '@' : ''}
+                                                                {viewingQuotation.form_data?.socialHandle}
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Full Name</span>
+                                                        <span className="text-sm font-bold text-slate-900">{viewingQuotation.customer_name}</span>
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Email Address</span>
+                                                        <a href={`mailto:${viewingQuotation.customer_email}`} className="text-sm font-bold text-primary hover:underline">{viewingQuotation.customer_email}</a>
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Phone Number</span>
+                                                        <a href={`tel:${viewingQuotation.customer_phone}`} className="text-sm font-bold text-slate-900 hover:text-primary transition-colors">{viewingQuotation.customer_phone}</a>
+                                                    </div>
                                                 </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Email Address</span>
-                                                    <a href={`mailto:${viewingQuotation.customer_email}`} className="text-sm font-medium text-gold hover:underline">{viewingQuotation.customer_email}</a>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Phone Number</span>
-                                                    <a href={`tel:${viewingQuotation.customer_phone}`} className="text-sm font-medium text-white hover:text-gold transition-colors">{viewingQuotation.customer_phone}</a>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 bg-primary rounded-full"></div> Quotation Summary
+                                                </h4>
+                                                <div className="bg-slate-50 p-6 rounded-2xl space-y-4 border border-slate-100">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Inquiry Path</span>
+                                                        <span className="text-sm font-bold text-slate-900 capitalize">{viewingQuotation.path.replace('_', ' ')}</span>
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Estimated Budget</span>
+                                                        <span className="text-sm font-bold text-primary">₱{viewingQuotation.final_price_low.toLocaleString()} - ₱{viewingQuotation.final_price_high.toLocaleString()}</span>
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Quality Tier</span>
+                                                        <span className="text-sm font-bold text-slate-900">{viewingQuotation.tier}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-6">
-                                        <div>
-                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Quotation Summary</h4>
-                                            <div className="bg-white/5 p-4 space-y-3 border border-white/5">
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Path</span>
-                                                    <span className="text-sm font-medium text-white capitalize">{viewingQuotation.path.replace('_', ' ')}</span>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Price Range</span>
-                                                    <span className="text-sm font-bold text-gold">₱{viewingQuotation.final_price_low.toLocaleString()} - ₱{viewingQuotation.final_price_high.toLocaleString()}</span>
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-[10px] text-white/60 uppercase font-bold">Tier</span>
-                                                    <span className="text-sm font-medium text-white">{viewingQuotation.tier}</span>
-                                                </div>
-                                            </div>
+                                    <div className="mb-10">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-4 flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div> Detailed Requirements
+                                        </h4>
+                                        <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
+                                            {Object.entries(viewingQuotation.form_data || {}).map(([key, value]: [string, any]) => (
+                                                key !== 'inspirationFiles' && key !== 'socialHandle' && key !== 'preferredComm' && (
+                                                    <div key={key} className="flex flex-col border-b border-slate-100 pb-2">
+                                                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                                        <span className="text-sm font-bold text-slate-900">{Array.isArray(value) ? value.join(', ') : String(value)}</span>
+                                                    </div>
+                                                )
+                                            ))}
                                         </div>
                                     </div>
-                                </div>
 
-                                <div>
-                                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-gold mb-3">Form Submissions</h4>
-                                    <div className="bg-white/5 p-4 border border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                                        {Object.entries(viewingQuotation.form_data || {}).map(([key, value]: [string, any]) => (
-                                            key !== 'inspirationFiles' && (
-                                                <div key={key} className="flex flex-col pb-2 border-b border-white/5">
-                                                    <span className="text-[10px] text-white/40 uppercase font-bold">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                                    <span className="text-xs text-white/80">{Array.isArray(value) ? value.join(', ') : String(value)}</span>
-                                                </div>
-                                            )
-                                        ))}
+                                    <div className="flex justify-end pt-10 border-t border-slate-50">
+                                        <button
+                                            onClick={() => setViewingQuotation(null)}
+                                            className="px-12 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-2xl transition-all"
+                                        >
+                                            Dismiss Inquiry
+                                        </button>
                                     </div>
-                                </div>
-
-                                <div className="flex justify-end pt-8">
-                                    <button
-                                        onClick={() => setViewingQuotation(null)}
-                                        className="px-8 py-3 text-[10px] font-bold uppercase tracking-widest border border-white/10 text-white/60 hover:bg-white/5 hover:text-white transition-colors"
-                                    >
-                                        Dismiss
-                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
-            </div>
-        </div>
+                    )
+                }
+            </div >
+        </div >
     );
 }
 

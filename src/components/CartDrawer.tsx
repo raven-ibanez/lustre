@@ -90,17 +90,17 @@ export function CartDrawer() {
       />
 
       {/* Drawer */}
-      <div className="relative w-full max-w-md bg-card h-full overflow-auto animate-slide-left border-l border-white/10 shadow-2xl">
+      <div className="relative w-full max-w-md bg-background h-full overflow-auto animate-slide-left border-l border-foreground/10 shadow-2xl">
         <div className="p-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-            <h2 className="font-serif text-2xl flex items-center gap-2 text-white">
+          <div className="flex items-center justify-between mb-8 border-b border-foreground/5 pb-6">
+            <h2 className="font-serif text-2xl flex items-center gap-2 text-foreground">
               <ShoppingBag className="w-5 h-5 text-gold" />
               Your Cart ({totalItems})
             </h2>
             <button
               onClick={handleClose}
-              className="p-2 text-muted-foreground hover:text-white transition-colors"
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -112,7 +112,7 @@ export function CartDrawer() {
               <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/20">
                 <Check className="w-8 h-8 text-gold" />
               </div>
-              <h3 className="font-serif text-2xl mb-2 text-white">Order Confirmed!</h3>
+              <h3 className="font-serif text-2xl mb-2 text-foreground">Order Confirmed!</h3>
               <p className="text-muted-foreground mb-6">
                 Thank you for your purchase. We&apos;ll send you an email confirmation shortly.
               </p>
@@ -126,8 +126,8 @@ export function CartDrawer() {
           ) : items.length === 0 ? (
             /* Empty Cart */
             <div className="text-center py-12">
-              <ShoppingBag className="w-16 h-16 text-white/10 mx-auto mb-4" />
-              <h3 className="font-serif text-xl mb-2 text-white">Your cart is empty</h3>
+              <ShoppingBag className="w-16 h-16 text-foreground/10 mx-auto mb-4" />
+              <h3 className="font-serif text-xl mb-2 text-foreground">Your cart is empty</h3>
               <p className="text-muted-foreground mb-6">
                 Discover our beautiful collection and add something special.
               </p>
@@ -144,34 +144,34 @@ export function CartDrawer() {
               {/* Cart Items */}
               <div className="space-y-4 mb-6">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-4 bg-white/5 border border-white/5">
+                  <div key={item.id} className="flex gap-4 p-4 bg-foreground/5 border border-foreground/5">
                     {item.image_url ? (
                       <img
                         src={item.image_url}
                         alt={item.name}
-                        className="w-20 h-20 object-cover border border-white/10"
+                        className="w-20 h-20 object-cover border border-foreground/10"
                       />
                     ) : (
-                      <div className="w-20 h-20 bg-white/5 flex items-center justify-center border border-white/10">
-                        <ShoppingBag className="w-6 h-6 text-white/20" />
+                      <div className="w-20 h-20 bg-foreground/5 flex items-center justify-center border border-foreground/10">
+                        <ShoppingBag className="w-6 h-6 text-foreground/20" />
                       </div>
                     )}
                     <div className="flex-1">
-                      <h4 className="font-medium text-sm text-white">{item.name}</h4>
+                      <h4 className="font-medium text-sm text-foreground">{item.name}</h4>
                       <p className="text-sm text-gold font-medium">
                         ₱{formatPrice(item.discount_active && item.discount_price ? item.discount_price : item.base_price)}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-8 h-8 border border-white/10 flex items-center justify-center text-muted-foreground hover:border-gold hover:text-gold transition-colors"
+                          className="w-8 h-8 border border-foreground/10 flex items-center justify-center text-muted-foreground hover:border-gold hover:text-gold transition-colors"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="text-sm w-8 text-center text-white">{item.quantity}</span>
+                        <span className="text-sm w-8 text-center text-foreground">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-8 h-8 border border-white/10 flex items-center justify-center text-muted-foreground hover:border-gold hover:text-gold transition-colors"
+                          className="w-8 h-8 border border-foreground/10 flex items-center justify-center text-muted-foreground hover:border-gold hover:text-gold transition-colors"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
@@ -188,24 +188,24 @@ export function CartDrawer() {
               </div>
 
               {/* Total */}
-              <div className="border-t border-white/10 pt-6 mb-8">
+              <div className="border-t border-foreground/10 pt-6 mb-8">
                 <div className="flex justify-between mb-2">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Subtotal</span>
-                  <span className="text-sm text-white">₱{formatPrice(totalPrice)}</span>
+                  <span className="text-sm text-foreground">₱{formatPrice(totalPrice)}</span>
                 </div>
                 <div className="flex justify-between mb-4">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Shipping</span>
-                  <span className="text-sm text-white">{totalPrice >= 5000 ? 'FREE' : '₱150'}</span>
+                  <span className="text-sm text-foreground">{totalPrice >= 5000 ? 'FREE' : '₱150'}</span>
                 </div>
-                <div className="flex justify-between items-center bg-white/5 -mx-6 px-6 py-4 border-y border-white/5">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold text-white/40">Total Amount</span>
+                <div className="flex justify-between items-center bg-foreground/5 -mx-6 px-6 py-4 border-y border-foreground/5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gold text-foreground/40">Total Amount</span>
                   <span className="text-xl font-serif text-gold">₱{formatPrice(totalPrice >= 5000 ? totalPrice : totalPrice + 150)}</span>
                 </div>
               </div>
 
               {/* Checkout Form */}
               <form onSubmit={handleCheckout} className="space-y-6">
-                <h3 className="font-serif text-xl text-white">Checkout Details</h3>
+                <h3 className="font-serif text-xl text-foreground">Checkout Details</h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
@@ -215,7 +215,7 @@ export function CartDrawer() {
                       placeholder="e.g. Juan"
                       value={orderDetails.firstName}
                       onChange={(e) => setOrderDetails({ ...orderDetails, firstName: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white text-sm focus:border-gold outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 text-sm focus:border-gold outline-none transition-colors"
                       required
                     />
                   </div>
@@ -226,7 +226,7 @@ export function CartDrawer() {
                       placeholder="e.g. Dela Cruz"
                       value={orderDetails.lastName}
                       onChange={(e) => setOrderDetails({ ...orderDetails, lastName: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white text-sm focus:border-gold outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 text-sm focus:border-gold outline-none transition-colors"
                       required
                     />
                   </div>
@@ -239,7 +239,7 @@ export function CartDrawer() {
                     placeholder="juan@example.com"
                     value={orderDetails.email}
                     onChange={(e) => setOrderDetails({ ...orderDetails, email: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white text-sm focus:border-gold outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 text-sm focus:border-gold outline-none transition-colors"
                     required
                   />
                 </div>
@@ -251,7 +251,7 @@ export function CartDrawer() {
                     placeholder="0917 XXX XXXX"
                     value={orderDetails.phone}
                     onChange={(e) => setOrderDetails({ ...orderDetails, phone: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white text-sm focus:border-gold outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 text-sm focus:border-gold outline-none transition-colors"
                     required
                   />
                 </div>
@@ -262,7 +262,7 @@ export function CartDrawer() {
                     placeholder="Street Name, Barangay, Landmark"
                     value={orderDetails.address}
                     onChange={(e) => setOrderDetails({ ...orderDetails, address: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white text-sm focus:border-gold outline-none transition-colors resize-none"
+                    className="w-full px-4 py-3 bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 text-sm focus:border-gold outline-none transition-colors resize-none"
                     rows={2}
                     required
                   />
@@ -276,7 +276,7 @@ export function CartDrawer() {
                       placeholder="City"
                       value={orderDetails.city}
                       onChange={(e) => setOrderDetails({ ...orderDetails, city: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white text-sm focus:border-gold outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 text-sm focus:border-gold outline-none transition-colors"
                       required
                     />
                   </div>
@@ -287,17 +287,17 @@ export function CartDrawer() {
                       placeholder="1234"
                       value={orderDetails.postalCode}
                       onChange={(e) => setOrderDetails({ ...orderDetails, postalCode: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 text-white text-sm focus:border-gold outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-foreground/5 border border-foreground/10 text-foreground placeholder:text-foreground/40 text-sm focus:border-gold outline-none transition-colors"
                       required
                     />
                   </div>
                 </div>
 
                 {/* Payment Method */}
-                <div className="space-y-4 pt-4 border-t border-white/10">
+                <div className="space-y-4 pt-4 border-t border-foreground/10">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gold">Payment Method</p>
                   <div className="space-y-3">
-                    <label className={`flex items-center gap-3 p-4 border cursor-pointer transition-all hover:bg-gold/5 ${orderDetails.paymentMethod === 'cod' ? 'border-gold bg-gold/5' : 'border-white/10 bg-white/5 rounded-none'}`}>
+                    <label className={`flex items-center gap-3 p-4 border cursor-pointer transition-all hover:bg-gold/5 ${orderDetails.paymentMethod === 'cod' ? 'border-gold bg-gold/5' : 'border-foreground/10 bg-foreground/5 rounded-none'}`}>
                       <input
                         type="radio"
                         name="payment"
@@ -308,14 +308,14 @@ export function CartDrawer() {
                       />
                       <Truck className={`w-5 h-5 ${orderDetails.paymentMethod === 'cod' ? 'text-gold' : 'text-muted-foreground'}`} />
                       <div className="flex-1">
-                        <span className={`text-sm font-medium ${orderDetails.paymentMethod === 'cod' ? 'text-white' : 'text-muted-foreground'}`}>Cash on Delivery</span>
+                        <span className={`text-sm font-medium ${orderDetails.paymentMethod === 'cod' ? 'text-foreground' : 'text-muted-foreground'}`}>Cash on Delivery</span>
                         <p className="text-[10px] text-muted-foreground/60">Pay when your order arrives</p>
                       </div>
                     </label>
 
                     {paymentMethods.map((method) => (
                       <div key={method.id} className="space-y-3">
-                        <label className={`flex items-center gap-3 p-4 border cursor-pointer transition-all hover:bg-gold/5 ${orderDetails.paymentMethod === method.id ? 'border-gold bg-gold/5' : 'border-white/10 bg-white/5'}`}>
+                        <label className={`flex items-center gap-3 p-4 border cursor-pointer transition-all hover:bg-gold/5 ${orderDetails.paymentMethod === method.id ? 'border-gold bg-gold/5' : 'border-foreground/10 bg-foreground/5'}`}>
                           <input
                             type="radio"
                             name="payment"
@@ -326,13 +326,13 @@ export function CartDrawer() {
                           />
                           <Wallet className={`w-5 h-5 ${orderDetails.paymentMethod === method.id ? 'text-gold' : 'text-muted-foreground'}`} />
                           <div className="flex-1">
-                            <span className={`text-sm font-medium ${orderDetails.paymentMethod === method.id ? 'text-white' : 'text-muted-foreground'}`}>{method.name}</span>
+                            <span className={`text-sm font-medium ${orderDetails.paymentMethod === method.id ? 'text-foreground' : 'text-muted-foreground'}`}>{method.name}</span>
                             <p className="text-[10px] text-muted-foreground/60">Fast & Secure Digital Payment</p>
                           </div>
                         </label>
 
                         {orderDetails.paymentMethod === method.id && (
-                          <div className="p-4 bg-white/5 border border-white/5 animate-in fade-in slide-in-from-top-2 duration-300">
+                          <div className="p-4 bg-foreground/5 border border-foreground/5 animate-in fade-in slide-in-from-top-2 duration-300">
                             {(method.qr_code_url || method.account_number) && (
                               <div className="text-center mb-6">
                                 {method.qr_code_url && (
@@ -376,7 +376,7 @@ export function CartDrawer() {
                 <button
                   type="submit"
                   disabled={isCheckingOut}
-                  className="w-full btn-primary py-5 disabled:opacity-50 text-[10px] font-bold uppercase tracking-widest"
+                  className="w-full btn-primary py-5 disabled:opacity-50 text-[10px] font-bold uppercase tracking-widest text-primary-dark"
                 >
                   {isCheckingOut ? 'Processing Transaction...' : `Complete Order • ₱${formatPrice(totalPrice >= 5000 ? totalPrice : totalPrice + 150)}`}
                 </button>

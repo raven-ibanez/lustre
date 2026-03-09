@@ -63,7 +63,7 @@ export function FAQs() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors"
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-foreground/5 transition-colors"
               >
                 <span className="font-medium pr-4">{faq.question}</span>
                 {openIndex === index ? (

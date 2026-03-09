@@ -27,6 +27,7 @@ export function Header({ isTransparent = false }: HeaderProps) {
           { name: 'All Products', href: '#shop' },
         ]
       },
+      { name: 'Custom Quote', href: '#quotation' },
     ];
 
     // Add dynamic categories
@@ -54,8 +55,6 @@ export function Header({ isTransparent = false }: HeaderProps) {
   }, [categories]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [navIsStuck, setNavIsStuck] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -86,34 +85,7 @@ export function Header({ isTransparent = false }: HeaderProps) {
     }, 200);
   };
 
-  // Detect when the nav bar becomes stuck at the top
-  useEffect(() => {
-    const nav = navRef.current;
-    if (!nav) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // When the nav's top sentinel goes out of view, the nav is stuck
-        setNavIsStuck(!entry.isIntersecting);
-      },
-      { threshold: 0, rootMargin: '-1px 0px 0px 0px' }
-    );
-
-    // Create a sentinel element right before the nav
-    const sentinel = document.createElement('div');
-    sentinel.style.height = '1px';
-    sentinel.style.width = '100%';
-    sentinel.style.position = 'absolute';
-    sentinel.style.top = '-1px';
-    nav.style.position = 'relative';
-    nav.prepend(sentinel);
-    observer.observe(sentinel);
-
-    return () => {
-      observer.disconnect();
-      sentinel.remove();
-    };
-  }, []);
+  // Navigation Bar - sticky
 
   useEffect(() => {
     return () => {
@@ -128,8 +100,6 @@ export function Header({ isTransparent = false }: HeaderProps) {
       {/* Full header wrapper */}
       <div
         className="header-wrapper"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         style={{
           position: isTransparent ? 'absolute' : 'relative',
           top: 0,
@@ -140,10 +110,7 @@ export function Header({ isTransparent = false }: HeaderProps) {
       >
         {/* Logo Section */}
         <div
-          className="transition-colors duration-300"
-          style={{
-            backgroundColor: isHovered || !isTransparent ? '#050b18' : 'transparent',
-          }}
+          className="bg-[#13204A]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-center py-5">
@@ -185,14 +152,11 @@ export function Header({ isTransparent = false }: HeaderProps) {
         {/* Navigation Bar - sticky, transparent by default, bg on hover or when stuck */}
         <nav
           ref={navRef}
-          className="transition-colors duration-300"
+          className="bg-[#13204A] border-t border-white/10 shadow-lg"
           style={{
             position: 'sticky',
             top: 0,
             zIndex: 50,
-            backgroundColor: isHovered || navIsStuck || !isTransparent ? '#050b18' : 'transparent',
-            borderTop: isHovered || navIsStuck || !isTransparent ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
-            boxShadow: navIsStuck ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
           }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

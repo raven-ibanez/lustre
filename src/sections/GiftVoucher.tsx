@@ -31,6 +31,7 @@ export function GiftVoucher() {
       image_url: '/images/gift-voucher.jpg',
       available: true,
       discount_active: false,
+      is_new_arrival: false,
       raw_price: selectedDenomination
     }, quantity);
   };

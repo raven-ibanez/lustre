@@ -1,0 +1,6 @@
+
+> my-app@0.0.0 build
+> tsc -b && vite build
+
+src/sections/GiftVoucher.tsx(24,15): error TS2345: Argument of type '{ id: string; name: string; description: string; base_price: number; category: string; popular: false; image_url: string; available: true; discount_active: false; raw_price: number; }' is not assignable to parameter of type 'Product'.
+  Property 'is_new_arrival' is missing in type '{ id: string; name: string; description: string; base_price: number; category: string; popular: false; image_url: string; available: true; discount_active: false; raw_price: number; }' but required in type 'Product'.

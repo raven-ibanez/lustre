@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { Product, Category, Order, PaymentMethod } from '@/types';
-import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks, Calendar, LayoutDashboard, Sparkles, Users, ArrowRight } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks, Calendar, LayoutDashboard, Sparkles, Users, ArrowRight, ArrowLeft } from 'lucide-react';
 
 export function Admin() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -463,63 +463,6 @@ export function Admin() {
                     </div>
                 </div>
 
-                {/* Tabs */}
-                <div className="border-b border-slate-200 mb-8 -mx-4 px-4 sm:mx-0 sm:px-0">
-                    <div className="flex overflow-x-auto scrollbar-hide no-scrollbar">
-                        <div className="flex min-w-max">
-                            <button
-                                onClick={() => setActiveTab('overview')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Overview
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('products')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'products' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Products ({products.length})
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('categories')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'categories' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Categories ({categories.length})
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('orders')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'orders' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Orders ({orders.length})
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('analytics')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'analytics' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Analytics
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('payments')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'payments' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                Payments
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('quotation_settings')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_settings' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                <Settings className="w-4 h-4 inline-block mr-2" />
-                                Quote Settings
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('quotation_records')}
-                                className={`px-6 py-3 font-medium transition-colors border-b-2 ${activeTab === 'quotation_records' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-                            >
-                                <ListChecks className="w-4 h-4 inline-block mr-2" />
-                                Quote Records ({quotationRecords.length})
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 {loading ? (
                     <div className="text-center py-20 italic">Loading dashboard...</div>
@@ -679,8 +622,94 @@ export function Admin() {
                         </div>
                     </div>
                 ) : activeTab === 'products' ? (
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
-                        <table className="min-w-full divide-y divide-slate-100">
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Manage Products</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Inventory Management</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setCurrentProduct({
+                                        name: '',
+                                        description: '',
+                                        base_price: 0,
+                                        category: categories[0]?.id || '',
+                                        popular: false,
+                                        is_new_arrival: false,
+                                        available: true,
+                                        discount_active: false,
+                                        raw_price: 0,
+                                        markup_type: 'jewelry'
+                                    });
+                                    setIsEditing(true);
+                                }}
+                                className="bg-primary text-white p-2.5 rounded-xl shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+                            >
+                                <Plus className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Mobile Card Layout */}
+                        <div className="grid grid-cols-1 gap-4 md:hidden">
+                            {products.map((product) => (
+                                <div key={product.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm active:scale-[0.98] transition-all">
+                                    <div className="flex gap-4">
+                                        {product.image_url ? (
+                                            <img className="h-20 w-20 rounded-xl object-cover border border-slate-50" src={product.image_url} alt="" />
+                                        ) : (
+                                            <div className="h-20 w-20 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-50">
+                                                <Package className="w-8 h-8 text-slate-200" />
+                                            </div>
+                                        )}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex justify-between items-start mb-1">
+                                                <div className="font-bold text-slate-900 truncate pr-2">{product.name}</div>
+                                                <div className="font-bold text-primary">₱{product.base_price.toLocaleString()}</div>
+                                            </div>
+                                            <div className="text-xs text-slate-400 mb-3">{categories.find(c => c.id === product.category)?.name || product.category}</div>
+                                            <div className="flex flex-wrap gap-1.5 mb-4">
+                                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-tighter ${product.available ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                                                    {product.available ? 'In Stock' : 'Out of Stock'}
+                                                </span>
+                                                {product.popular && <span className="text-[10px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Favorite</span>}
+                                                {product.is_new_arrival && <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">New</span>}
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        setCurrentProduct(product);
+                                                        setIsEditing(true);
+                                                    }}
+                                                    className="flex-1 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2"
+                                                >
+                                                    <Edit className="w-3 h-3" /> Edit
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteProduct(product.id)}
+                                                    className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-500 rounded-xl transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hidden md:block">
+                            <table className="min-w-full divide-y divide-slate-100">
                             <thead className="bg-slate-50">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Product</th>
@@ -744,10 +773,75 @@ export function Admin() {
                             </tbody>
                         </table>
                     </div>
+                </div>
                 ) : activeTab === 'categories' ? (
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
-                        <table className="min-w-full divide-y divide-slate-100">
-                            <thead className="bg-slate-50">
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Manage Categories</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Classification Management</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setCurrentCategory({ name: '', slug: '', sort_order: 0, active: true });
+                                    setIsEditingCategory(true);
+                                }}
+                                className="bg-primary text-white p-2.5 rounded-xl shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+                            >
+                                <Plus className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Mobile Card Layout */}
+                        <div className="grid grid-cols-1 gap-4 md:hidden">
+                            {categories.map((category) => (
+                                <div key={category.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                            <div className="font-bold text-slate-900 text-lg">{category.name}</div>
+                                            <div className="text-xs text-slate-400 font-mono mt-0.5">{category.slug}</div>
+                                        </div>
+                                        <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-widest ${category.active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                                            {category.active ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center justify-between border-t border-slate-50 pt-4 mt-2">
+                                        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Order: <span className="text-slate-900 ml-1">{category.sort_order}</span></div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    setCurrentCategory(category);
+                                                    setIsEditingCategory(true);
+                                                }}
+                                                className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl transition-colors"
+                                            >
+                                                <Edit className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteCategory(category.id)}
+                                                className="p-2 bg-red-50 hover:bg-red-100 text-red-500 rounded-xl transition-colors"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hidden md:block">
+                            <table className="min-w-full divide-y divide-slate-100">
+                                <thead className="bg-slate-50">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Category Name</th>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Slug</th>
@@ -795,9 +889,75 @@ export function Admin() {
                             </tbody>
                         </table>
                     </div>
+                </div>
                 ) : activeTab === 'orders' ? (
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
-                        <table className="min-w-full divide-y divide-slate-100">
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Manage Orders</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Sales & Fulfillment</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mobile Card Layout */}
+                        <div className="grid grid-cols-1 gap-4 md:hidden">
+                            {orders.map((order) => (
+                                <div key={order.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                            <div className="text-[10px] font-mono text-slate-400 mb-1">#{order.id.slice(0, 8)}</div>
+                                            <div className="font-bold text-slate-900">{order.first_name} {order.last_name}</div>
+                                            <div className="text-xs text-slate-400">{order.email}</div>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="font-bold text-primary mb-2">₱{order.total_amount.toLocaleString()}</div>
+                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest block">{new Date(order.created_at!).toLocaleDateString()}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between border-t border-slate-50 pt-4 mt-2">
+                                        <select
+                                            value={order.status}
+                                            onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value as Order['status'])}
+                                            className={`px-3 py-1.5 text-xs font-bold rounded-lg outline-none transition-all ${order.status === 'completed' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' :
+                                                order.status === 'cancelled' ? 'text-red-600 bg-red-50 border-red-100' :
+                                                    'text-blue-600 bg-blue-50 border-blue-100'
+                                                }`}
+                                        >
+                                            <option value="pending">Pending</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => setViewingOrder(order)}
+                                                className="px-4 py-2 bg-slate-50 hover:bg-slate-100 text-primary rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors"
+                                            >
+                                                View Details
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteOrder(order.id)}
+                                                className="p-2 bg-red-50 hover:bg-red-100 text-red-500 rounded-xl transition-colors"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hidden md:block">
+                            <table className="min-w-full divide-y divide-slate-100">
                             <thead className="bg-slate-50">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Order ID</th>
@@ -857,9 +1017,86 @@ export function Admin() {
                             </tbody>
                         </table>
                     </div>
+                </div>
                 ) : activeTab === 'payments' ? (
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
-                        <table className="min-w-full divide-y divide-slate-100">
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Payment Methods</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Transaction Channels</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setCurrentPaymentMethod({ name: '', account_number: '', account_name: '', active: true });
+                                    setIsEditingPayment(true);
+                                }}
+                                className="bg-primary text-white p-2.5 rounded-xl shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+                            >
+                                <Plus className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Mobile Card Layout */}
+                        <div className="grid grid-cols-1 gap-4 md:hidden">
+                            {paymentMethods.map((method) => (
+                                <div key={method.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <div className="p-3 bg-primary/5 rounded-xl text-primary font-bold">
+                                            <Wallet className="w-6 h-6" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-center">
+                                                <div className="font-bold text-slate-900">{method.name}</div>
+                                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-widest ${method.active ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                                                    {method.active ? 'Active' : 'Inactive'}
+                                                </span>
+                                            </div>
+                                            <div className="text-xs font-bold text-slate-900 mt-1">{method.account_name}</div>
+                                            <div className="text-[10px] font-mono text-slate-400">{method.account_number}</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between border-t border-slate-50 pt-4">
+                                        <div className="h-12 w-12">
+                                            {method.qr_code_url ? (
+                                                <img src={method.qr_code_url} alt="QR" className="h-full w-full object-contain border border-slate-100 rounded-lg p-1 bg-white" />
+                                            ) : (
+                                                <div className="w-full h-full bg-slate-50 rounded-lg flex items-center justify-center border border-slate-50 italic text-[8px] text-slate-300">No QR</div>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    setCurrentPaymentMethod(method);
+                                                    setIsEditingPayment(true);
+                                                }}
+                                                className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl transition-colors"
+                                            >
+                                                <Edit className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeletePaymentMethod(method.id)}
+                                                className="p-2.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-xl transition-colors"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hidden md:block">
+                            <table className="min-w-full divide-y divide-slate-100">
                             <thead className="bg-slate-50">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Method Name</th>
@@ -916,104 +1153,224 @@ export function Admin() {
                             </tbody>
                         </table>
                     </div>
+                </div>
                 ) : activeTab === 'quotation_settings' ? (
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
-                        <table className="min-w-full divide-y divide-slate-100">
-                            <thead className="bg-slate-50">
-                                <tr>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Category</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Setting Name</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Value</th>
-                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
-                                {quotationSettings.map((setting) => (
-                                    <tr key={setting.id} className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="px-2 py-1 text-[10px] bg-primary/10 text-primary rounded uppercase font-bold tracking-tighter">
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Quotation Settings</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Pricing Configuration</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mobile Card Layout */}
+                        <div className="grid grid-cols-1 gap-4 md:hidden">
+                            {quotationSettings.map((setting) => (
+                                <div key={setting.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                            <span className="px-2 py-0.5 text-[10px] bg-primary/10 text-primary rounded uppercase font-bold tracking-tighter mb-2 block w-fit">
                                                 {setting.category}
                                             </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap font-bold text-slate-900">
-                                            {setting.label}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-slate-900 font-mono">
+                                            <div className="font-bold text-slate-900">{setting.label}</div>
+                                        </div>
+                                        <button
+                                            onClick={() => {
+                                                setCurrentQuotationSetting(setting);
+                                                setIsEditingQuotationSetting(true);
+                                            }}
+                                            className="p-2 bg-slate-50 hover:bg-slate-100 text-primary rounded-xl transition-colors"
+                                        >
+                                            <Edit className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-50">
+                                        <div className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-1">Current Value</div>
+                                        <div className="text-sm font-bold text-slate-900 font-mono">
                                             {typeof setting.value === 'number' ? `₱${setting.value.toLocaleString()}` : JSON.stringify(setting.value)}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
-                                            <button
-                                                onClick={() => {
-                                                    setCurrentQuotationSetting(setting);
-                                                    setIsEditingQuotationSetting(true);
-                                                }}
-                                                className="text-primary hover:text-primary/80 p-2 hover:bg-primary/5 rounded-lg transition-colors"
-                                            >
-                                                <Edit className="w-4 h-4" />
-                                            </button>
-                                        </td>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hidden md:block">
+                            <table className="min-w-full divide-y divide-slate-100">
+                                <thead className="bg-slate-50">
+                                    <tr>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Category</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Setting Name</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Value</th>
+                                        <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-slate-100 text-sm">
+                                    {quotationSettings.map((setting) => (
+                                        <tr key={setting.id} className="hover:bg-slate-50/50 transition-colors">
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className="px-2 py-1 text-[10px] bg-primary/10 text-primary rounded uppercase font-bold tracking-tighter">
+                                                    {setting.category}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap font-bold text-slate-900">
+                                                {setting.label}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-slate-900 font-mono">
+                                                {typeof setting.value === 'number' ? `₱${setting.value.toLocaleString()}` : JSON.stringify(setting.value)}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
+                                                <button
+                                                    onClick={() => {
+                                                        setCurrentQuotationSetting(setting);
+                                                        setIsEditingQuotationSetting(true);
+                                                    }}
+                                                    className="text-primary hover:text-primary/80 p-2 hover:bg-primary/5 rounded-lg transition-colors"
+                                                >
+                                                    <Edit className="w-4 h-4" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 ) : activeTab === 'quotation_records' ? (
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden overflow-x-auto">
-                        <table className="min-w-full divide-y divide-slate-100">
-                            <thead className="bg-slate-50">
-                                <tr>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Customer</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Contact Preference</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Path</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Quote Summary</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Date</th>
-                                    <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-slate-100 text-sm">
-                                {quotationRecords.map((record) => (
-                                    <tr key={record.id} className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-slate-900 font-bold">{record.customer_name}</div>
-                                            <div className="text-slate-400 text-xs">{record.customer_email}</div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="px-2 py-1 text-[10px] bg-slate-100 text-slate-600 rounded uppercase font-bold tracking-tighter">
-                                                {record.form_data?.preferredComm || 'Email'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className="text-xs text-primary font-bold bg-primary/5 px-2 py-1 rounded">
-                                                {record.path.replace('_', ' ').toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-slate-900 font-bold">₱{record.final_price_low.toLocaleString()} - ₱{record.final_price_high.toLocaleString()}</div>
-                                            <div className="text-[10px] text-slate-400 font-medium">{record.tier}</div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Quotation Inquiries</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Lead Management</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mobile Card Layout */}
+                        <div className="grid grid-cols-1 gap-4 md:hidden">
+                            {quotationRecords.map((record) => (
+                                <div key={record.id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm transition-all">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                            <div className="font-bold text-slate-900 text-lg">{record.customer_name}</div>
+                                            <div className="text-xs text-slate-400">{record.customer_email}</div>
+                                        </div>
+                                        <span className="px-2 py-0.5 text-[10px] bg-slate-100 text-slate-600 rounded uppercase font-bold tracking-tighter">
+                                            {record.form_data?.preferredComm || 'Email'}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <span className="text-[10px] text-primary font-bold bg-primary/5 px-2 py-1 rounded uppercase tracking-wider">
+                                            {record.path.replace('_', ' ')}
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest ml-auto">
                                             {new Date(record.created_at).toLocaleDateString()}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
-                                            <button
-                                                onClick={() => setViewingQuotation(record)}
-                                                className="text-primary hover:text-primary/80 font-bold text-xs p-2 hover:bg-primary/5 rounded-lg transition-colors"
-                                            >
-                                                View Details
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {quotationRecords.length === 0 && (
+                                        </span>
+                                    </div>
+                                    <div className="bg-slate-50 p-4 rounded-xl space-y-2 mb-4">
+                                        <div className="flex justify-between items-baseline">
+                                            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Estimated Budget</span>
+                                            <span className="text-xs font-bold text-slate-900">₱{record.final_price_low.toLocaleString()} - ₱{record.final_price_high.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex justify-between items-baseline">
+                                            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Quality Tier</span>
+                                            <span className="text-xs font-bold text-slate-900">{record.tier}</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setViewingQuotation(record)}
+                                        className="w-full py-3 bg-primary text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-primary/10 hover:bg-primary/90 transition-all"
+                                    >
+                                        View Details
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hidden md:block">
+                            <table className="min-w-full divide-y divide-slate-100">
+                                <thead className="bg-slate-50">
                                     <tr>
-                                        <td colSpan={6} className="px-6 py-10 text-center text-slate-400 italic">No quotation records found.</td>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Customer</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Contact Preference</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Path</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Quote Summary</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Date</th>
+                                        <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-slate-100 text-sm">
+                                    {quotationRecords.map((record) => (
+                                        <tr key={record.id} className="hover:bg-slate-50/50 transition-colors">
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="text-slate-900 font-bold">{record.customer_name}</div>
+                                                <div className="text-slate-400 text-xs">{record.customer_email}</div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className="px-2 py-1 text-[10px] bg-slate-100 text-slate-600 rounded uppercase font-bold tracking-tighter">
+                                                    {record.form_data?.preferredComm || 'Email'}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <span className="text-xs text-primary font-bold bg-primary/5 px-2 py-1 rounded">
+                                                    {record.path.replace('_', ' ').toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="text-slate-900 font-bold">₱{record.final_price_low.toLocaleString()} - ₱{record.final_price_high.toLocaleString()}</div>
+                                                <div className="text-[10px] text-slate-400 font-medium">{record.tier}</div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                                                {new Date(record.created_at).toLocaleDateString()}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-right font-medium">
+                                                <button
+                                                    onClick={() => setViewingQuotation(record)}
+                                                    className="text-primary hover:text-primary/80 font-bold text-xs p-2 hover:bg-primary/5 rounded-lg transition-colors"
+                                                >
+                                                    View Details
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 ) : activeTab === 'analytics' ? (
                     <div className="space-y-8 animate-in fade-in duration-500">
+                        <div className="flex items-center gap-4 mb-2">
+                            <button
+                                onClick={() => setActiveTab('overview')}
+                                className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                title="Back to Overview"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                            </button>
+                            <div>
+                                <h2 className="text-xl font-bold text-slate-900 font-serif">Sales Analytics</h2>
+                                <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Business Intelligence</p>
+                            </div>
+                        </div>
+
                         {/* Filters */}
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap items-center gap-4">
                             <div className="flex items-center gap-2">

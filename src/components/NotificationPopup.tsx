@@ -63,6 +63,7 @@ export function NotificationPopup() {
               
               <div>
                 <h3 className="text-2xl font-serif text-slate-900 mb-2">Join the Lustre Club</h3>
+                <p className="text-primary font-bold text-sm mb-4">Get 5% off on your first sign in</p>
                 <p className="text-slate-500 text-sm leading-relaxed">
                   Be the first to know about new arrivals, private sales, and jewelry care tips.
                 </p>

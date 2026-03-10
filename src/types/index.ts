@@ -126,3 +126,17 @@ export interface OrderItem {
   markup_type?: string;
   created_at?: string;
 }
+
+export interface HeroSlide {
+  id: string;
+  image_url: string;
+  title: string;
+  subtitle: string;
+  cta_text: string;
+  cta_link: string;
+  sort_order: number;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+

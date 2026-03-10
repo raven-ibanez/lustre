@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import type { Product, Category, Order, PaymentMethod } from '@/types';
-import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks, Calendar, LayoutDashboard, Sparkles, Users, ArrowRight, ArrowLeft } from 'lucide-react';
+import type { Product, Category, Order, PaymentMethod, HeroSlide } from '@/types';
+import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks, Calendar, LayoutDashboard, Sparkles, Users, ArrowRight, ArrowLeft, Image } from 'lucide-react';
 
 export function Admin() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -17,7 +17,7 @@ export function Admin() {
     const [loginError, setLoginError] = useState(false);
 
     // Tabs State
-    const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'orders' | 'analytics' | 'payments' | 'quotation_settings' | 'quotation_records'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'orders' | 'analytics' | 'payments' | 'quotation_settings' | 'quotation_records' | 'hero_slides'>('overview');
 
     // Quotation State
     const [quotationSettings, setQuotationSettings] = useState<any[]>([]);
@@ -25,6 +25,12 @@ export function Admin() {
     const [isEditingQuotationSetting, setIsEditingQuotationSetting] = useState(false);
     const [currentQuotationSetting, setCurrentQuotationSetting] = useState<any>(null);
     const [viewingQuotation, setViewingQuotation] = useState<any>(null);
+
+    // Hero State
+    const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([]);
+    const [isEditingHero, setIsEditingHero] = useState(false);
+    const [currentHeroSlide, setCurrentHeroSlide] = useState<Partial<HeroSlide> | null>(null);
+    const [heroImageFile, setHeroImageFile] = useState<File | null>(null);
 
     // Form State
     const [isEditing, setIsEditing] = useState(false);
@@ -103,12 +109,18 @@ export function Admin() {
                 .select('*')
                 .order('created_at', { ascending: false });
 
+            const { data: heroSlidesData, error: heroSlidesErr } = await supabase
+                .from('hero_slides')
+                .select('*')
+                .order('sort_order', { ascending: true });
+
             if (productsError) throw productsError;
             if (categoriesError) throw categoriesError;
             if (ordersError) throw ordersError;
             if (paymentsError) throw paymentsError;
             if (quoteSettingsErr) throw quoteSettingsErr;
             if (quoteRecordsErr) throw quoteRecordsErr;
+            if (heroSlidesErr) throw heroSlidesErr;
 
             setProducts(productsData || []);
             setCategories(categoriesData || []);
@@ -116,10 +128,16 @@ export function Admin() {
             setPaymentMethods(paymentsData || []);
             setQuotationSettings(quoteSettingsData || []);
             setQuotationRecords(quoteRecordsData || []);
+            setHeroSlides(heroSlidesData || []);
 
             // If quotation settings are empty, initialize them
             if (!quoteSettingsData || quoteSettingsData.length === 0) {
                 await initializeQuotationSettings();
+            }
+
+            // If hero slides are empty, initialize them
+            if (!heroSlidesData || heroSlidesData.length === 0) {
+                await initializeHeroSlides();
             }
         } catch (err: any) {
             setError(err.message);
@@ -366,6 +384,117 @@ export function Admin() {
         }
     };
 
+    const initializeHeroSlides = async () => {
+        const initialSlides = [
+            {
+                image_url: '/images/hero-ring.jpg',
+                title: 'custom creations',
+                subtitle: 'design your dream jewelry with us',
+                cta_text: 'GET YOUR RING QUOTATION NOW',
+                cta_link: '#quotation',
+                sort_order: 0,
+                active: true
+            },
+            {
+                image_url: '/images/hero-ring.jpg',
+                title: 'discover timeless elegance',
+                subtitle: 'fine jewelry crafted with passion',
+                cta_text: 'SHOP COLLECTION',
+                cta_link: '#shop',
+                sort_order: 1,
+                active: true
+            },
+            {
+                image_url: '/images/hero-necklace.jpg',
+                title: 'new arrivals',
+                subtitle: 'exquisite pieces for every moment',
+                cta_text: 'Explore Now',
+                cta_link: '#shop',
+                sort_order: 2,
+                active: true
+            }
+        ];
+
+        try {
+            const { error } = await supabase
+                .from('hero_slides')
+                .insert(initialSlides);
+
+            if (!error) {
+                const { data } = await supabase.from('hero_slides').select('*').order('sort_order', { ascending: true });
+                setHeroSlides(data || []);
+            }
+        } catch (err) {
+            console.error('Hero initialization error:', err);
+        }
+    };
+
+    const handleSaveHeroSlide = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!currentHeroSlide) return;
+
+        setIsUploading(true);
+        try {
+            let image_url = currentHeroSlide.image_url;
+
+            if (heroImageFile) {
+                const fileExt = heroImageFile.name.split('.').pop();
+                const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+                const filePath = `hero-banners/${fileName}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('categories') // Reusing the same bucket for now, or you can create a 'banners' bucket
+                    .upload(filePath, heroImageFile);
+
+                if (uploadError) throw uploadError;
+
+                const { data: { publicUrl } } = supabase.storage
+                    .from('categories')
+                    .getPublicUrl(filePath);
+
+                image_url = publicUrl;
+            }
+
+            const slideData = { ...currentHeroSlide, image_url };
+
+            const { error } = currentHeroSlide.id
+                ? await supabase
+                    .from('hero_slides')
+                    .update(slideData)
+                    .eq('id', currentHeroSlide.id)
+                : await supabase
+                    .from('hero_slides')
+                    .insert([slideData]);
+
+            if (error) throw error;
+
+            setIsEditingHero(false);
+            setCurrentHeroSlide(null);
+            setHeroImageFile(null);
+            fetchData();
+        } catch (err: any) {
+            alert(err.message);
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleDeleteHeroSlide = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this hero slide?')) return;
+
+        try {
+            const { error } = await supabase
+                .from('hero_slides')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+            fetchData();
+        } catch (err: any) {
+            alert(err.message);
+        }
+    };
+
     if (!isAuthenticated) {
         return (
             <div className="admin-dark min-h-screen flex items-center justify-center px-4">
@@ -458,6 +587,24 @@ export function Admin() {
                             >
                                 <Plus className="w-4 h-4" />
                                 Add Payment Method
+                            </button>
+                        ) : activeTab === 'hero_slides' ? (
+                            <button
+                                onClick={() => {
+                                    setCurrentHeroSlide({
+                                        title: '',
+                                        subtitle: '',
+                                        cta_text: '',
+                                        cta_link: '',
+                                        sort_order: heroSlides.length,
+                                        active: true
+                                    });
+                                    setIsEditingHero(true);
+                                }}
+                                className="btn-primary flex items-center gap-2"
+                            >
+                                <Plus className="w-4 h-4" />
+                                Add Hero Slide
                             </button>
                         ) : null}
                     </div>
@@ -616,6 +763,16 @@ export function Admin() {
                                         <BarChart3 className="w-5 h-5 text-slate-600" />
                                     </div>
                                     <span className="font-semibold text-slate-700 flex-1">Sales Analytics</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('hero_slides')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-pink-50 rounded-xl group-hover:bg-pink-100 transition-colors">
+                                        <Image className="w-5 h-5 text-pink-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Hero Banner Manager</span>
                                     <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
                                 </button>
                             </div>
@@ -1355,6 +1512,101 @@ export function Admin() {
                             </table>
                         </div>
                     </div>
+                ) : activeTab === 'hero_slides' ? (
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Hero Banner Manager</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Homepage Content</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setCurrentHeroSlide({
+                                        title: '',
+                                        subtitle: '',
+                                        cta_text: '',
+                                        cta_link: '',
+                                        sort_order: heroSlides.length,
+                                        active: true
+                                    });
+                                    setIsEditingHero(true);
+                                }}
+                                className="bg-primary text-white p-2.5 rounded-xl shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+                            >
+                                <Plus className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Mobile & Desktop List/Grid View */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {heroSlides.map((slide) => (
+                                <div key={slide.id} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col group hover:shadow-md transition-all">
+                                    <div className="relative h-40 bg-slate-100 overflow-hidden">
+                                        {slide.image_url ? (
+                                            <img src={slide.image_url} alt={slide.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                <Image className="w-10 h-10" />
+                                            </div>
+                                        )}
+                                        <div className="absolute top-3 right-3 flex gap-2">
+                                            <span className={`px-2 py-1 text-[10px] font-bold rounded-full uppercase tracking-widest backdrop-blur-md ${slide.active ? 'bg-emerald-500/90 text-white' : 'bg-slate-900/60 text-white'}`}>
+                                                {slide.active ? 'Active' : 'Draft'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="p-5 flex-1 flex flex-col">
+                                        <div className="flex-1">
+                                            <div className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1 line-clamp-1">{slide.subtitle}</div>
+                                            <div className="font-bold text-slate-900 mb-2 line-clamp-1">{slide.title}</div>
+                                            <div className="text-xs text-slate-400 font-mono">Order: {slide.sort_order}</div>
+                                        </div>
+                                        <div className="flex items-center justify-between border-t border-slate-50 mt-4 pt-4">
+                                            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{slide.cta_text || 'No CTA'}</div>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        setCurrentHeroSlide(slide);
+                                                        setIsEditingHero(true);
+                                                    }}
+                                                    className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-lg transition-colors"
+                                                >
+                                                    <Edit className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteHeroSlide(slide.id!)}
+                                                    className="p-2 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {heroSlides.length === 0 && (
+                                <div className="col-span-full py-20 bg-slate-50/50 rounded-3xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-3">
+                                    <Image className="w-12 h-12 opacity-10" />
+                                    <p className="font-medium text-sm">No hero slides found</p>
+                                    <button
+                                        onClick={() => initializeHeroSlides()}
+                                        className="mt-2 text-primary font-bold text-xs uppercase tracking-widest hover:underline"
+                                    >
+                                        Restore Default Slides
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 ) : activeTab === 'analytics' ? (
                     <div className="space-y-8 animate-in fade-in duration-500">
                         <div className="flex items-center gap-4 mb-2">
@@ -1948,6 +2200,138 @@ export function Admin() {
                                                 className="px-10 py-3 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all font-bold uppercase tracking-widest text-xs"
                                             >
                                                 Save Method
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+                {/* Hero Slide Edit Modal */}
+                {
+                    isEditingHero && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                            <div className="bg-white w-full max-w-xl max-h-[95vh] overflow-y-auto rounded-3xl shadow-2xl border border-slate-100 animate-in zoom-in-95 duration-300">
+                                <div className="p-6 sm:p-10">
+                                    <div className="flex items-center justify-between mb-8 border-b border-slate-50 pb-6">
+                                        <div>
+                                            <h3 className="font-bold text-2xl text-slate-900">{currentHeroSlide?.id ? 'Edit Hero Slide' : 'Add New Hero Slide'}</h3>
+                                            <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Banner Configuration</p>
+                                        </div>
+                                        <button onClick={() => setIsEditingHero(false)} className="bg-slate-50 hover:bg-slate-100 text-slate-400 p-2.5 rounded-full transition-all">
+                                            <X className="w-5 h-5" />
+                                        </button>
+                                    </div>
+
+                                    <form onSubmit={handleSaveHeroSlide} className="space-y-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Main Title</label>
+                                                <input
+                                                    type="text"
+                                                    value={currentHeroSlide?.title || ''}
+                                                    onChange={(e) => setCurrentHeroSlide({ ...currentHeroSlide, title: e.target.value })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                    placeholder="Hero Title"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Subtitle / Top Tag</label>
+                                                <input
+                                                    type="text"
+                                                    value={currentHeroSlide?.subtitle || ''}
+                                                    onChange={(e) => setCurrentHeroSlide({ ...currentHeroSlide, subtitle: e.target.value })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                    placeholder="e.g. Luxury Collection"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">CTA Button Text</label>
+                                                <input
+                                                    type="text"
+                                                    value={currentHeroSlide?.cta_text || ''}
+                                                    onChange={(e) => setCurrentHeroSlide({ ...currentHeroSlide, cta_text: e.target.value })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                    placeholder="Shop Now"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">CTA Link</label>
+                                                <input
+                                                    type="text"
+                                                    value={currentHeroSlide?.cta_link || ''}
+                                                    onChange={(e) => setCurrentHeroSlide({ ...currentHeroSlide, cta_link: e.target.value })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                    placeholder="/shop"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Banner Image</label>
+                                            <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                                {currentHeroSlide?.image_url && !heroImageFile && (
+                                                    <img src={currentHeroSlide.image_url} alt="" className="w-20 h-12 object-cover rounded-lg shadow-sm" />
+                                                )}
+                                                {heroImageFile && (
+                                                    <div className="w-20 h-12 bg-primary/10 flex items-center justify-center rounded-lg">
+                                                        <Upload className="w-5 h-5 text-primary" />
+                                                    </div>
+                                                )}
+                                                <div className="flex-1">
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={(e) => setHeroImageFile(e.target.files?.[0] || null)}
+                                                        className="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-primary file:text-white hover:file:bg-primary/90 transition-all cursor-pointer"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Sort Order</label>
+                                                <input
+                                                    type="number"
+                                                    value={currentHeroSlide?.sort_order || 0}
+                                                    onChange={(e) => setCurrentHeroSlide({ ...currentHeroSlide, sort_order: parseInt(e.target.value) })}
+                                                    className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all"
+                                                />
+                                            </div>
+                                            <div className="flex items-end pb-3">
+                                                <label className="relative flex items-center gap-3 cursor-pointer group">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={currentHeroSlide?.active !== false}
+                                                        onChange={(e) => setCurrentHeroSlide({ ...currentHeroSlide, active: e.target.checked })}
+                                                        className="w-5 h-5 rounded-lg border-2 border-slate-200 text-primary focus:ring-primary/20 transition-all accent-primary scale-110"
+                                                    />
+                                                    <span className="text-sm font-semibold text-slate-600 group-hover:text-primary transition-colors">Published</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-end gap-3 pt-8 border-t border-slate-50">
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsEditingHero(false)}
+                                                className="px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                disabled={isUploading}
+                                                className="px-10 py-3 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all font-bold uppercase tracking-widest text-xs disabled:opacity-50"
+                                            >
+                                                {isUploading ? 'Uploading...' : 'Save Banner'}
                                             </button>
                                         </div>
                                     </form>

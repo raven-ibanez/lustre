@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { Product, Category, Order, PaymentMethod, HeroSlide } from '@/types';
-import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks, Calendar, LayoutDashboard, Sparkles, Users, ArrowRight, ArrowLeft, Image } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Package, ShoppingCart, BarChart3, TrendingUp, DollarSign, Wallet, Upload, Settings, ListChecks, Calendar, LayoutDashboard, Sparkles, Users, ArrowRight, ArrowLeft, Image, Mail, FileText, MessageSquare } from 'lucide-react';
 
 export function Admin() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -17,7 +17,13 @@ export function Admin() {
     const [loginError, setLoginError] = useState(false);
 
     // Tabs State
-    const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'orders' | 'analytics' | 'payments' | 'quotation_settings' | 'quotation_records' | 'hero_slides'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'categories' | 'orders' | 'analytics' | 'payments' | 'quotation_settings' | 'quotation_records' | 'hero_slides' | 'customer_leads'>('overview');
+
+    // Leads State
+    const [newsletterSignups, setNewsletterSignups] = useState<any[]>([]);
+    const [contactInquiries, setContactInquiries] = useState<any[]>([]);
+    const [bespokeRequests, setBespokeRequests] = useState<any[]>([]);
+    const [customerHubTab, setCustomerHubTab] = useState<'newsletter' | 'quotations' | 'contact' | 'bespoke'>('newsletter');
 
     // Quotation State
     const [quotationSettings, setQuotationSettings] = useState<any[]>([]);
@@ -47,12 +53,12 @@ export function Admin() {
     const [dateFilter, setDateFilter] = useState('');
     const [monthFilter, setMonthFilter] = useState('');
 
-    const filteredOrders = products.length > 0 ? orders.filter(order => {
+    const filteredOrders = orders.filter(order => {
         const orderDate = new Date(order.created_at!);
         const matchDate = !dateFilter || orderDate.toISOString().split('T')[0] === dateFilter;
         const matchMonth = !monthFilter || (orderDate.getMonth() + 1).toString().padStart(2, '0') === monthFilter;
         return matchDate && matchMonth;
-    }) : [];
+    });
 
     const resetFilters = () => {
         setDateFilter('');
@@ -114,6 +120,21 @@ export function Admin() {
                 .select('*')
                 .order('sort_order', { ascending: true });
 
+            const { data: newsletterData, error: newsletterErr } = await supabase
+                .from('newsletter_signups')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            const { data: contactData, error: contactErr } = await supabase
+                .from('contact_inquiries')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            const { data: bespokeData, error: bespokeErr } = await supabase
+                .from('bespoke_requests')
+                .select('*')
+                .order('created_at', { ascending: false });
+
             if (productsError) throw productsError;
             if (categoriesError) throw categoriesError;
             if (ordersError) throw ordersError;
@@ -121,6 +142,9 @@ export function Admin() {
             if (quoteSettingsErr) throw quoteSettingsErr;
             if (quoteRecordsErr) throw quoteRecordsErr;
             if (heroSlidesErr) throw heroSlidesErr;
+            if (newsletterErr) throw newsletterErr;
+            if (contactErr) throw contactErr;
+            if (bespokeErr) throw bespokeErr;
 
             setProducts(productsData || []);
             setCategories(categoriesData || []);
@@ -129,6 +153,9 @@ export function Admin() {
             setQuotationSettings(quoteSettingsData || []);
             setQuotationRecords(quoteRecordsData || []);
             setHeroSlides(heroSlidesData || []);
+            setNewsletterSignups(newsletterData || []);
+            setContactInquiries(contactData || []);
+            setBespokeRequests(bespokeData || []);
 
             // If quotation settings are empty, initialize them
             if (!quoteSettingsData || quoteSettingsData.length === 0) {
@@ -495,6 +522,42 @@ export function Admin() {
         }
     };
 
+    const handleDeleteNewsletterSignup = async (id: string) => {
+        if (!confirm('Delete this subscriber?')) return;
+        try {
+            const { error } = await supabase.from('newsletter_signups').delete().eq('id', id);
+            if (error) throw error;
+            fetchData();
+        } catch (err: any) { alert(err.message); }
+    };
+
+    const handleDeleteContactInquiry = async (id: string) => {
+        if (!confirm('Delete this inquiry?')) return;
+        try {
+            const { error } = await supabase.from('contact_inquiries').delete().eq('id', id);
+            if (error) throw error;
+            fetchData();
+        } catch (err: any) { alert(err.message); }
+    };
+
+    const handleDeleteBespokeRequest = async (id: string) => {
+        if (!confirm('Delete this bespoke request?')) return;
+        try {
+            const { error } = await supabase.from('bespoke_requests').delete().eq('id', id);
+            if (error) throw error;
+            fetchData();
+        } catch (err: any) { alert(err.message); }
+    };
+
+    const handleDeleteQuotationRecord = async (id: string) => {
+        if (!confirm('Delete this quotation?')) return;
+        try {
+            const { error } = await supabase.from('quotation_results').delete().eq('id', id);
+            if (error) throw error;
+            fetchData();
+        } catch (err: any) { alert(err.message); }
+    };
+
     if (!isAuthenticated) {
         return (
             <div className="admin-dark min-h-screen flex items-center justify-center px-4">
@@ -773,6 +836,16 @@ export function Admin() {
                                         <Image className="w-5 h-5 text-pink-600" />
                                     </div>
                                     <span className="font-semibold text-slate-700 flex-1">Hero Banner Manager</span>
+                                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('customer_leads')}
+                                    className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors text-left group"
+                                >
+                                    <div className="p-2 bg-orange-50 rounded-xl group-hover:bg-orange-100 transition-colors">
+                                        <Users className="w-5 h-5 text-orange-600" />
+                                    </div>
+                                    <span className="font-semibold text-slate-700 flex-1">Customer Hub (Leads & Emails)</span>
                                     <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
                                 </button>
                             </div>
@@ -1662,81 +1735,95 @@ export function Admin() {
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                            <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
                                 <div className="p-2 bg-emerald-50 w-fit rounded-lg">
                                     <DollarSign className="w-5 h-5 text-emerald-500" />
                                 </div>
                                 <div>
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Gross Sales</p>
-                                    <p className="text-3xl font-bold text-slate-900">
+                                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 truncate" title={`₱${filteredOrders
+                                            .filter(o => o.status === 'completed')
+                                            .reduce((sum, o) => sum + o.total_amount, 0)
+                                            .toLocaleString()}`}>
                                         ₱{filteredOrders
                                             .filter(o => o.status === 'completed')
-                                            .reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0), 0)
+                                            .reduce((sum, o) => sum + o.total_amount, 0)
                                             .toLocaleString()}
                                     </p>
                                     <p className="text-[10px] text-slate-400 mt-1 italic">Total Selling Price (Completed)</p>
                                 </div>
                             </div>
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                            <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
                                 <div className="p-2 bg-primary/10 w-fit rounded-lg">
                                     <TrendingUp className="w-5 h-5 text-primary" />
                                 </div>
                                 <div>
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Profit</p>
-                                    <p className="text-3xl font-bold text-slate-900">
+                                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 truncate" title={`₱${filteredOrders
+                                            .filter(o => o.status === 'completed')
+                                            .reduce((sum, o) => {
+                                                const revenueWithoutShipping = o.total_amount - (o.shipping_fee || 0);
+                                                const itemCosts = o.order_items?.reduce((s, i) => s + ((i.raw_price || 0) * i.quantity), 0) || 0;
+                                                const businessShippingExpense = o.shipping_fee === 0 ? 150 : 0;
+                                                return sum + (revenueWithoutShipping - itemCosts - businessShippingExpense);
+                                            }, 0)
+                                            .toLocaleString()}`}>
                                         ₱{filteredOrders
                                             .filter(o => o.status === 'completed')
                                             .reduce((sum, o) => {
-                                                const gross = o.order_items?.reduce((s, i) => s + (i.price * i.quantity), 0) || 0;
-                                                const raw = o.order_items?.reduce((s, i) => s + ((i.raw_price || 0) * i.quantity), 0) || 0;
-                                                return sum + (gross - raw);
+                                                const revenueWithoutShipping = o.total_amount - (o.shipping_fee || 0);
+                                                const itemCosts = o.order_items?.reduce((s, i) => s + ((i.raw_price || 0) * i.quantity), 0) || 0;
+                                                const businessShippingExpense = o.shipping_fee === 0 ? 150 : 0;
+                                                return sum + (revenueWithoutShipping - itemCosts - businessShippingExpense);
                                             }, 0)
                                             .toLocaleString()}
                                     </p>
                                     <p className="text-[10px] text-slate-400 mt-1 italic">Gross Sales - Total Cost</p>
                                 </div>
                             </div>
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                            <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
                                 <div className="p-2 bg-blue-50 w-fit rounded-lg">
                                     <ShoppingCart className="w-5 h-5 text-blue-500" />
                                 </div>
                                 <div>
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Filtered Orders</p>
-                                    <p className="text-3xl font-bold text-slate-900">{filteredOrders.length}</p>
-                                    <p className="text-[10px] text-slate-400 mt-1 italic">Based on current filters</p>
+                                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">{filteredOrders.filter(o => o.status === 'completed').length}</p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">Based on current filters (Completed)</p>
                                 </div>
                             </div>
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
+                            <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-2">
                                 <div className="p-2 bg-amber-50 w-fit rounded-lg">
                                     <Package className="w-5 h-5 text-amber-500" />
                                 </div>
                                 <div>
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Items Sold</p>
-                                    <p className="text-3xl font-bold text-slate-900">
-                                        {filteredOrders.reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + i.quantity, 0) || 0), 0)}
+                                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900">
+                                        {filteredOrders
+                                            .filter(o => o.status === 'completed')
+                                            .reduce((sum, o) => sum + (o.order_items?.reduce((s, i) => s + i.quantity, 0) || 0), 0)}
                                     </p>
-                                    <p className="text-[10px] text-slate-400 mt-1 italic">In filtered period</p>
+                                    <p className="text-[10px] text-slate-400 mt-1 italic">In filtered period (Completed)</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                            <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
                                 <h3 className="font-bold text-xl mb-6 text-slate-900">Filtered Order Activity</h3>
                                 <div className="space-y-4">
                                     {filteredOrders.slice(0, 5).map(order => (
-                                        <div key={order.id} className="flex items-center justify-between py-4 px-4 hover:bg-slate-50 transition-all rounded-2xl group border border-transparent hover:border-slate-100">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-primary/5 rounded-full flex items-center justify-center text-primary font-bold text-sm group-hover:bg-primary/10 transition-colors">
+                                        <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between py-4 px-4 hover:bg-slate-50 transition-all rounded-2xl group border border-transparent hover:border-slate-100 gap-3">
+                                            <div className="flex items-center gap-3 sm:gap-4">
+                                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/5 rounded-full flex items-center justify-center text-primary font-bold text-xs sm:text-sm group-hover:bg-primary/10 transition-colors shrink-0">
                                                     {order.first_name[0]}{order.last_name[0]}
                                                 </div>
-                                                <div>
-                                                    <div className="text-sm font-bold text-slate-900">{order.first_name} {order.last_name}</div>
-                                                    <div className="text-xs text-slate-400">{new Date(order.created_at!).toLocaleDateString()}</div>
+                                                <div className="min-w-0">
+                                                    <div className="text-sm font-bold text-slate-900 truncate">{order.first_name} {order.last_name}</div>
+                                                    <div className="text-[10px] sm:text-xs text-slate-400">{new Date(order.created_at!).toLocaleDateString()}</div>
                                                 </div>
                                             </div>
-                                            <div className="text-right">
+                                            <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-1">
                                                 <div className="text-sm font-bold text-slate-900">₱{order.total_amount.toLocaleString()}</div>
                                                 <div className={`text-[10px] font-bold uppercase tracking-widest ${order.status === 'completed' ? 'text-emerald-500' :
                                                     order.status === 'cancelled' ? 'text-red-500' :
@@ -1751,37 +1838,252 @@ export function Admin() {
                                 </div>
                             </div>
 
-                            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                            <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-sm border border-slate-100">
                                 <h3 className="font-bold text-xl mb-6 flex items-center gap-2 text-slate-900">
                                     <BarChart3 className="w-5 h-5 text-primary" /> Sales Performance
                                 </h3>
-                                <div className="h-64 flex items-end gap-3 px-6 pb-6 bg-slate-50/50 rounded-3xl">
-                                    {(filteredOrders.length > 0 ? filteredOrders : []).slice(0, 7).reverse().map((order, i) => {
-                                        const maxAmount = Math.max(...filteredOrders.map(o => o.total_amount)) || 1;
-                                        const height = (order.total_amount / maxAmount) * 100;
-                                        return (
-                                            <div key={i} className="flex-1 flex flex-col items-center gap-3 group relative h-full justify-end">
-                                                <div className="absolute -top-4 bg-slate-900 text-white text-[10px] px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-xl font-bold -translate-y-2 group-hover:translate-y-0 z-20">
-                                                    ₱{order.total_amount.toLocaleString()}
-                                                </div>
-                                                <div
-                                                    className="w-full bg-primary/15 group-hover:bg-primary transition-all rounded-t-xl"
-                                                    style={{ height: `${Math.max(height, 8)}%` }}
-                                                />
-                                                <span className="text-[10px] text-slate-400 font-bold rotate-0 whitespace-nowrap">
-                                                    {new Date(order.created_at!).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                                                </span>
-                                            </div>
-                                        );
-                                    })}
-                                     {filteredOrders.length === 0 && (
-                                         <div className="w-full h-full flex items-center justify-center text-slate-400 italic">No data</div>
-                                     )}
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 ) : (
+                                <div className="overflow-x-auto pb-4 custom-scrollbar">
+                                    <div className="h-64 flex items-end gap-3 px-6 pb-6 bg-slate-50/50 rounded-3xl min-w-[500px] lg:min-w-0">
+                                        {filteredOrders.filter(o => o.status === 'completed').length > 0 ? (
+                                            filteredOrders.filter(o => o.status === 'completed').slice(0, 7).reverse().map((order, i) => {
+                                                const completedOrders = filteredOrders.filter(o => o.status === 'completed');
+                                                const maxAmount = Math.max(...completedOrders.map(o => o.total_amount)) || 1;
+                                                const height = (order.total_amount / maxAmount) * 100;
+                                                return (
+                                                    <div key={i} className="flex-1 flex flex-col items-center gap-3 group relative h-full justify-end">
+                                                        <div className="absolute -top-4 bg-slate-900 text-white text-[10px] px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-xl font-bold -translate-y-2 group-hover:translate-y-0 z-20">
+                                                            ₱{order.total_amount.toLocaleString()}
+                                                        </div>
+                                                        <div
+                                                            className="w-full bg-primary/15 group-hover:bg-primary transition-all rounded-t-xl"
+                                                            style={{ height: `${Math.max(height, 8)}%` }}
+                                                        />
+                                                        <span className="text-[10px] text-slate-400 font-bold rotate-0 whitespace-nowrap">
+                                                            {new Date(order.created_at!).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-slate-400 italic">No data available</div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  ) : activeTab === 'customer_leads' ? (
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setActiveTab('overview')}
+                                    className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
+                                    title="Back to Overview"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 font-serif">Customer Hub</h2>
+                                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Lead & Communication Center</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sub-navigation */}
+                        <div className="flex flex-wrap gap-2 border-b border-slate-100 pb-4">
+                            {[
+                                { id: 'newsletter', label: 'Newsletter', icon: Mail, count: newsletterSignups.length },
+                                { id: 'quotations', label: 'Quotation Inquiries', icon: FileText, count: quotationRecords.length },
+                                { id: 'contact', label: 'Contact Messages', icon: MessageSquare, count: contactInquiries.length },
+                                { id: 'bespoke', label: 'Bespoke Requests', icon: Sparkles, count: bespokeRequests.length }
+                            ].map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setCustomerHubTab(tab.id as any)}
+                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
+                                        customerHubTab === tab.id 
+                                        ? 'bg-primary text-white shadow-lg shadow-primary/20' 
+                                        : 'bg-white text-slate-400 hover:bg-slate-50 border border-slate-100'
+                                    }`}
+                                >
+                                    <tab.icon className="w-4 h-4" />
+                                    {tab.label}
+                                    <span className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] ${
+                                        customerHubTab === tab.id ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
+                                    }`}>
+                                        {tab.count}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Content */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                            {customerHubTab === 'newsletter' ? (
+                                <table className="min-w-full divide-y divide-slate-100">
+                                    <thead className="bg-slate-50">
+                                        <tr>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Email Address</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Sign-up Date</th>
+                                            <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-slate-100 text-sm">
+                                        {newsletterSignups.map((signup) => (
+                                            <tr key={signup.id} className="hover:bg-slate-50/50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap font-semibold text-slate-900">{signup.email}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                                                    {new Date(signup.created_at).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-right">
+                                                    <button
+                                                        onClick={() => handleDeleteNewsletterSignup(signup.id)}
+                                                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {newsletterSignups.length === 0 && (
+                                            <tr><td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">No newsletter signups yet.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            ) : customerHubTab === 'quotations' ? (
+                                <table className="min-w-full divide-y divide-slate-100">
+                                    <thead className="bg-slate-50">
+                                        <tr>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Customer</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Contact</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Budget Range</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Date</th>
+                                            <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-slate-100 text-sm">
+                                        {quotationRecords.map((record) => (
+                                            <tr key={record.id} className="hover:bg-slate-50/50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap font-semibold text-slate-900">{record.customer_name}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-slate-900 font-medium">{record.customer_email}</div>
+                                                    <div className="text-slate-400 text-xs">{record.customer_phone}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-primary font-bold">
+                                                    ₱{record.final_price_low.toLocaleString()} - ₱{record.final_price_high.toLocaleString()}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                                                    {new Date(record.created_at).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-right">
+                                                    <button
+                                                        onClick={() => setViewingQuotation(record)}
+                                                        className="text-primary hover:text-primary/80 mr-3 p-2 hover:bg-primary/5 rounded-lg transition-colors font-bold text-xs"
+                                                    >
+                                                        Details
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteQuotationRecord(record.id)}
+                                                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {quotationRecords.length === 0 && (
+                                            <tr><td colSpan={5} className="px-6 py-10 text-center text-slate-400 italic">No quotations found.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            ) : customerHubTab === 'contact' ? (
+                                <table className="min-w-full divide-y divide-slate-100">
+                                    <thead className="bg-slate-50">
+                                        <tr>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Customer</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Subject</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Message</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Date</th>
+                                            <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-slate-100 text-sm">
+                                        {contactInquiries.map((inquiry) => (
+                                            <tr key={inquiry.id} className="hover:bg-slate-50/50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-slate-900 font-semibold">{inquiry.name}</div>
+                                                    <div className="text-slate-400 text-xs">{inquiry.email}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap font-medium text-slate-700">{inquiry.subject}</td>
+                                                <td className="px-6 py-4 max-w-xs truncate text-slate-500" title={inquiry.message}>{inquiry.message}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                                                    {new Date(inquiry.created_at).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-right">
+                                                    <button
+                                                        onClick={() => handleDeleteContactInquiry(inquiry.id)}
+                                                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {contactInquiries.length === 0 && (
+                                            <tr><td colSpan={5} className="px-6 py-10 text-center text-slate-400 italic">No contact entries yet.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <table className="min-w-full divide-y divide-slate-100">
+                                    <thead className="bg-slate-50">
+                                        <tr>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Customer</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Design Details</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Budget/Timeline</th>
+                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-widest">Date</th>
+                                            <th className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-widest">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-slate-100 text-sm">
+                                        {bespokeRequests.map((request) => (
+                                            <tr key={request.id} className="hover:bg-slate-50/50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-slate-900 font-semibold">{request.name}</div>
+                                                    <div className="text-slate-400 text-xs">{request.email}</div>
+                                                    <div className="text-slate-400 text-[10px] mt-0.5">{request.phone}</div>
+                                                </td>
+                                                <td className="px-6 py-4 max-w-xs">
+                                                    <div className="text-xs font-bold text-primary uppercase tracking-wider">{request.jewelry_type}</div>
+                                                    <div className="text-xs text-slate-500 line-clamp-2 mt-1">{request.description}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-xs font-bold text-slate-900">{request.budget}</div>
+                                                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">{request.timeline}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                                                    {new Date(request.created_at).toLocaleDateString()}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-right">
+                                                    <button
+                                                        onClick={() => handleDeleteBespokeRequest(request.id)}
+                                                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {bespokeRequests.length === 0 && (
+                                            <tr><td colSpan={5} className="px-6 py-10 text-center text-slate-400 italic">No bespoke requests yet.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </div>
+                ) : (
                     <div className="flex flex-col items-center justify-center py-20 text-slate-400 gap-4">
                         <LayoutDashboard className="w-12 h-12 opacity-20" />
                         <p className="italic font-medium text-sm uppercase tracking-widest">Select a management tab to begin</p>

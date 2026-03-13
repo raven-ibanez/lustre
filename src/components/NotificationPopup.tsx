@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { X, Mail, Sparkles } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export function NotificationPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,15 +20,26 @@ export function NotificationPopup() {
     setIsVisible(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
-      // Here you would typically send the email to your backend/service
-      console.log('Subscribing email:', email);
-      setIsSubscribed(true);
-      setTimeout(() => {
-        handleClose();
-      }, 2000);
+      setLoading(true);
+      try {
+        const { error } = await supabase
+          .from('newsletter_signups')
+          .insert([{ email }]);
+
+        if (error && error.code !== '23505') throw error;
+
+        setIsSubscribed(true);
+        setTimeout(() => {
+          handleClose();
+        }, 2000);
+      } catch (err) {
+        console.error('Subscription error:', err);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -83,9 +96,10 @@ export function NotificationPopup() {
                 </div>
                 <button 
                   type="submit"
-                  className="w-full py-3 bg-primary text-white rounded-xl font-bold uppercase tracking-widest text-xs shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all"
+                  disabled={loading}
+                  className="w-full py-3 bg-primary text-white rounded-xl font-bold uppercase tracking-widest text-xs shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all disabled:opacity-50"
                 >
-                  Join Now
+                  {loading ? 'Joining...' : 'Join Now'}
                 </button>
               </form>
               

@@ -1,12 +1,35 @@
 import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export function Newsletter() {
   const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Newsletter signup:', email);
-    setEmail('');
+    if (!email) return;
+
+    setStatus('loading');
+    try {
+      const { error } = await supabase
+        .from('newsletter_signups')
+        .insert([{ email }]);
+
+      if (error) {
+        if (error.code === '23505') {
+          // Unique violation - already subscribed
+          setStatus('success');
+        } else {
+          throw error;
+        }
+      } else {
+        setStatus('success');
+      }
+      setEmail('');
+    } catch (err) {
+      console.error('Newsletter error:', err);
+      setStatus('error');
+    }
   };
 
   return (
@@ -24,7 +47,8 @@ export function Newsletter() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-4 py-3 bg-transparent focus:outline-none transition-colors"
+              disabled={status === 'loading'}
+              className="flex-1 px-4 py-3 bg-transparent focus:outline-none transition-colors disabled:opacity-50"
               style={{
                 borderBottom: '1px solid rgba(237,231,220,0.3)',
                 color: '#EDE7DC',
@@ -33,20 +57,31 @@ export function Newsletter() {
             />
             <button
               type="submit"
-              className="px-8 py-3 text-xs uppercase tracking-[2px] font-semibold transition-colors"
+              disabled={status === 'loading'}
+              className="px-8 py-3 text-xs uppercase tracking-[2px] font-semibold transition-colors disabled:opacity-50"
               style={{ border: '1px solid #EDE7DC', color: '#EDE7DC' }}
               onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = '#EDE7DC';
-                e.currentTarget.style.color = '#13204A';
+                if (status !== 'loading') {
+                  e.currentTarget.style.backgroundColor = '#EDE7DC';
+                  e.currentTarget.style.color = '#13204A';
+                }
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#EDE7DC';
+                if (status !== 'loading') {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#EDE7DC';
+                }
               }}
             >
-              Subscribe
+              {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
             </button>
           </form>
+          {status === 'success' && (
+            <p className="mt-4 text-xs text-emerald-400 animate-fade-in font-medium">Thank you for joining our family!</p>
+          )}
+          {status === 'error' && (
+            <p className="mt-4 text-xs text-red-400 animate-fade-in font-medium">Something went wrong. Please try again.</p>
+          )}
         </div>
       </div>
     </section>

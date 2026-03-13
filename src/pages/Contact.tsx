@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -8,12 +9,26 @@ export function Contact() {
     subject: '',
     message: '',
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contact form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('contact_inquiries')
+        .insert([formData]);
+
+      if (error) throw error;
+
+      alert('Thank you for your message! We will get back to you soon.');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      console.error('Contact error:', err);
+      alert('Failed to send message. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,8 +76,8 @@ export function Contact() {
                 rows={5}
                 required
               />
-              <button type="submit" className="w-full btn-primary">
-                Send Message
+              <button type="submit" disabled={loading} className="w-full btn-primary disabled:opacity-50">
+                {loading ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>

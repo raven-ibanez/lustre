@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Sparkles, MessageSquare, Palette, Package } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export function CustomOrder() {
   const [formData, setFormData] = useState({
@@ -12,11 +13,44 @@ export function CustomOrder() {
     description: '',
     inspiration: '',
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Custom order request:', formData);
-    alert('Thank you for your custom order request! We will contact you within 24-48 hours to discuss your design.');
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('bespoke_requests')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          jewelry_type: formData.jewelryType,
+          budget: formData.budget,
+          timeline: formData.timeline,
+          description: formData.description,
+          inspiration: formData.inspiration
+        }]);
+
+      if (error) throw error;
+
+      alert('Thank you for your custom order request! We will contact you within 24-48 hours to discuss your design.');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        jewelryType: '',
+        budget: '',
+        timeline: '',
+        description: '',
+        inspiration: '',
+      });
+    } catch (err) {
+      console.error('Bespoke error:', err);
+      alert('Failed to submit request. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -156,8 +190,8 @@ export function CustomOrder() {
                 rows={3}
               />
 
-              <button type="submit" className="w-full btn-primary">
-                Submit Request
+              <button type="submit" disabled={loading} className="w-full btn-primary disabled:opacity-50">
+                {loading ? 'Submitting...' : 'Submit Request'}
               </button>
             </form>
           </div>

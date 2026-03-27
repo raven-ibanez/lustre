@@ -210,9 +210,9 @@ export function CustomRingQuotation() {
             cost += 2500;
         }
 
-        const finalTotal = cost * margin;
-        const low = Math.round(finalTotal * 0.98 / 100) * 100;
-        const high = Math.round(finalTotal * 1.10 / 100) * 100;
+        const finalTotal = cost * margin * 0.8; // Apply 20% reduction
+        const low = Math.round(finalTotal);
+        const high = Math.round(finalTotal * 1.10);
 
         let tier = 'Refined Minimal';
         if (finalTotal >= 250000) tier = 'Heirloom Tier';

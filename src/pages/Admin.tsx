@@ -47,6 +47,7 @@ export function Admin() {
     const [isEditingPayment, setIsEditingPayment] = useState(false);
     const [viewingOrder, setViewingOrder] = useState<Order | null>(null);
     const [categoryImageFile, setCategoryImageFile] = useState<File | null>(null);
+    const [productImageFile, setProductImageFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
     // Analytics Filters
@@ -225,23 +226,49 @@ export function Admin() {
         e.preventDefault();
         if (!currentProduct) return;
 
+        setIsUploading(true);
         try {
+            let image_url = currentProduct.image_url;
+
+            if (productImageFile) {
+                const fileExt = productImageFile.name.split('.').pop();
+                const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+                const filePath = `products/${fileName}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('categories')
+                    .upload(filePath, productImageFile);
+
+                if (uploadError) throw uploadError;
+
+                const { data: { publicUrl } } = supabase.storage
+                    .from('categories')
+                    .getPublicUrl(filePath);
+
+                image_url = publicUrl;
+            }
+
+            const productData = { ...currentProduct, image_url };
+
             const { error } = currentProduct.id
                 ? await supabase
                     .from('menu_items')
-                    .update(currentProduct)
+                    .update(productData)
                     .eq('id', currentProduct.id)
                 : await supabase
                     .from('menu_items')
-                    .insert([currentProduct]);
+                    .insert([productData]);
 
             if (error) throw error;
 
             setIsEditing(false);
             setCurrentProduct(null);
+            setProductImageFile(null);
             fetchData();
         } catch (err: any) {
             alert(err.message);
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -2205,17 +2232,44 @@ export function Admin() {
                                                 </div>
                                             </div>
                                         </div>
+                                         <div className="space-y-2">
+                                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Product Image</label>
+                                             <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                                 {currentProduct?.image_url && !productImageFile && (
+                                                     <img src={currentProduct.image_url} alt="" className="w-16 h-16 object-cover rounded-xl shadow-sm" />
+                                                 )}
+                                                 {productImageFile && (
+                                                     <div className="w-16 h-16 bg-primary/10 flex items-center justify-center rounded-xl overflow-hidden">
+                                                         <img src={URL.createObjectURL(productImageFile)} alt="" className="w-full h-full object-cover" />
+                                                     </div>
+                                                 )}
+                                                 {!currentProduct?.image_url && !productImageFile && (
+                                                     <div className="w-16 h-16 bg-slate-100 flex items-center justify-center rounded-xl">
+                                                         <Upload className="w-6 h-6 text-slate-300" />
+                                                     </div>
+                                                 )}
+                                                 <div className="flex-1">
+                                                     <input
+                                                         type="file"
+                                                         accept="image/*"
+                                                         onChange={(e) => setProductImageFile(e.target.files?.[0] || null)}
+                                                         className="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-primary file:text-white hover:file:bg-primary/90 transition-all cursor-pointer"
+                                                     />
+                                                     {productImageFile && <p className="text-[10px] text-primary font-bold mt-2 italic">{productImageFile.name}</p>}
+                                                 </div>
+                                             </div>
+                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Feature Image URL</label>
-                                            <input
-                                                type="text"
-                                                value={currentProduct?.image_url || ''}
-                                                onChange={(e) => setCurrentProduct({ ...currentProduct, image_url: e.target.value })}
-                                                className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
-                                                placeholder="https://example.com/image.jpg"
-                                            />
-                                        </div>
+                                         <div className="space-y-2">
+                                             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Feature Image URL</label>
+                                             <input
+                                                 type="text"
+                                                 value={currentProduct?.image_url || ''}
+                                                 onChange={(e) => setCurrentProduct({ ...currentProduct, image_url: e.target.value })}
+                                                 className="w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none transition-all placeholder:text-slate-300"
+                                                 placeholder="https://example.com/image.jpg"
+                                             />
+                                         </div>
 
                                         <div className="flex flex-wrap gap-8 pt-2">
                                             <label className="relative flex items-center gap-3 cursor-pointer group">
@@ -2273,16 +2327,20 @@ export function Admin() {
                                         <div className="flex flex-col sm:flex-row justify-end gap-4 pt-8 border-t border-slate-50">
                                             <button
                                                 type="button"
-                                                onClick={() => setIsEditing(false)}
+                                                onClick={() => {
+                                                    setIsEditing(false);
+                                                    setProductImageFile(null);
+                                                }}
                                                 className="w-full sm:w-auto px-10 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 bg-slate-50 hover:bg-slate-100 hover:text-slate-600 rounded-2xl transition-all"
                                             >
                                                 Discard
                                             </button>
                                             <button
                                                 type="submit"
-                                                className="w-full sm:w-auto px-12 py-4 bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all rounded-2xl font-bold uppercase tracking-[0.2em] text-xs"
+                                                disabled={isUploading}
+                                                className="w-full sm:w-auto px-12 py-4 bg-primary text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all rounded-2xl font-bold uppercase tracking-[0.2em] text-xs disabled:opacity-50"
                                             >
-                                                Publish Product
+                                                {isUploading ? 'Uploading...' : 'Publish Product'}
                                             </button>
                                         </div>
                                     </form>
